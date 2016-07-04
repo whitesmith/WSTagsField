@@ -1,31 +1,31 @@
 //
-//  Tag.swift
-//  Pearland
+//  WSTag.swift
+//  Whitesmith
 //
 //  Created by Ricardo Pereira on 12/05/16.
-//  Copyright © 2016 Pearland. All rights reserved.
+//  Copyright © 2016 Whitesmith. All rights reserved.
 //
 
 import Foundation
 
-public struct Tag: Hashable {
+public struct WSTag: Hashable {
 
-    public let displayText: String
+    public let text: String
 
-    public init(displayText: String) {
-        self.displayText = displayText
+    public init(_ text: String) {
+        self.text = text
     }
 
     public var hashValue: Int {
-        return self.displayText.hashValue
+        return self.text.hashValue
     }
 
-    public func equals(other: Tag) -> Bool {
-        return self.displayText == other.displayText
+    public func equals(other: WSTag) -> Bool {
+        return self.text == other.text
     }
 
 }
 
-public func ==(lhs: Tag, rhs: Tag) -> Bool {
+public func ==(lhs: WSTag, rhs: WSTag) -> Bool {
     return lhs.equals(rhs)
 }

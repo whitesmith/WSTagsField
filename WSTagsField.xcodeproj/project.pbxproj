@@ -7,12 +7,12 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D77F81B31D2A957400E6FF3E /* WSTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B01D2A957400E6FF3E /* WSTag.swift */; };
+		D77F81B41D2A957400E6FF3E /* WSTagsField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B11D2A957400E6FF3E /* WSTagsField.swift */; };
+		D77F81B51D2A957400E6FF3E /* WSTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B21D2A957400E6FF3E /* WSTagView.swift */; };
 		D78C9FF31D2A6AFD004F4BFF /* WSTagsField.h in Headers */ = {isa = PBXBuildFile; fileRef = D78C9FF21D2A6AFD004F4BFF /* WSTagsField.h */; settings = {ATTRIBUTES = (Public, ); }; };
 		D78C9FFA1D2A6AFD004F4BFF /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D78C9FEF1D2A6AFD004F4BFF /* WSTagsField.framework */; };
 		D78C9FFF1D2A6AFD004F4BFF /* WSTagsFieldTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78C9FFE1D2A6AFD004F4BFF /* WSTagsFieldTests.swift */; };
-		D78CA00C1D2A6B89004F4BFF /* WSTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78CA0091D2A6B89004F4BFF /* WSTag.swift */; };
-		D78CA00D1D2A6B89004F4BFF /* WSTagsField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78CA00A1D2A6B89004F4BFF /* WSTagsField.swift */; };
-		D78CA00E1D2A6B89004F4BFF /* WSTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D78CA00B1D2A6B89004F4BFF /* WSTagView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -26,15 +26,15 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		D77F81B01D2A957400E6FF3E /* WSTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTag.swift; path = Source/WSTag.swift; sourceTree = SOURCE_ROOT; };
+		D77F81B11D2A957400E6FF3E /* WSTagsField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagsField.swift; path = Source/WSTagsField.swift; sourceTree = SOURCE_ROOT; };
+		D77F81B21D2A957400E6FF3E /* WSTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagView.swift; path = Source/WSTagView.swift; sourceTree = SOURCE_ROOT; };
 		D78C9FEF1D2A6AFD004F4BFF /* WSTagsField.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = WSTagsField.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		D78C9FF21D2A6AFD004F4BFF /* WSTagsField.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = WSTagsField.h; sourceTree = "<group>"; };
 		D78C9FF41D2A6AFD004F4BFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D78C9FF91D2A6AFD004F4BFF /* WSTagsFieldTests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = WSTagsFieldTests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		D78C9FFE1D2A6AFD004F4BFF /* WSTagsFieldTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WSTagsFieldTests.swift; sourceTree = "<group>"; };
 		D78CA0001D2A6AFD004F4BFF /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D78CA0091D2A6B89004F4BFF /* WSTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSTag.swift; sourceTree = "<group>"; };
-		D78CA00A1D2A6B89004F4BFF /* WSTagsField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSTagsField.swift; sourceTree = "<group>"; };
-		D78CA00B1D2A6B89004F4BFF /* WSTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = WSTagView.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -78,9 +78,9 @@
 			isa = PBXGroup;
 			children = (
 				D78C9FF21D2A6AFD004F4BFF /* WSTagsField.h */,
-				D78CA0091D2A6B89004F4BFF /* WSTag.swift */,
-				D78CA00A1D2A6B89004F4BFF /* WSTagsField.swift */,
-				D78CA00B1D2A6B89004F4BFF /* WSTagView.swift */,
+				D77F81B01D2A957400E6FF3E /* WSTag.swift */,
+				D77F81B11D2A957400E6FF3E /* WSTagsField.swift */,
+				D77F81B21D2A957400E6FF3E /* WSTagView.swift */,
 				D78C9FF41D2A6AFD004F4BFF /* Info.plist */,
 			);
 			path = WSTagsField;
@@ -203,9 +203,9 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D78CA00C1D2A6B89004F4BFF /* WSTag.swift in Sources */,
-				D78CA00D1D2A6B89004F4BFF /* WSTagsField.swift in Sources */,
-				D78CA00E1D2A6B89004F4BFF /* WSTagView.swift in Sources */,
+				D77F81B31D2A957400E6FF3E /* WSTag.swift in Sources */,
+				D77F81B41D2A957400E6FF3E /* WSTagsField.swift in Sources */,
+				D77F81B51D2A957400E6FF3E /* WSTagView.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -397,6 +397,7 @@
 				D78CA0051D2A6AFD004F4BFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		D78CA0061D2A6AFD004F4BFF /* Build configuration list for PBXNativeTarget "WSTagsFieldTests" */ = {
 			isa = XCConfigurationList;
@@ -405,6 +406,7 @@
 				D78CA0081D2A6AFD004F4BFF /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

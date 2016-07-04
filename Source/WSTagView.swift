@@ -1,14 +1,14 @@
 //
-//  TagView.swift
-//  Pearland
+//  WSTagView.swift
+//  Whitesmith
 //
 //  Created by Ricardo Pereira on 12/05/16.
-//  Copyright © 2016 Pearland. All rights reserved.
+//  Copyright © 2016 Whitesmith. All rights reserved.
 //
 
 import UIKit
 
-public class TagView: UIView {
+public class WSTagView: UIView {
 
     internal static let xPadding: CGFloat = 6.0
     internal static let yPadding: CGFloat = 2.0
@@ -61,8 +61,8 @@ public class TagView: UIView {
         }
     }
 
-    public var onDidRequestDelete: Optional<(tagView: TagView, replacementText: String?)->()>
-    public var onDidRequestSelection: Optional<(tagView: TagView)->()>
+    public var onDidRequestDelete: Optional<(tagView: WSTagView, replacementText: String?)->()>
+    public var onDidRequestSelection: Optional<(tagView: WSTagView)->()>
 
     public var selected: Bool = false {
         didSet {
@@ -76,7 +76,7 @@ public class TagView: UIView {
     }
 
 
-    public init(tag: Tag) {
+    public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
         backgroundLayer.backgroundColor = tintColor.CGColor
         backgroundLayer.cornerRadius = 3.0
@@ -87,13 +87,13 @@ public class TagView: UIView {
         selectedColor = .grayColor()
         selectedTextColor = .blackColor()
 
-        textLabel.frame = CGRect(x: TagView.xPadding, y: TagView.yPadding, width: 0, height: 0)
+        textLabel.frame = CGRect(x: WSTagView.xPadding, y: WSTagView.yPadding, width: 0, height: 0)
         textLabel.font = font
         textLabel.textColor = .whiteColor()
         textLabel.backgroundColor = .clearColor()
         addSubview(textLabel)
 
-        self.displayText = tag.displayText
+        self.displayText = tag.text
         updateLabelText()
 
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGestureRecognizer))
@@ -136,13 +136,13 @@ public class TagView: UIView {
 
     public override func intrinsicContentSize() -> CGSize {
         let labelIntrinsicSize = textLabel.intrinsicContentSize()
-        return CGSize(width: labelIntrinsicSize.width + 2 * TagView.xPadding, height: labelIntrinsicSize.height + 2 * TagView.yPadding)
+        return CGSize(width: labelIntrinsicSize.width + 2 * WSTagView.xPadding, height: labelIntrinsicSize.height + 2 * WSTagView.yPadding)
     }
 
     public override func sizeThatFits(size: CGSize) -> CGSize {
-        let fittingSize = CGSize(width: size.width - 2.0 * TagView.xPadding, height: size.height - 2.0 * TagView.yPadding)
+        let fittingSize = CGSize(width: size.width - 2.0 * WSTagView.xPadding, height: size.height - 2.0 * WSTagView.yPadding)
         let labelSize = textLabel.sizeThatFits(fittingSize)
-        return CGSize(width: labelSize.width + 2.0 * TagView.xPadding, height: labelSize.height + 2.0 * TagView.yPadding)
+        return CGSize(width: labelSize.width + 2.0 * WSTagView.xPadding, height: labelSize.height + 2.0 * WSTagView.yPadding)
     }
 
 
@@ -162,8 +162,8 @@ public class TagView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
-        var labelFrame = CGRectInset(bounds, TagView.xPadding, TagView.yPadding)
-        labelFrame.size.width += TagView.xPadding * 2.0
+        var labelFrame = CGRectInset(bounds, WSTagView.xPadding, WSTagView.yPadding)
+        labelFrame.size.width += WSTagView.xPadding * 2.0
         textLabel.frame = labelFrame
     }
 
@@ -197,7 +197,7 @@ public class TagView: UIView {
 
 }
 
-extension TagView: UIKeyInput {
+extension WSTagView: UIKeyInput {
 
     public func hasText() -> Bool {
         return true

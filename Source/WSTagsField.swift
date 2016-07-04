@@ -1,21 +1,21 @@
 //
-//  TagsField.swift
-//  Pearland
+//  WSTagsField.swift
+//  Whitesmith
 //
 //  Created by Ricardo Pereira on 12/05/16.
-//  Copyright © 2016 Pearland. All rights reserved.
+//  Copyright © 2016 Whitesmith. All rights reserved.
 //
 
 import UIKit
 
-public class TagsField: UIView {
+public class WSTagsField: UIView {
 
     private static let HSPACE: CGFloat = 0.0
-    private static let TEXT_FIELD_HSPACE: CGFloat = TagView.xPadding
+    private static let TEXT_FIELD_HSPACE: CGFloat = WSTagView.xPadding
     private static let VSPACE: CGFloat = 4.0
     private static let MINIMUM_TEXTFIELD_WIDTH: CGFloat = 56.0
     private static let STANDARD_ROW_HEIGHT: CGFloat = 25.0
-    private static let FIELD_MARGIN_X: CGFloat = TagView.xPadding
+    private static let FIELD_MARGIN_X: CGFloat = WSTagView.xPadding
 
     private let textField = BackspaceDetectingTextField()
 
@@ -92,44 +92,44 @@ public class TagsField: UIView {
         }
     }
 
-    public private(set) var tags = [Tag]()
-    private var tagViews = [TagView]()
+    public private(set) var tags = [WSTag]()
+    internal var tagViews = [WSTagView]()
     private var intrinsicContentHeight: CGFloat = 0.0
 
 
     // MARK: - Events
 
     /// Called when the text field begins editing
-    public var onDidEndEditing: ((TagsField) -> Void)?
+    public var onDidEndEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field ends editing
-    public var onDidBeginEditing: ((TagsField) -> Void)?
+    public var onDidBeginEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field should return
-    public var onShouldReturn: ((TagsField) -> Bool)?
+    public var onShouldReturn: ((WSTagsField) -> Bool)?
 
     /// Called when the text field text has changed. You should update your autocompleting UI based on the text supplied.
-    public var onDidChangeText: ((TagsField, text: String?) -> Void)?
+    public var onDidChangeText: ((WSTagsField, text: String?) -> Void)?
 
     /// Called when a tag has been added. You should use this opportunity to update your local list of selected items.
-    public var onDidAddTag: ((TagsField, tag: Tag) -> Void)?
+    public var onDidAddTag: ((WSTagsField, tag: WSTag) -> Void)?
 
     /// Called when a tag has been removed. You should use this opportunity to update your local list of selected items.
-    public var onDidRemoveTag: ((TagsField, tag: Tag) -> Void)?
+    public var onDidRemoveTag: ((WSTagsField, tag: WSTag) -> Void)?
 
     /**
      * Called when the user attempts to press the Return key with text partially typed.
      * @return A Tag for a match (typically the first item in the matching results),
      * or nil if the text shouldn't be accepted.
      */
-    public var onVerifyTag: ((TagsField, text: String) -> Bool)?
+    public var onVerifyTag: ((WSTagsField, text: String) -> Bool)?
 
     /**
      * Called when the view has updated its own height. If you are
      * not using Autolayout, you should use this method to update the
      * frames to make sure the tag view still fits.
      */
-    public var onDidChangeHeightTo: ((TagsField, height: CGFloat) -> Void)?
+    public var onDidChangeHeightTo: ((WSTagsField, height: CGFloat) -> Void)?
 
     // MARK: -
 
@@ -165,7 +165,7 @@ public class TagsField: UIView {
 
         textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), forControlEvents:UIControlEvents.EditingChanged)
 
-        intrinsicContentHeight = TagsField.STANDARD_ROW_HEIGHT
+        intrinsicContentHeight = WSTagsField.STANDARD_ROW_HEIGHT
         repositionViews()
     }
 
@@ -178,7 +178,7 @@ public class TagsField: UIView {
         let firstLineRightBoundary: CGFloat = rightBoundary
         var curX: CGFloat = padding.left
         var curY: CGFloat = padding.top
-        var totalHeight: CGFloat = TagsField.STANDARD_ROW_HEIGHT
+        var totalHeight: CGFloat = WSTagsField.STANDARD_ROW_HEIGHT
         var isOnFirstLine = true
 
         // Position Tag views
@@ -190,31 +190,31 @@ public class TagsField: UIView {
             if curX + CGRectGetWidth(tagRect) > tagBoundary {
                 // Need a new line
                 curX = padding.left
-                curY += TagsField.STANDARD_ROW_HEIGHT + TagsField.VSPACE
-                totalHeight += TagsField.STANDARD_ROW_HEIGHT
+                curY += WSTagsField.STANDARD_ROW_HEIGHT + WSTagsField.VSPACE
+                totalHeight += WSTagsField.STANDARD_ROW_HEIGHT
                 isOnFirstLine = false
             }
 
             tagRect.origin.x = curX
             // Center our tagView vertically within STANDARD_ROW_HEIGHT
-            tagRect.origin.y = curY + ((TagsField.STANDARD_ROW_HEIGHT - CGRectGetHeight(tagRect))/2.0)
+            tagRect.origin.y = curY + ((WSTagsField.STANDARD_ROW_HEIGHT - CGRectGetHeight(tagRect))/2.0)
             tagView.frame = tagRect
 
-            curX = CGRectGetMaxX(tagRect) + TagsField.HSPACE + self.spaceBetweenTags
+            curX = CGRectGetMaxX(tagRect) + WSTagsField.HSPACE + self.spaceBetweenTags
         }
 
         // Always indent TextField by a little bit
-        curX += TagsField.TEXT_FIELD_HSPACE - self.spaceBetweenTags
+        curX += WSTagsField.TEXT_FIELD_HSPACE - self.spaceBetweenTags
         let textBoundary: CGFloat = isOnFirstLine ? firstLineRightBoundary : rightBoundary
         var availableWidthForTextField: CGFloat = textBoundary - curX
-        if availableWidthForTextField < TagsField.MINIMUM_TEXTFIELD_WIDTH {
+        if availableWidthForTextField < WSTagsField.MINIMUM_TEXTFIELD_WIDTH {
             isOnFirstLine = false
             // If in the future we add more UI elements below the tags,
             // isOnFirstLine will be useful, and this calculation is important.
             // So leaving it set here, and marking the warning to ignore it
-            curX = padding.left + TagsField.TEXT_FIELD_HSPACE
-            curY += TagsField.STANDARD_ROW_HEIGHT + TagsField.VSPACE
-            totalHeight += TagsField.STANDARD_ROW_HEIGHT
+            curX = padding.left + WSTagsField.TEXT_FIELD_HSPACE
+            curY += WSTagsField.STANDARD_ROW_HEIGHT + WSTagsField.VSPACE
+            totalHeight += WSTagsField.STANDARD_ROW_HEIGHT
             // Adjust the width
             availableWidthForTextField = rightBoundary - curX
         }
@@ -223,7 +223,7 @@ public class TagsField: UIView {
         textFieldRect.origin.x = curX
         textFieldRect.origin.y = curY
         textFieldRect.size.width = availableWidthForTextField
-        textFieldRect.size.height = TagsField.STANDARD_ROW_HEIGHT
+        textFieldRect.size.height = WSTagsField.STANDARD_ROW_HEIGHT
         self.textField.frame = textFieldRect
 
         let oldContentHeight: CGFloat = self.intrinsicContentHeight
@@ -276,20 +276,24 @@ public class TagsField: UIView {
     // MARK: - Adding / Removing Tags
 
     public func addTags(tags: [String]) {
-        addTags(tags.map{ Tag(displayText: $0) })
-    }
-
-    public func addTags(tags: [Tag]) {
         tags.forEach() { addTag($0) }
     }
 
-    public func addTag(tag: Tag) {
+    public func addTags(tags: [WSTag]) {
+        tags.forEach() { addTag($0) }
+    }
+
+    public func addTag(tag: String) {
+        addTag(WSTag(tag))
+    }
+
+    public func addTag(tag: WSTag) {
         if self.tags.contains(tag) {
             return
         }
         self.tags.append(tag)
 
-        let tagView = TagView(tag: tag)
+        let tagView = WSTagView(tag: tag)
         tagView.font = self.font
         tagView.tintColor = self.tintColor
         tagView.textColor = self.textColor
@@ -328,7 +332,11 @@ public class TagsField: UIView {
         repositionViews()
     }
 
-    public func removeTag(tag: Tag) {
+    public func removeTag(tag: String) {
+        removeTag(WSTag(tag))
+    }
+
+    public func removeTag(tag: WSTag) {
         if let index = self.tags.indexOf(tag) {
             removeTagAtIndex(index)
         }
@@ -357,10 +365,10 @@ public class TagsField: UIView {
         }
     }
 
-    public func tokenizeTextFieldText() -> Tag? {
+    public func tokenizeTextFieldText() -> WSTag? {
         let text = self.textField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) ?? ""
         if text.isEmpty == false && (onVerifyTag?(self, text: text) ?? true) {
-            let tag = Tag(displayText: text)
+            let tag = WSTag(text)
             addTag(tag)
             self.textField.text = ""
             onTextFieldDidChange(self.textField)
@@ -381,7 +389,7 @@ public class TagsField: UIView {
 
     // MARK: - Tag selection
 
-    public func selectTagView(tagView: TagView, animated: Bool) {
+    public func selectTagView(tagView: WSTagView, animated: Bool) {
         tagView.selected = true
         tagViews.forEach() { item in
             if item != tagView {
@@ -398,11 +406,11 @@ public class TagsField: UIView {
 
 }
 
-public func ==(lhs: UITextField, rhs: TagsField) -> Bool {
+public func ==(lhs: UITextField, rhs: WSTagsField) -> Bool {
     return lhs == rhs.textField
 }
 
-extension TagsField: UITextFieldDelegate {
+extension WSTagsField: UITextFieldDelegate {
 
     public func textFieldDidBeginEditing(textField: UITextField) {
         if let didBeginEditingEvent = onDidBeginEditing {
