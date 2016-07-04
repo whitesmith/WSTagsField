@@ -1,4 +1,11 @@
 # WSTagsField
+
+<a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"></a>
+<a href="https://github.com/cocoapods/cocoapods"><img src="https://img.shields.io/cocoapods/v/WSTagsField.svg"></a>
+[![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
+[![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
+
 An iOS text field that represents different Tags.
 
 ![WSTagsField](http://i.imgur.com/px2zcuD.png)
