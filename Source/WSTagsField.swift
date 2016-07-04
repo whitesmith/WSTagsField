@@ -80,6 +80,14 @@ public class WSTagsField: UIView {
         }
     }
 
+    public var readOnly: Bool = false {
+        didSet {
+            unselectAllTagViewsAnimated()
+            textField.enabled = !readOnly
+            repositionViews()
+        }
+    }
+
     public var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 16.0) {
         didSet {
             repositionViews()
@@ -157,6 +165,9 @@ public class WSTagsField: UIView {
         addSubview(textField)
 
         textField.onDeleteBackwards = {
+            if self.readOnly {
+                return
+            }
             if self.textField.text?.isEmpty ?? true, let tagView = self.tagViews.last {
                 self.selectTagView(tagView, animated: true)
                 self.textField.resignFirstResponder()
@@ -219,11 +230,18 @@ public class WSTagsField: UIView {
             availableWidthForTextField = rightBoundary - curX
         }
 
-        var textFieldRect: CGRect = self.textField.frame
-        textFieldRect.origin.x = curX
-        textFieldRect.origin.y = curY
-        textFieldRect.size.width = availableWidthForTextField
-        textFieldRect.size.height = WSTagsField.STANDARD_ROW_HEIGHT
+        var textFieldRect: CGRect
+        if textField.enabled {
+            textFieldRect = self.textField.frame
+            textFieldRect.origin.x = curX
+            textFieldRect.origin.y = curY
+            textFieldRect.size.width = availableWidthForTextField
+            textFieldRect.size.height = WSTagsField.STANDARD_ROW_HEIGHT
+        }
+        else {
+            textFieldRect = CGRect.zero
+            textField.hidden = true
+        }
         self.textField.frame = textFieldRect
 
         let oldContentHeight: CGFloat = self.intrinsicContentHeight
@@ -389,7 +407,10 @@ public class WSTagsField: UIView {
 
     // MARK: - Tag selection
 
-    public func selectTagView(tagView: WSTagView, animated: Bool) {
+    public func selectTagView(tagView: WSTagView, animated: Bool = false) {
+        if self.readOnly {
+            return
+        }
         tagView.selected = true
         tagViews.forEach() { item in
             if item != tagView {
@@ -398,7 +419,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public func unselectAllTagViewsAnimated(animated: Bool) {
+    public func unselectAllTagViewsAnimated(animated: Bool = false) {
         tagViews.forEach() { item in
             item.selected = false
         }
