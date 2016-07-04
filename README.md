@@ -8,7 +8,7 @@
 
 An iOS text field that represents different Tags.
 
-![WSTagsField](http://i.imgur.com/px2zcuD.png)
+![WSTagsField](http://i.imgur.com/9di8WTz.png)
 
 ## Usage
 
