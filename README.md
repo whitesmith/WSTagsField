@@ -4,6 +4,7 @@
 <a href="https://github.com/cocoapods/cocoapods"><img src="https://img.shields.io/cocoapods/v/WSTagsField.svg"></a>
 [![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
+[![Build Status](https://www.bitrise.io/app/059bc89743c769dc.svg?token=Wu0zdJtTsCQlVFSG1XuGIw&branch=master)](https://www.bitrise.io/app/059bc89743c769dc)
 [![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 An iOS text field that represents different Tags.
