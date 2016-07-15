@@ -53,6 +53,35 @@ tagsField.onDidChangeHeightTo = { sender, height in
 
 ```
 
+## Functions
+`func acceptCurrentTextAsTag()`
+
+Creates a tag with the text currently inside of the field.
+
+___
+
+`func addTags(tags: [String])`
+
+Adds tags from the array of Strings provided.
+___
+
+`func addTags(tags: [WSTag])`
+
+Adds tags from the array of WSTags provided.
+___
+
+`func addTag(tag: String)`
+
+Adds a tag with the content of a String.
+___
+
+`func addTag(tag: WSTag)`
+
+Adds a tag with the content of a WSTag.
+___
+
+
+
 ## Installation
 
 #### <img src="https://cloud.githubusercontent.com/assets/432536/5252404/443d64f4-7952-11e4-9d26-fc5cc664cb61.png" width="24" height="24"> [Carthage]
