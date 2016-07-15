@@ -1,14 +1,16 @@
 # WSTagsField
 
 <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"></a>
+[![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swift.org/package-manager/)
 <a href="https://github.com/cocoapods/cocoapods"><img src="https://img.shields.io/cocoapods/v/WSTagsField.svg"></a>
 [![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
+[![Build Status](https://www.bitrise.io/app/059bc89743c769dc.svg?token=Wu0zdJtTsCQlVFSG1XuGIw&branch=master)](https://www.bitrise.io/app/059bc89743c769dc)
 [![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 An iOS text field that represents different Tags.
 
-![WSTagsField](http://i.imgur.com/9di8WTz.png)
+![WSTagsField](http://i.giphy.com/3o72F8JCGkjrF4Lwvm.gif)
 
 ## Usage
 
@@ -18,7 +20,7 @@ let tagsField = WSTagsField()
 tagsField.backgroundColor = .whiteColor()
 tagsField.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
 tagsField.spaceBetweenTags = 10.0
-tagsField.font = UIFont.systemFontOfSize(12.0)
+tagsField.font = .systemFontOfSize(12.0)
 tagsField.tintColor = .greenColor()
 tagsField.textColor = .blackColor()
 tagsField.fieldTextColor = .blueColor()
@@ -52,6 +54,35 @@ tagsField.onDidChangeHeightTo = { sender, height in
 }
 
 ```
+
+## Functions
+`func acceptCurrentTextAsTag()`
+
+Creates a tag with the text currently inside of the field.
+
+___
+
+`func addTags(tags: [String])`
+
+Adds tags from the array of Strings provided.
+___
+
+`func addTags(tags: [WSTag])`
+
+Adds tags from the array of WSTags provided.
+___
+
+`func addTag(tag: String)`
+
+Adds a tag with the content of a String.
+___
+
+`func addTag(tag: WSTag)`
+
+Adds a tag with the content of a WSTag.
+___
+
+
 
 ## Installation
 
@@ -89,6 +120,23 @@ use_frameworks!
 ```
 
 Then run `pod install` with CocoaPods 1.0 or newer.
+
+#### <img src="https://dl.dropboxusercontent.com/u/11377305/resources/swiftpm.png" width="24" height="24"> [SwiftPM]
+
+[SwiftPM]: https://github.com/apple/swift-package-manager
+
+If your version of Swift supports the SPM, you just need to add WSTagsField as a dependency in your `Package.swift`:
+
+```swift
+let package = Package(
+    name: "MyProject",
+    dependencies: [
+        .Package(url: "https://github.com/whitesmith/WSTagsField.git", majorVersion: 0),
+        ...
+    ]
+    ...
+)
+```
 
 #### Manually
 
