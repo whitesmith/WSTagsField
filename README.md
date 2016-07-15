@@ -10,7 +10,7 @@
 
 An iOS text field that represents different Tags.
 
-![WSTagsField](http://i.imgur.com/9di8WTz.png)
+![WSTagsField](http://i.giphy.com/3o72F8JCGkjrF4Lwvm.gif)
 
 ## Usage
 
