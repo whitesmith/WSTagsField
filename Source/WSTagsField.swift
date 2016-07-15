@@ -215,7 +215,7 @@ public class WSTagsField: UIView {
         }
 
         // Always indent TextField by a little bit
-        curX += WSTagsField.TEXT_FIELD_HSPACE - self.spaceBetweenTags
+        curX += max(0, WSTagsField.TEXT_FIELD_HSPACE - self.spaceBetweenTags)
         let textBoundary: CGFloat = isOnFirstLine ? firstLineRightBoundary : rightBoundary
         var availableWidthForTextField: CGFloat = textBoundary - curX
         if availableWidthForTextField < WSTagsField.MINIMUM_TEXTFIELD_WIDTH {
