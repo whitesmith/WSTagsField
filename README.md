@@ -1,6 +1,7 @@
 # WSTagsField
 
 <a href="https://github.com/Carthage/Carthage"><img src="https://img.shields.io/badge/Carthage-compatible-4BC51D.svg?style=flat"></a>
+[![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swift.org/package-manager/)
 <a href="https://github.com/cocoapods/cocoapods"><img src="https://img.shields.io/cocoapods/v/WSTagsField.svg"></a>
 [![Swift 2.2](https://img.shields.io/badge/Swift-2.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](https://developer.apple.com/swift/)
@@ -119,6 +120,23 @@ use_frameworks!
 ```
 
 Then run `pod install` with CocoaPods 1.0 or newer.
+
+#### <img src="https://dl.dropboxusercontent.com/u/11377305/resources/swiftpm.png" width="24" height="24"> [SwiftPM]
+
+[SwiftPM]: https://github.com/apple/swift-package-manager
+
+If your version of Swift supports the SPM, you just need to add WSTagsField as a dependency in your `Package.swift`:
+
+```swift
+let package = Package(
+    name: "MyProject",
+    dependencies: [
+        .Package(url: "https://github.com/whitesmith/WSTagsField.git", majorVersion: 0),
+        ...
+    ]
+    ...
+)
+```
 
 #### Manually
 
