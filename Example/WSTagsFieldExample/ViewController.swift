@@ -57,7 +57,7 @@ class ViewController: UIViewController {
     func didTouchTestButton(sender: AnyObject) {
         tagsField.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tagsField.spaceBetweenTags = 10.0
-        tagsField.font = UIFont.systemFontOfSize(12.0)
+        tagsField.font = .systemFontOfSize(12.0)
         tagsField.tintColor = .greenColor()
         tagsField.textColor = .blackColor()
         tagsField.fieldTextColor = .blueColor()
