@@ -100,14 +100,16 @@ If your version of Swift supports the SPM, you just need to add WSTagsField as a
 
 ```swift
 let package = Package(
-    name: "MyProject",
+    name: "YOUR_PROJECT_NAME",
     dependencies: [
-        .Package(url: "https://github.com/whitesmith/WSTagsField.git", majorVersion: 0),
+        .Package(url: "https://github.com/whitesmith/WSTagsField.git", , versions: "1.2.0" ..< Version.max),
         ...
     ]
     ...
 )
 ```
+
+(Note that the Swift Package Manager is still in early design and development, for more infomation checkout its repository)
 
 #### Manually
 
