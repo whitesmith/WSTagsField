@@ -276,7 +276,8 @@ public class WSTagsField: UIView {
         repositionViews()
     }
 
-    public func acceptCurrentTextAsTag(){
+    /// Take the text inside of the field and make it a Tag.
+    public func acceptCurrentTextAsTag() {
         if let currentText = tokenizeTextFieldText() where (self.textField.text?.isEmpty ?? true) == false {
             self.addTag(currentText)
         }
