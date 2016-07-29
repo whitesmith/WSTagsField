@@ -276,6 +276,12 @@ public class WSTagsField: UIView {
         repositionViews()
     }
 
+    public func acceptCurrentTextAsTag(){
+        if let currentText = tokenizeTextFieldText() where (self.textField.text?.isEmpty ?? true) == false {
+            self.addTag(currentText)
+        }
+    }
+    
     public var isEditing: Bool {
         return self.textField.editing
     }
