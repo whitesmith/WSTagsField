@@ -145,6 +145,13 @@ public class WSTagView: UIView {
         return CGSize(width: labelSize.width + 2.0 * WSTagView.xPadding, height: labelSize.height + 2.0 * WSTagView.yPadding)
     }
 
+    public func sizeToFit(size: CGSize) -> CGSize {
+        if self.frame.size.width > size.width {
+            return CGSize(width: size.width, height: self.frame.size.height)
+        }
+        return self.frame.size
+    }
+
 
     // MARK: - Attributed Text
 
@@ -162,9 +169,7 @@ public class WSTagView: UIView {
     public override func layoutSubviews() {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
-        var labelFrame = CGRectInset(bounds, WSTagView.xPadding, WSTagView.yPadding)
-        labelFrame.size.width += WSTagView.xPadding * 2.0
-        textLabel.frame = labelFrame
+        textLabel.frame = CGRectInset(bounds, WSTagView.xPadding, WSTagView.yPadding)
     }
 
 
