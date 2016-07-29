@@ -88,7 +88,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 16.0) {
+    public var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
         didSet {
             repositionViews()
         }
@@ -181,7 +181,7 @@ public class WSTagsField: UIView {
     }
 
     public override func intrinsicContentSize() -> CGSize {
-        return CGSize(width: UIViewNoIntrinsicMetric, height: max(45, self.intrinsicContentHeight))
+        return CGSize(width: self.frame.size.width - padding.left - padding.right, height: max(45, self.intrinsicContentHeight))
     }
 
     private func repositionViews() {
@@ -195,7 +195,7 @@ public class WSTagsField: UIView {
         // Position Tag views
         var tagRect = CGRect.null
         for tagView in tagViews {
-            tagRect = tagView.frame
+            tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(self.intrinsicContentSize()))
 
             let tagBoundary = isOnFirstLine ? firstLineRightBoundary : rightBoundary
             if curX + CGRectGetWidth(tagRect) > tagBoundary {
@@ -210,6 +210,7 @@ public class WSTagsField: UIView {
             // Center our tagView vertically within STANDARD_ROW_HEIGHT
             tagRect.origin.y = curY + ((WSTagsField.STANDARD_ROW_HEIGHT - CGRectGetHeight(tagRect))/2.0)
             tagView.frame = tagRect
+            tagView.setNeedsLayout()
 
             curX = CGRectGetMaxX(tagRect) + WSTagsField.HSPACE + self.spaceBetweenTags
         }
@@ -278,7 +279,6 @@ public class WSTagsField: UIView {
     public var isEditing: Bool {
         return self.textField.editing
     }
-
 
     public func beginEditing() {
         self.textField.becomeFirstResponder()
