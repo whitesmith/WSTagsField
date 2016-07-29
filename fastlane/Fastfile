@@ -1,0 +1,24 @@
+fastlane_version "1.99.0"
+REQUIRED_XCODE_VERSION = "7.3.1"
+default_platform :ios
+
+platform :ios do
+  desc "Runs all the tests"
+  lane :test do
+    scan project: "WSTagsField.xcodeproj"
+  end
+
+  desc "Increment the verion and build number"
+  lane :version_bump_project do |options|
+    build_number = Time.new.strftime("%Y.%m.%d.%H.%M")
+    increment_build_number build_number: build_number
+    increment_version_number bump_type: options[:bump]
+  end
+
+  desc "Prepare a new Release version"
+  lane :release do |options|
+    version_bump_project bump_type: options[:bump]
+    version_bump_podspec bump_type: options[:bump]
+    clean_build_artifacts
+  end
+end
