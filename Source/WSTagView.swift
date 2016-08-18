@@ -170,6 +170,9 @@ public class WSTagView: UIView {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
         textLabel.frame = CGRectInset(bounds, WSTagView.xPadding, WSTagView.yPadding)
+        if frame.width == 0 || frame.height == 0 {
+            frame.size = self.intrinsicContentSize()
+        }
     }
 
 
