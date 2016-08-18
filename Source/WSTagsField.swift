@@ -273,6 +273,9 @@ public class WSTagsField: UIView {
 
     public override func layoutSubviews() {
         super.layoutSubviews()
+        tagViews.forEach {
+            $0.setNeedsLayout()
+        }
         repositionViews()
     }
 
