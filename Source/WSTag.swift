@@ -20,7 +20,7 @@ public struct WSTag: Hashable {
         return self.text.hashValue
     }
 
-    public func equals(other: WSTag) -> Bool {
+    public func equals(_ other: WSTag) -> Bool {
         return self.text == other.text
     }
 
