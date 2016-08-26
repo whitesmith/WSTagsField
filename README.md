@@ -64,7 +64,7 @@ tagsField.onDidChangeHeightTo = { sender, height in
 To install it, simply add the following line to your **Cartfile**:
 
 ```ruby
-github "whitesmith/WSTagsField" == "2.0.0.beta.1"
+github "whitesmith/WSTagsField" "2.0.0.beta.1"
 ```
 
 Then run `carthage update`.
