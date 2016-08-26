@@ -152,11 +152,11 @@ open class WSTagsField: UIView {
     }
 
     fileprivate func internalInit() {
-        textColor = .white()
-        selectedColor = .gray()
-        selectedTextColor = .black()
+        textColor = .white
+        selectedColor = .gray
+        selectedTextColor = .black
 
-        textField.backgroundColor = .clear()
+        textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.autocapitalizationType = UITextAutocapitalizationType.none
         textField.delegate = self
@@ -180,7 +180,7 @@ open class WSTagsField: UIView {
         repositionViews()
     }
 
-    open override func intrinsicContentSize() -> CGSize {
+    open override var intrinsicContentSize: CGSize {
         return CGSize(width: self.frame.size.width - padding.left - padding.right, height: max(45, self.intrinsicContentHeight))
     }
 
@@ -195,7 +195,7 @@ open class WSTagsField: UIView {
         // Position Tag views
         var tagRect = CGRect.null
         for tagView in tagViews {
-            tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(self.intrinsicContentSize()))
+            tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(self.intrinsicContentSize))
 
             let tagBoundary = isOnFirstLine ? firstLineRightBoundary : rightBoundary
             if curX + tagRect.width > tagBoundary {
@@ -250,7 +250,7 @@ open class WSTagsField: UIView {
         invalidateIntrinsicContentSize()
 
         if oldContentHeight != self.intrinsicContentHeight {
-            let newContentHeight = intrinsicContentSize().height
+            let newContentHeight = intrinsicContentSize.height
             if let didChangeHeightToEvent = self.onDidChangeHeightTo {
                 didChangeHeightToEvent(self, newContentHeight)
             }
@@ -393,6 +393,7 @@ open class WSTagsField: UIView {
         }
     }
 
+    @discardableResult
     open func tokenizeTextFieldText() -> WSTag? {
         let text = self.textField.text?.trimmingCharacters(in: CharacterSet.whitespaces) ?? ""
         if text.isEmpty == false && (onVerifyTag?(self, text) ?? true) {
@@ -410,7 +411,7 @@ open class WSTagsField: UIView {
 
     open func onTextFieldDidChange(_ sender: AnyObject) {
         if let didChangeTextEvent = onDidChangeText {
-            didChangeTextEvent(self, text Field.text)
+            didChangeTextEvent(self, textField.text)
         }
     }
 

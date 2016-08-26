@@ -67,9 +67,9 @@ open class WSTagView: UIView {
     open var selected: Bool = false {
         didSet {
             if selected && !isFirstResponder {
-                becomeFirstResponder()
+                let _ = becomeFirstResponder()
             } else if !selected && isFirstResponder {
-                resignFirstResponder()
+                let _ = resignFirstResponder()
             }
             updateContent(animated: true)
         }
@@ -134,7 +134,7 @@ open class WSTagView: UIView {
 
     // MARK: - Size Measurements
 
-    open override func intrinsicContentSize() -> CGSize {
+    open override var intrinsicContentSize: CGSize {
         let labelIntrinsicSize = textLabel.intrinsicContentSize
         return CGSize(width: labelIntrinsicSize.width + 2 * WSTagView.xPadding, height: labelIntrinsicSize.height + 2 * WSTagView.yPadding)
     }
@@ -159,7 +159,7 @@ open class WSTagView: UIView {
         // Unselected shows "[displayText]," and selected is "[displayText]"
         textLabel.text = displayText + displayDelimiter
         // Expand Label
-        let intrinsicSize = intrinsicContentSize()
+        let intrinsicSize = self.intrinsicContentSize
         frame = CGRect(x: 0, y: 0, width: intrinsicSize.width, height: intrinsicSize.height)
     }
 
@@ -171,14 +171,14 @@ open class WSTagView: UIView {
         backgroundLayer.frame = bounds
         textLabel.frame = bounds.insetBy(dx: WSTagView.xPadding, dy: WSTagView.yPadding)
         if frame.width == 0 || frame.height == 0 {
-            frame.size = self.intrinsicContentSize()
+            frame.size = self.intrinsicContentSize
         }
     }
 
 
     // MARK: - First Responder (needed to capture keyboard)
 
-    open override func canBecomeFirstResponder() -> Bool {
+    open override var canBecomeFirstResponder: Bool {
         return true
     }
 
@@ -207,7 +207,7 @@ open class WSTagView: UIView {
 
 extension WSTagView: UIKeyInput {
 
-    public func hasText() -> Bool {
+    public var hasText: Bool {
         return true
     }
 
