@@ -8,18 +8,18 @@
 
 import UIKit
 
-public class WSTagsField: UIView {
+open class WSTagsField: UIView {
 
-    private static let HSPACE: CGFloat = 0.0
-    private static let TEXT_FIELD_HSPACE: CGFloat = WSTagView.xPadding
-    private static let VSPACE: CGFloat = 4.0
-    private static let MINIMUM_TEXTFIELD_WIDTH: CGFloat = 56.0
-    private static let STANDARD_ROW_HEIGHT: CGFloat = 25.0
-    private static let FIELD_MARGIN_X: CGFloat = WSTagView.xPadding
+    fileprivate static let HSPACE: CGFloat = 0.0
+    fileprivate static let TEXT_FIELD_HSPACE: CGFloat = WSTagView.xPadding
+    fileprivate static let VSPACE: CGFloat = 4.0
+    fileprivate static let MINIMUM_TEXTFIELD_WIDTH: CGFloat = 56.0
+    fileprivate static let STANDARD_ROW_HEIGHT: CGFloat = 25.0
+    fileprivate static let FIELD_MARGIN_X: CGFloat = WSTagView.xPadding
 
-    private let textField = BackspaceDetectingTextField()
+    fileprivate let textField = BackspaceDetectingTextField()
 
-    public override var tintColor: UIColor! {
+    open override var tintColor: UIColor! {
         didSet {
             tagViews.forEach() { item in
                 item.tintColor = self.tintColor
@@ -27,7 +27,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public var textColor: UIColor? {
+    open var textColor: UIColor? {
         didSet {
             tagViews.forEach() { item in
                 item.textColor = self.textColor
@@ -35,7 +35,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public var selectedColor: UIColor? {
+    open var selectedColor: UIColor? {
         didSet {
             tagViews.forEach() { item in
                 item.selectedColor = self.selectedColor
@@ -43,7 +43,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public var selectedTextColor: UIColor? {
+    open var selectedTextColor: UIColor? {
         didSet {
             tagViews.forEach() { item in
                 item.selectedTextColor = self.selectedTextColor
@@ -51,7 +51,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public var delimiter: String? {
+    open var delimiter: String? {
         didSet {
             tagViews.forEach() { item in
                 item.displayDelimiter = self.delimiter ?? ""
@@ -59,19 +59,19 @@ public class WSTagsField: UIView {
         }
     }
 
-    public var fieldTextColor: UIColor? {
+    open var fieldTextColor: UIColor? {
         didSet {
             textField.textColor = textColor
         }
     }
 
-    public var placeholder: String = "Tags" {
+    open var placeholder: String = "Tags" {
         didSet {
             updatePlaceholderTextVisibility()
         }
     }
 
-    public var font: UIFont? {
+    open var font: UIFont? {
         didSet {
             textField.font = font
             tagViews.forEach() { item in
@@ -80,64 +80,64 @@ public class WSTagsField: UIView {
         }
     }
 
-    public var readOnly: Bool = false {
+    open var readOnly: Bool = false {
         didSet {
             unselectAllTagViewsAnimated()
-            textField.enabled = !readOnly
+            textField.isEnabled = !readOnly
             repositionViews()
         }
     }
 
-    public var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
+    open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
         didSet {
             repositionViews()
         }
     }
 
-    public var spaceBetweenTags: CGFloat = 2.0 {
+    open var spaceBetweenTags: CGFloat = 2.0 {
         didSet {
             repositionViews()
         }
     }
 
-    public private(set) var tags = [WSTag]()
+    open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
-    private var intrinsicContentHeight: CGFloat = 0.0
+    fileprivate var intrinsicContentHeight: CGFloat = 0.0
 
 
     // MARK: - Events
 
     /// Called when the text field begins editing
-    public var onDidEndEditing: ((WSTagsField) -> Void)?
+    open var onDidEndEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field ends editing
-    public var onDidBeginEditing: ((WSTagsField) -> Void)?
+    open var onDidBeginEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field should return
-    public var onShouldReturn: ((WSTagsField) -> Bool)?
+    open var onShouldReturn: ((WSTagsField) -> Bool)?
 
     /// Called when the text field text has changed. You should update your autocompleting UI based on the text supplied.
-    public var onDidChangeText: ((WSTagsField, text: String?) -> Void)?
+    open var onDidChangeText: ((WSTagsField, _ text: String?) -> Void)?
 
     /// Called when a tag has been added. You should use this opportunity to update your local list of selected items.
-    public var onDidAddTag: ((WSTagsField, tag: WSTag) -> Void)?
+    open var onDidAddTag: ((WSTagsField, _ tag: WSTag) -> Void)?
 
     /// Called when a tag has been removed. You should use this opportunity to update your local list of selected items.
-    public var onDidRemoveTag: ((WSTagsField, tag: WSTag) -> Void)?
+    open var onDidRemoveTag: ((WSTagsField, _ tag: WSTag) -> Void)?
 
     /**
      * Called when the user attempts to press the Return key with text partially typed.
      * @return A Tag for a match (typically the first item in the matching results),
      * or nil if the text shouldn't be accepted.
      */
-    public var onVerifyTag: ((WSTagsField, text: String) -> Bool)?
+    open var onVerifyTag: ((WSTagsField, _ text: String) -> Bool)?
 
     /**
      * Called when the view has updated its own height. If you are
      * not using Autolayout, you should use this method to update the
      * frames to make sure the tag view still fits.
      */
-    public var onDidChangeHeightTo: ((WSTagsField, height: CGFloat) -> Void)?
+    open var onDidChangeHeightTo: ((WSTagsField, _ height: CGFloat) -> Void)?
 
     // MARK: -
 
@@ -151,14 +151,14 @@ public class WSTagsField: UIView {
         internalInit()
     }
 
-    private func internalInit() {
-        textColor = .whiteColor()
-        selectedColor = .grayColor()
-        selectedTextColor = .blackColor()
+    fileprivate func internalInit() {
+        textColor = .white
+        selectedColor = .gray
+        selectedTextColor = .black
 
-        textField.backgroundColor = .clearColor()
-        textField.autocorrectionType = UITextAutocorrectionType.No
-        textField.autocapitalizationType = UITextAutocapitalizationType.None
+        textField.backgroundColor = .clear
+        textField.autocorrectionType = UITextAutocorrectionType.no
+        textField.autocapitalizationType = UITextAutocapitalizationType.none
         textField.delegate = self
         textField.font = font
         textField.textColor = fieldTextColor
@@ -174,18 +174,18 @@ public class WSTagsField: UIView {
             }
         }
 
-        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), forControlEvents:UIControlEvents.EditingChanged)
+        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for:UIControlEvents.editingChanged)
 
         intrinsicContentHeight = WSTagsField.STANDARD_ROW_HEIGHT
         repositionViews()
     }
 
-    public override func intrinsicContentSize() -> CGSize {
+    open override var intrinsicContentSize: CGSize {
         return CGSize(width: self.frame.size.width - padding.left - padding.right, height: max(45, self.intrinsicContentHeight))
     }
 
-    private func repositionViews() {
-        let rightBoundary: CGFloat = CGRectGetWidth(self.bounds) - padding.right
+    fileprivate func repositionViews() {
+        let rightBoundary: CGFloat = self.bounds.width - padding.right
         let firstLineRightBoundary: CGFloat = rightBoundary
         var curX: CGFloat = padding.left
         var curY: CGFloat = padding.top
@@ -195,10 +195,10 @@ public class WSTagsField: UIView {
         // Position Tag views
         var tagRect = CGRect.null
         for tagView in tagViews {
-            tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(self.intrinsicContentSize()))
+            tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(self.intrinsicContentSize))
 
             let tagBoundary = isOnFirstLine ? firstLineRightBoundary : rightBoundary
-            if curX + CGRectGetWidth(tagRect) > tagBoundary {
+            if curX + tagRect.width > tagBoundary {
                 // Need a new line
                 curX = padding.left
                 curY += WSTagsField.STANDARD_ROW_HEIGHT + WSTagsField.VSPACE
@@ -208,11 +208,11 @@ public class WSTagsField: UIView {
 
             tagRect.origin.x = curX
             // Center our tagView vertically within STANDARD_ROW_HEIGHT
-            tagRect.origin.y = curY + ((WSTagsField.STANDARD_ROW_HEIGHT - CGRectGetHeight(tagRect))/2.0)
+            tagRect.origin.y = curY + ((WSTagsField.STANDARD_ROW_HEIGHT - tagRect.height)/2.0)
             tagView.frame = tagRect
             tagView.setNeedsLayout()
 
-            curX = CGRectGetMaxX(tagRect) + WSTagsField.HSPACE + self.spaceBetweenTags
+            curX = tagRect.maxX + WSTagsField.HSPACE + self.spaceBetweenTags
         }
 
         // Always indent TextField by a little bit
@@ -232,7 +232,7 @@ public class WSTagsField: UIView {
         }
 
         var textFieldRect: CGRect
-        if textField.enabled {
+        if textField.isEnabled {
             textFieldRect = self.textField.frame
             textFieldRect.origin.x = curX
             textFieldRect.origin.y = curY
@@ -241,18 +241,18 @@ public class WSTagsField: UIView {
         }
         else {
             textFieldRect = CGRect.zero
-            textField.hidden = true
+            textField.isHidden = true
         }
         self.textField.frame = textFieldRect
 
         let oldContentHeight: CGFloat = self.intrinsicContentHeight
-        intrinsicContentHeight = max(totalHeight, CGRectGetMaxY(textFieldRect) + padding.bottom)
+        intrinsicContentHeight = max(totalHeight, textFieldRect.maxY + padding.bottom)
         invalidateIntrinsicContentSize()
 
         if oldContentHeight != self.intrinsicContentHeight {
-            let newContentHeight = intrinsicContentSize().height
+            let newContentHeight = intrinsicContentSize.height
             if let didChangeHeightToEvent = self.onDidChangeHeightTo {
-                didChangeHeightToEvent(self, height: newContentHeight)
+                didChangeHeightToEvent(self, newContentHeight)
             }
             frame.size.height = newContentHeight
         }
@@ -262,7 +262,7 @@ public class WSTagsField: UIView {
         setNeedsDisplay()
     }
 
-    private func updatePlaceholderTextVisibility() {
+    fileprivate func updatePlaceholderTextVisibility() {
         if tags.count > 0 {
             textField.placeholder = nil
         }
@@ -271,7 +271,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public override func layoutSubviews() {
+    open override func layoutSubviews() {
         super.layoutSubviews()
         tagViews.forEach {
             $0.setNeedsLayout()
@@ -280,22 +280,22 @@ public class WSTagsField: UIView {
     }
 
     /// Take the text inside of the field and make it a Tag.
-    public func acceptCurrentTextAsTag() {
-        if let currentText = tokenizeTextFieldText() where (self.textField.text?.isEmpty ?? true) == false {
+    open func acceptCurrentTextAsTag() {
+        if let currentText = tokenizeTextFieldText() , (self.textField.text?.isEmpty ?? true) == false {
             self.addTag(currentText)
         }
     }
     
-    public var isEditing: Bool {
-        return self.textField.editing
+    open var isEditing: Bool {
+        return self.textField.isEditing
     }
 
-    public func beginEditing() {
+    open func beginEditing() {
         self.textField.becomeFirstResponder()
         self.unselectAllTagViewsAnimated(false)
     }
 
-    public func endEditing() {
+    open func endEditing() {
         // NOTE: We used to check if .isFirstResponder and then resign first responder, but sometimes we noticed that it would be the first responder, but still return isFirstResponder=NO. So always attempt to resign without checking.
         self.textField.resignFirstResponder()
     }
@@ -303,19 +303,19 @@ public class WSTagsField: UIView {
 
     // MARK: - Adding / Removing Tags
 
-    public func addTags(tags: [String]) {
+    open func addTags(_ tags: [String]) {
         tags.forEach() { addTag($0) }
     }
 
-    public func addTags(tags: [WSTag]) {
+    open func addTags(_ tags: [WSTag]) {
         tags.forEach() { addTag($0) }
     }
 
-    public func addTag(tag: String) {
+    open func addTag(_ tag: String) {
         addTag(WSTag(tag))
     }
 
-    public func addTag(tag: WSTag) {
+    open func addTag(_ tag: WSTag) {
         if self.tags.contains(tag) {
             return
         }
@@ -340,7 +340,7 @@ public class WSTagsField: UIView {
                 self.textField.text = replacementText
             }
             // Then remove the view from our data
-            if let index = self.tagViews.indexOf(tagView) {
+            if let index = self.tagViews.index(of: tagView) {
                 self.removeTagAtIndex(index)
             }
         }
@@ -350,7 +350,7 @@ public class WSTagsField: UIView {
 
         self.textField.text = ""
         if let didAddTagEvent = onDidAddTag {
-            didAddTagEvent(self, tag: tag)
+            didAddTagEvent(self, tag)
         }
 
         // Clearing text programmatically doesn't call this automatically
@@ -360,42 +360,43 @@ public class WSTagsField: UIView {
         repositionViews()
     }
 
-    public func removeTag(tag: String) {
+    open func removeTag(_ tag: String) {
         removeTag(WSTag(tag))
     }
 
-    public func removeTag(tag: WSTag) {
-        if let index = self.tags.indexOf(tag) {
+    open func removeTag(_ tag: WSTag) {
+        if let index = self.tags.index(of: tag) {
             removeTagAtIndex(index)
         }
     }
 
-    public func removeTagAtIndex(index: Int) {
+    open func removeTagAtIndex(_ index: Int) {
         if index < 0 || index >= self.tags.count {
             return
         }
         let tagView = self.tagViews[index]
         tagView.removeFromSuperview()
-        self.tagViews.removeAtIndex(index)
+        self.tagViews.remove(at: index)
 
         let removedTag = self.tags[index]
-        self.tags.removeAtIndex(index)
+        self.tags.remove(at: index)
         if let didRemoveTagEvent = onDidRemoveTag {
-            didRemoveTagEvent(self, tag: removedTag)
+            didRemoveTagEvent(self, removedTag)
         }
         updatePlaceholderTextVisibility()
         repositionViews()
     }
 
-    public func removeTags() {
-        self.tags.enumerate().reverse().forEach { index, tag in
+    open func removeTags() {
+        self.tags.enumerated().reversed().forEach { index, tag in
             removeTagAtIndex(index)
         }
     }
 
-    public func tokenizeTextFieldText() -> WSTag? {
-        let text = self.textField.text?.stringByTrimmingCharactersInSet(NSCharacterSet.whitespaceCharacterSet()) ?? ""
-        if text.isEmpty == false && (onVerifyTag?(self, text: text) ?? true) {
+    @discardableResult
+    open func tokenizeTextFieldText() -> WSTag? {
+        let text = self.textField.text?.trimmingCharacters(in: CharacterSet.whitespaces) ?? ""
+        if text.isEmpty == false && (onVerifyTag?(self, text) ?? true) {
             let tag = WSTag(text)
             addTag(tag)
             self.textField.text = ""
@@ -408,16 +409,16 @@ public class WSTagsField: UIView {
 
     // MARK: - Actions
 
-    public func onTextFieldDidChange(sender: AnyObject) {
+    open func onTextFieldDidChange(_ sender: AnyObject) {
         if let didChangeTextEvent = onDidChangeText {
-            didChangeTextEvent(self, text: textField.text)
+            didChangeTextEvent(self, textField.text)
         }
     }
 
 
     // MARK: - Tag selection
 
-    public func selectTagView(tagView: WSTagView, animated: Bool = false) {
+    open func selectTagView(_ tagView: WSTagView, animated: Bool = false) {
         if self.readOnly {
             return
         }
@@ -429,7 +430,7 @@ public class WSTagsField: UIView {
         }
     }
 
-    public func unselectAllTagViewsAnimated(animated: Bool = false) {
+    open func unselectAllTagViewsAnimated(_ animated: Bool = false) {
         tagViews.forEach() { item in
             item.selected = false
         }
@@ -443,20 +444,20 @@ public func ==(lhs: UITextField, rhs: WSTagsField) -> Bool {
 
 extension WSTagsField: UITextFieldDelegate {
 
-    public func textFieldDidBeginEditing(textField: UITextField) {
+    public func textFieldDidBeginEditing(_ textField: UITextField) {
         if let didBeginEditingEvent = onDidBeginEditing {
             didBeginEditingEvent(self)
         }
         unselectAllTagViewsAnimated(true)
     }
 
-    public func textFieldDidEndEditing(textField: UITextField) {
+    public func textFieldDidEndEditing(_ textField: UITextField) {
         if let didEndEditingEvent = onDidEndEditing {
             didEndEditingEvent(self)
         }
     }
 
-    public func textFieldShouldReturn(textField: UITextField) -> Bool {
+    public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         tokenizeTextFieldText()
         var shouldDoDefaultBehavior = false
         if let shouldReturnEvent = onShouldReturn {
@@ -465,7 +466,7 @@ extension WSTagsField: UITextFieldDelegate {
         return shouldDoDefaultBehavior
     }
 
-    public func textField(textField: UITextField, shouldChangeCharactersInRange range: NSRange, replacementString string: String) -> Bool {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return true
     }
 
@@ -473,7 +474,7 @@ extension WSTagsField: UITextFieldDelegate {
 
 private protocol BackspaceDetectingTextFieldDelegate: UITextFieldDelegate {
     /// Notify whenever the backspace key is pressed
-    func textFieldDidDeleteBackwards(textField: UITextField)
+    func textFieldDidDeleteBackwards(_ textField: UITextField)
 }
 
 private class BackspaceDetectingTextField: UITextField {
@@ -481,7 +482,7 @@ private class BackspaceDetectingTextField: UITextField {
     var onDeleteBackwards: Optional<()->()>
 
     init() {
-        super.init(frame: CGRectZero)
+        super.init(frame: CGRect.zero)
     }
 
     required init?(coder aDecoder: NSCoder) {
