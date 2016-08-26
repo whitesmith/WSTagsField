@@ -90,7 +90,7 @@ You will also need to make sure you're opting into using frameworks:
 use_frameworks!
 ```
 
-Then run `pod install` with CocoaPods 1.0 or newer.
+Then run `pod install` with CocoaPods 1.1.0.beta.1 or newer.
 
 #### <img src="https://dl.dropboxusercontent.com/u/11377305/resources/swiftpm.png" width="24" height="24"> [SwiftPM]
 
