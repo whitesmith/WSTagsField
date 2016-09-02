@@ -99,6 +99,16 @@ public class WSTagsField: UIView {
             repositionViews()
         }
     }
+    
+    public var keyboardType: UIKeyboardType {
+        get {
+            return textField.keyboardType
+        }
+        
+        set {
+            textField.keyboardType = newValue
+        }
+    }
 
     public private(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
