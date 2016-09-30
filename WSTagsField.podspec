@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name             = "WSTagsField"
-  s.version          = "1.2.4"
+  s.version          = "2.0.0.beta.1"
   s.summary          = "An iOS text field that represents different Tags"
   s.homepage         = "https://github.com/whitesmith/WSTagsField"
   s.license          = 'MIT'
