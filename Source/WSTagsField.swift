@@ -61,7 +61,7 @@ public class WSTagsField: UIView {
 
     public var fieldTextColor: UIColor? {
         didSet {
-            textField.textColor = textColor
+            textField.textColor = fieldTextColor
         }
     }
 
