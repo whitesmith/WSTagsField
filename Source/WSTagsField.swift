@@ -109,6 +109,15 @@ open class WSTagsField: UIView {
             textField.keyboardType = newValue
         }
     }
+    
+    public var returnKeyType: UIReturnKeyType {
+        get {
+            return textField.returnKeyType
+        }
+        set {
+            textField.returnKeyType = newValue
+        }
+    }
 
     open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()

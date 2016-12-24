@@ -21,6 +21,7 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .white
         tagsField.frame = CGRect(x: 0, y: 44, width: 200, height: 44)
         view.addSubview(tagsField)
+        tagsField.returnKeyType = .next
 
         // Events
         tagsField.onDidAddTag = { _ in
