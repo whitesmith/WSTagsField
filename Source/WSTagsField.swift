@@ -241,17 +241,15 @@ open class WSTagsField: UIView {
             availableWidthForTextField = rightBoundary - curX
         }
 
-        var textFieldRect: CGRect
+        var textFieldRect = CGRect.zero
+        textFieldRect.origin.y = curY
+        textFieldRect.size.height = WSTagsField.STANDARD_ROW_HEIGHT
         if textField.isEnabled {
-            textFieldRect = self.textField.frame
             textFieldRect.origin.x = curX
-            textFieldRect.origin.y = curY
             textFieldRect.size.width = availableWidthForTextField
-            textFieldRect.size.height = WSTagsField.STANDARD_ROW_HEIGHT
             textField.isHidden = false
         }
         else {
-            textFieldRect = CGRect.zero
             textField.isHidden = true
         }
         self.textField.frame = textFieldRect
