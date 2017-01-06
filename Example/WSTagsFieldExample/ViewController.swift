@@ -13,6 +13,7 @@ class ViewController: UIViewController {
 
     let tagsField = WSTagsField()
     let testButton = UIButton(type: .system)
+    let readOnlyToggleButton = UIButton(type: .system)
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -52,6 +53,12 @@ class ViewController: UIViewController {
         testButton.setTitle("Test", for: UIControlState())
         view.addSubview(testButton)
         testButton.addTarget(self, action: #selector(didTouchTestButton), for: .touchUpInside)
+        
+        readOnlyToggleButton.frame = CGRect(x: 0, y: 300, width: 120, height: 44)
+        readOnlyToggleButton.backgroundColor = .white
+        readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
+        view.addSubview(readOnlyToggleButton)
+        readOnlyToggleButton.addTarget(self, action: #selector(didTouchReadOnlyToggleButton), for: .touchUpInside)
     }
 
     func didTouchTestButton(_ sender: AnyObject) {
@@ -65,6 +72,15 @@ class ViewController: UIViewController {
         tagsField.selectedTextColor = .red
         tagsField.delimiter = ","
         print(tagsField.tags)
+    }
+    
+    func didTouchReadOnlyToggleButton(_ sender: AnyObject) {
+        tagsField.readOnly = !tagsField.readOnly
+        if tagsField.readOnly {
+            readOnlyToggleButton.setTitle("Enable Editing", for: UIControlState())
+        } else {
+            readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
+        }
     }
 
     override func viewDidAppear(_ animated: Bool) {
