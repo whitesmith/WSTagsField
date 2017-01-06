@@ -72,6 +72,7 @@ class ViewController: UIViewController {
         tagsField.selectedColor = .black
         tagsField.selectedTextColor = .red
         tagsField.delimiter = ","
+        tagsField.returnKeyType = .go
         print(tagsField.tags)
     }
     

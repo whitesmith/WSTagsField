@@ -119,6 +119,22 @@ open class WSTagsField: UIView {
         }
     }
 
+    @available(iOS, unavailable)
+    override open var inputAccessoryView: UIView? {
+        get {
+            return super.inputAccessoryView
+        }
+    }
+
+    open var inputFieldAccessoryView: UIView? {
+        get {
+            return textField.inputAccessoryView
+        }
+        set {
+            textField.inputAccessoryView = newValue
+        }
+    }
+
     open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
     fileprivate var intrinsicContentHeight: CGFloat = 0.0
