@@ -384,6 +384,16 @@ open class WSTagsField: UIView {
                 self.removeTagAtIndex(index)
             }
         }
+
+        tagView.onDidInputText = { tagView, text in
+            if text == "\n" {
+                self.selectNextTag()
+            }
+            else {
+                self.textField.becomeFirstResponder()
+                self.textField.text = text
+            }
+        }
         
         self.tagViews.append(tagView)
         addSubview(tagView)
@@ -457,6 +467,28 @@ open class WSTagsField: UIView {
 
 
     // MARK: - Tag selection
+
+    open func selectNextTag() {
+        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+            return
+        }
+        let nextIndex = tagViews.index(after: selectedIndex)
+        if nextIndex < tagViews.count {
+            tagViews[selectedIndex].selected = false
+            tagViews[nextIndex].selected = true
+        }
+    }
+
+    open func selectPrevTag() {
+        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+            return
+        }
+        let prevIndex = tagViews.index(before: selectedIndex)
+        if prevIndex >= 0 {
+            tagViews[selectedIndex].selected = false
+            tagViews[prevIndex].selected = true
+        }
+    }
 
     open func selectTagView(_ tagView: WSTagView, animated: Bool = false) {
         if self.readOnly {

@@ -61,8 +61,9 @@ open class WSTagView: UIView {
         }
     }
 
-    open var onDidRequestDelete: Optional<(_ tagView: WSTagView, _ replacementText: String?)->()>
-    open var onDidRequestSelection: Optional<(_ tagView: WSTagView)->()>
+    internal var onDidRequestDelete: Optional<(_ tagView: WSTagView, _ replacementText: String?)->()>
+    internal var onDidRequestSelection: Optional<(_ tagView: WSTagView)->()>
+    internal var onDidInputText: Optional<(_ tagView: WSTagView, _ text: String)->()>
 
     open var selected: Bool = false {
         didSet {
@@ -212,8 +213,8 @@ extension WSTagView: UIKeyInput {
     }
 
     public func insertText(_ text: String) {
-        if let didRequestDeleteEvent = onDidRequestDelete {
-            didRequestDeleteEvent(self, text)
+        if let didInputText = onDidInputText {
+            didInputText(self, text)
         }
     }
     
