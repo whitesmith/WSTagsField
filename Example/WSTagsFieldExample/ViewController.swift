@@ -49,6 +49,14 @@ class ViewController: UIViewController {
             print("HeightTo \(height)")
         }
 
+        tagsField.onDidSelectTagView = { _, tagView in
+            print("Select \(tagView)")
+        }
+
+        tagsField.onDidUnselectTagView = { _, tagView in
+            print("Unselect \(tagView)")
+        }
+
         testButton.frame = CGRect(x: 0, y: 250, width: 100, height: 44)
         testButton.backgroundColor = .white
         testButton.setTitle("Test", for: UIControlState())

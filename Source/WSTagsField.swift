@@ -142,13 +142,13 @@ open class WSTagsField: UIView {
 
     // MARK: - Events
 
-    /// Called when the text field begins editing
+    /// Called when the text field begins editing.
     open var onDidEndEditing: ((WSTagsField) -> Void)?
 
-    /// Called when the text field ends editing
+    /// Called when the text field ends editing.
     open var onDidBeginEditing: ((WSTagsField) -> Void)?
 
-    /// Called when the text field should return
+    /// Called when the text field should return.
     open var onShouldReturn: ((WSTagsField) -> Bool)?
 
     /// Called when the text field text has changed. You should update your autocompleting UI based on the text supplied.
@@ -159,6 +159,12 @@ open class WSTagsField: UIView {
 
     /// Called when a tag has been removed. You should use this opportunity to update your local list of selected items.
     open var onDidRemoveTag: ((WSTagsField, _ tag: WSTag) -> Void)?
+
+    /// Called when a tag has been selected.
+    open var onDidSelectTagView: ((WSTagsField, _ tag: WSTagView) -> Void)?
+
+    /// Called when a tag has been unselected.
+    open var onDidUnselectTagView: ((WSTagsField, _ tag: WSTagView) -> Void)?
 
     /**
      * Called when the user attempts to press the Return key with text partially typed.
@@ -460,13 +466,16 @@ open class WSTagsField: UIView {
         tagViews.forEach() { item in
             if item != tagView {
                 item.selected = false
+                onDidUnselectTagView?(self, item)
             }
         }
+        onDidSelectTagView?(self, tagView)
     }
 
     open func unselectAllTagViewsAnimated(_ animated: Bool = false) {
         tagViews.forEach() { item in
             item.selected = false
+            onDidUnselectTagView?(self, item)
         }
     }
 
