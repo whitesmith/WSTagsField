@@ -118,7 +118,52 @@ open class WSTagsField: UIView {
             textField.returnKeyType = newValue
         }
     }
-
+  
+    public var spellCheckingType: UITextSpellCheckingType {
+        get {
+            return textField.spellCheckingType
+        }
+        set {
+            textField.spellCheckingType = newValue
+        }
+    }
+  
+    public var autocapitalizationType: UITextAutocapitalizationType {
+        get {
+            return textField.autocapitalizationType
+        }
+        set {
+            textField.autocapitalizationType = newValue
+        }
+    }
+  
+    public var autocorrectionType: UITextAutocorrectionType {
+        get {
+            return textField.autocorrectionType
+        }
+        set {
+            textField.autocorrectionType = newValue
+        }
+    }
+  
+    public var enablesReturnKeyAutomatically: Bool {
+        get {
+            return textField.enablesReturnKeyAutomatically
+        }
+        set {
+            textField.enablesReturnKeyAutomatically = newValue
+        }
+    }
+  
+    public var text: String? {
+        get {
+            return textField.text
+        }
+        set {
+            textField.text = newValue
+        }
+    }
+  
     @available(iOS, unavailable)
     override open var inputAccessoryView: UIView? {
         get {
@@ -200,6 +245,7 @@ open class WSTagsField: UIView {
         textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.autocapitalizationType = UITextAutocapitalizationType.none
+        textField.spellCheckingType = .no
         textField.delegate = self
         textField.font = font
         textField.textColor = fieldTextColor
