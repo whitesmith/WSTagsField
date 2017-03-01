@@ -8,6 +8,12 @@
 
 import UIKit
 
+public enum WSTagAcceptOption {
+    case `return`
+    case comma
+    case space
+}
+
 open class WSTagsField: UIView {
 
     fileprivate static let HSPACE: CGFloat = 0.0
@@ -18,6 +24,8 @@ open class WSTagsField: UIView {
     fileprivate static let FIELD_MARGIN_X: CGFloat = WSTagView.xPadding
 
     fileprivate let textField = BackspaceDetectingTextField()
+
+    open weak var delegate: UITextFieldDelegate?
 
     open override var tintColor: UIColor! {
         didSet {
@@ -163,6 +171,8 @@ open class WSTagsField: UIView {
             textField.text = newValue
         }
     }
+
+    open var acceptTagOption: WSTagAcceptOption = .return
   
     @available(iOS, unavailable)
     override open var inputAccessoryView: UIView? {
@@ -194,7 +204,7 @@ open class WSTagsField: UIView {
     open var onDidBeginEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field should return.
-    open var onShouldReturn: ((WSTagsField) -> Bool)?
+    open var onShouldAcceptTag: ((WSTagsField) -> Bool)?
 
     /// Called when the text field text has changed. You should update your autocompleting UI based on the text supplied.
     open var onDidChangeText: ((WSTagsField, _ text: String?) -> Void)?
@@ -579,15 +589,26 @@ extension WSTagsField: UITextFieldDelegate {
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        tokenizeTextFieldText()
-        var shouldDoDefaultBehavior = false
-        if let shouldReturnEvent = onShouldReturn {
-            shouldDoDefaultBehavior = shouldReturnEvent(self)
+        if acceptTagOption == .return && onShouldAcceptTag?(self) ?? true {
+            tokenizeTextFieldText()
+            return true
         }
-        return shouldDoDefaultBehavior
+        if let textFieldShouldReturn = delegate?.textFieldShouldReturn, textFieldShouldReturn(textField) {
+            tokenizeTextFieldText()
+            return true
+        }
+        return false
     }
 
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if acceptTagOption == .comma && string == "," && onShouldAcceptTag?(self) ?? true {
+            tokenizeTextFieldText()
+            return false
+        }
+        if acceptTagOption == .space && string == " " && onShouldAcceptTag?(self) ?? true {
+            tokenizeTextFieldText()
+            return false
+        }
         return true
     }
 
