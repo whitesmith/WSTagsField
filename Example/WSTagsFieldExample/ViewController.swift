@@ -12,6 +12,7 @@ import WSTagsField
 class ViewController: UIViewController {
 
     let tagsField = WSTagsField()
+    let anotherField = UITextField()
     let testButton = UIButton(type: .system)
     let readOnlyToggleButton = UIButton(type: .system)
 
@@ -21,6 +22,7 @@ class ViewController: UIViewController {
         tagsField.placeholder = "Enter a tag"
         tagsField.backgroundColor = .white
         tagsField.frame = CGRect(x: 0, y: 44, width: 200, height: 44)
+        tagsField.delegate = self
         view.addSubview(tagsField)
         tagsField.returnKeyType = .next
 
@@ -57,13 +59,19 @@ class ViewController: UIViewController {
             print("Unselect \(tagView)")
         }
 
-        testButton.frame = CGRect(x: 0, y: 250, width: 100, height: 44)
+        anotherField.frame = CGRect(x: 0, y: 250, width: 120, height: 44)
+        anotherField.backgroundColor = .white
+        anotherField.placeholder = "another field"
+        anotherField.delegate = self
+        view.addSubview(anotherField)
+
+        testButton.frame = CGRect(x: 0, y: 300, width: 100, height: 44)
         testButton.backgroundColor = .white
         testButton.setTitle("Test", for: UIControlState())
         view.addSubview(testButton)
         testButton.addTarget(self, action: #selector(didTouchTestButton), for: .touchUpInside)
         
-        readOnlyToggleButton.frame = CGRect(x: 0, y: 300, width: 120, height: 44)
+        readOnlyToggleButton.frame = CGRect(x: 0, y: 350, width: 120, height: 44)
         readOnlyToggleButton.backgroundColor = .white
         readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
         view.addSubview(readOnlyToggleButton)
@@ -80,6 +88,7 @@ class ViewController: UIViewController {
         tagsField.selectedColor = .black
         tagsField.selectedTextColor = .red
         tagsField.delimiter = ","
+        tagsField.acceptTagOption = .space
         tagsField.returnKeyType = .go
         print(tagsField.tags)
     }
@@ -98,6 +107,17 @@ class ViewController: UIViewController {
             tagsField.beginEditing()
         }
         super.viewDidAppear(animated)
+    }
+
+}
+
+extension ViewController: UITextFieldDelegate {
+
+    func textFieldShouldReturn(_ textField: UITextField) -> Bool {
+        if textField == tagsField {
+            anotherField.becomeFirstResponder()
+        }
+        return true
     }
 
 }
