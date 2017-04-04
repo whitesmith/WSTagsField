@@ -113,16 +113,18 @@ open class WSTagView: UIView {
                 backgroundLayer.backgroundColor = selectedColor?.cgColor
                 textLabel.textColor = selectedTextColor
             }
+            
+            weak var weakSelf = self
             UIView.animate(
                 withDuration: 0.03,
                 animations: {
-                    self.backgroundLayer.backgroundColor = self.selected ? self.selectedColor?.cgColor : self.tintColor.cgColor
-                    self.textLabel.textColor = self.selected ? self.selectedTextColor : self.textColor
+                    weakSelf?.backgroundLayer.backgroundColor = weakSelf!.selected ? weakSelf?.selectedColor?.cgColor : weakSelf?.tintColor.cgColor
+                    weakSelf?.textLabel.textColor = weakSelf!.selected ? weakSelf?.selectedTextColor : weakSelf?.textColor
                 },
                 completion: { finished in
-                    if !self.selected {
-                        self.backgroundLayer.backgroundColor = self.tintColor.cgColor
-                        self.textLabel.textColor = self.textColor
+                    if !weakSelf!.selected {
+                        weakSelf?.backgroundLayer.backgroundColor = weakSelf?.tintColor.cgColor
+                        weakSelf?.textLabel.textColor = weakSelf?.textColor
                     }
                 }
             )

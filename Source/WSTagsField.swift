@@ -22,7 +22,7 @@ open class WSTagsField: UIView {
     open override var tintColor: UIColor! {
         didSet {
             tagViews.forEach() { item in
-                item.tintColor = self.tintColor
+                item.tintColor = tintColor
             }
         }
     }
@@ -30,7 +30,7 @@ open class WSTagsField: UIView {
     open var textColor: UIColor? {
         didSet {
             tagViews.forEach() { item in
-                item.textColor = self.textColor
+                item.textColor = textColor
             }
         }
     }
@@ -38,7 +38,7 @@ open class WSTagsField: UIView {
     open var selectedColor: UIColor? {
         didSet {
             tagViews.forEach() { item in
-                item.selectedColor = self.selectedColor
+                item.selectedColor = selectedColor
             }
         }
     }
@@ -46,7 +46,7 @@ open class WSTagsField: UIView {
     open var selectedTextColor: UIColor? {
         didSet {
             tagViews.forEach() { item in
-                item.selectedTextColor = self.selectedTextColor
+                item.selectedTextColor = selectedTextColor
             }
         }
     }
@@ -54,7 +54,7 @@ open class WSTagsField: UIView {
     open var delimiter: String? {
         didSet {
             tagViews.forEach() { item in
-                item.displayDelimiter = self.delimiter ?? ""
+                item.displayDelimiter = delimiter ?? ""
             }
         }
     }
@@ -75,7 +75,7 @@ open class WSTagsField: UIView {
         didSet {
             textField.font = font
             tagViews.forEach() { item in
-                item.font = self.font
+                item.font = font
             }
         }
     }
@@ -250,14 +250,15 @@ open class WSTagsField: UIView {
         textField.font = font
         textField.textColor = fieldTextColor
         addSubview(textField)
-
+        
+        weak var weakSelf = self
         textField.onDeleteBackwards = {
-            if self.readOnly {
+            if weakSelf!.readOnly {
                 return
             }
-            if self.textField.text?.isEmpty ?? true, let tagView = self.tagViews.last {
-                self.selectTagView(tagView, animated: true)
-                self.textField.resignFirstResponder()
+            if weakSelf?.textField.text?.isEmpty ?? true, let tagView = weakSelf?.tagViews.last {
+                weakSelf?.selectTagView(tagView, animated: true)
+                weakSelf?.textField.resignFirstResponder()
             }
         }
 
@@ -418,26 +419,27 @@ open class WSTagsField: UIView {
         tagView.onDidRequestSelection = { tagView in
             self.selectTagView(tagView, animated: true)
         }
-
+        
+        weak var weakSelf = self
         tagView.onDidRequestDelete = { tagView, replacementText in
             // First, refocus the text field
-            self.textField.becomeFirstResponder()
+            weakSelf?.textField.becomeFirstResponder()
             if (replacementText?.isEmpty ?? false) == false {
-                self.textField.text = replacementText
+                weakSelf?.textField.text = replacementText
             }
             // Then remove the view from our data
-            if let index = self.tagViews.index(of: tagView) {
-                self.removeTagAtIndex(index)
+            if let index = weakSelf?.tagViews.index(of: tagView) {
+                weakSelf?.removeTagAtIndex(index)
             }
         }
 
         tagView.onDidInputText = { tagView, text in
             if text == "\n" {
-                self.selectNextTag()
+                weakSelf?.selectNextTag()
             }
             else {
-                self.textField.becomeFirstResponder()
-                self.textField.text = text
+                weakSelf?.textField.becomeFirstResponder()
+                weakSelf?.textField.text = text
             }
         }
         
