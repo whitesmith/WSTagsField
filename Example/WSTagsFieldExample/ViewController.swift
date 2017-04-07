@@ -82,6 +82,13 @@ class ViewController: UIViewController {
         tagsField.delimiter = ","
         tagsField.returnKeyType = .go
         print(tagsField.tags)
+
+        // Dealloc test
+        let field = WSTagsField()
+        field.addTag("test1")
+        field.addTag("test2")
+        field.addTag("test3")
+        field.addTag("test4")
     }
     
     func didTouchReadOnlyToggleButton(_ sender: AnyObject) {

@@ -251,13 +251,13 @@ open class WSTagsField: UIView {
         textField.textColor = fieldTextColor
         addSubview(textField)
 
-        textField.onDeleteBackwards = {
-            if self.readOnly {
+        textField.onDeleteBackwards = { [weak self] in
+            if self?.readOnly ?? true {
                 return
             }
-            if self.textField.text?.isEmpty ?? true, let tagView = self.tagViews.last {
-                self.selectTagView(tagView, animated: true)
-                self.textField.resignFirstResponder()
+            if self?.textField.text?.isEmpty ?? true, let tagView = self?.tagViews.last {
+                self?.selectTagView(tagView, animated: true)
+                self?.textField.resignFirstResponder()
             }
         }
 
@@ -415,29 +415,29 @@ open class WSTagsField: UIView {
         tagView.selectedTextColor = self.selectedTextColor
         tagView.displayDelimiter = self.delimiter ?? ""
 
-        tagView.onDidRequestSelection = { tagView in
-            self.selectTagView(tagView, animated: true)
+        tagView.onDidRequestSelection = { [weak self] tagView in
+            self?.selectTagView(tagView, animated: true)
         }
 
-        tagView.onDidRequestDelete = { tagView, replacementText in
+        tagView.onDidRequestDelete = { [weak self] tagView, replacementText in
             // First, refocus the text field
-            self.textField.becomeFirstResponder()
+            self?.textField.becomeFirstResponder()
             if (replacementText?.isEmpty ?? false) == false {
-                self.textField.text = replacementText
+                self?.textField.text = replacementText
             }
             // Then remove the view from our data
-            if let index = self.tagViews.index(of: tagView) {
-                self.removeTagAtIndex(index)
+            if let index = self?.tagViews.index(of: tagView) {
+                self?.removeTagAtIndex(index)
             }
         }
 
-        tagView.onDidInputText = { tagView, text in
+        tagView.onDidInputText = { [weak self] tagView, text in
             if text == "\n" {
-                self.selectNextTag()
+                self?.selectNextTag()
             }
             else {
-                self.textField.becomeFirstResponder()
-                self.textField.text = text
+                self?.textField.becomeFirstResponder()
+                self?.textField.text = text
             }
         }
         
