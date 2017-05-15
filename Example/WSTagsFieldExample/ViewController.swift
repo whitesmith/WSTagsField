@@ -68,6 +68,12 @@ class ViewController: UIViewController {
         readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
         view.addSubview(readOnlyToggleButton)
         readOnlyToggleButton.addTarget(self, action: #selector(didTouchReadOnlyToggleButton), for: .touchUpInside)
+
+        //tagsField.addTag("Salvador Sobral")
+        //tagsField.addTag("EuroVision")
+        //tagsField.addTag("Portugal")
+        //tagsField.addTag("Lasdkjasop POAKSd jalskdj kajsld ka")
+        //tagsField.addTag("🇵🇹")
     }
 
     func didTouchTestButton(_ sender: AnyObject) {

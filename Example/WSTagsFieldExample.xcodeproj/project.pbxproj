@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		D73307521EB3B8DE00FD29B4 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73307511EB3B8DE00FD29B4 /* TableViewController.swift */; };
 		D7F33FF61D2A7378003F0082 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F33FF51D2A7378003F0082 /* AppDelegate.swift */; };
 		D7F33FF81D2A7378003F0082 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F33FF71D2A7378003F0082 /* ViewController.swift */; };
 		D7F33FFB1D2A7378003F0082 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7F33FF91D2A7378003F0082 /* Main.storyboard */; };
@@ -55,6 +56,7 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D73307511EB3B8DE00FD29B4 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		D7F33FF21D2A7378003F0082 /* WSTagsFieldExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WSTagsFieldExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7F33FF51D2A7378003F0082 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		D7F33FF71D2A7378003F0082 /* ViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ViewController.swift; sourceTree = "<group>"; };
@@ -99,6 +101,7 @@
 			children = (
 				D7F33FF51D2A7378003F0082 /* AppDelegate.swift */,
 				D7F33FF71D2A7378003F0082 /* ViewController.swift */,
+				D73307511EB3B8DE00FD29B4 /* TableViewController.swift */,
 				D7F33FF91D2A7378003F0082 /* Main.storyboard */,
 				D7F33FFC1D2A7378003F0082 /* Assets.xcassets */,
 				D7F33FFE1D2A7378003F0082 /* LaunchScreen.storyboard */,
@@ -214,6 +217,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				D7F33FF81D2A7378003F0082 /* ViewController.swift in Sources */,
+				D73307521EB3B8DE00FD29B4 /* TableViewController.swift in Sources */,
 				D7F33FF61D2A7378003F0082 /* AppDelegate.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
