@@ -242,6 +242,8 @@ open class WSTagsField: UIView {
         selectedColor = .gray
         selectedTextColor = .black
 
+        clipsToBounds = true
+
         textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.autocapitalizationType = UITextAutocapitalizationType.none
@@ -340,10 +342,14 @@ open class WSTagsField: UIView {
             if let didChangeHeightToEvent = self.onDidChangeHeightTo {
                 didChangeHeightToEvent(self, newContentHeight)
             }
-            frame.size.height = newContentHeight
+            if constraints.isEmpty {
+                frame.size.height = newContentHeight
+            }
         }
-        else {
-            frame.size.height = oldContentHeight
+        else if frame.size.height != oldContentHeight {
+            if constraints.isEmpty {
+                frame.size.height = oldContentHeight
+            }
         }
         setNeedsDisplay()
     }
