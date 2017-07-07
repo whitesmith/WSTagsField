@@ -147,10 +147,10 @@ open class WSTagView: UIView {
     }
 
     open func sizeToFit(_ size: CGSize) -> CGSize {
-        if self.frame.size.width > size.width {
+        if intrinsicContentSize.width > size.width {
             return CGSize(width: size.width, height: self.frame.size.height)
         }
-        return self.frame.size
+        return intrinsicContentSize
     }
 
 
