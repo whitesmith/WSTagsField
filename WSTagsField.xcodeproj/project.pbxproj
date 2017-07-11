@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		125AC6EC1F14D13F00137101 /* BackspaceDetectingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */; };
 		D77F81B31D2A957400E6FF3E /* WSTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B01D2A957400E6FF3E /* WSTag.swift */; };
 		D77F81B41D2A957400E6FF3E /* WSTagsField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B11D2A957400E6FF3E /* WSTagsField.swift */; };
 		D77F81B51D2A957400E6FF3E /* WSTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B21D2A957400E6FF3E /* WSTagView.swift */; };
@@ -26,6 +27,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BackspaceDetectingTextField.swift; path = Source/BackspaceDetectingTextField.swift; sourceTree = SOURCE_ROOT; };
 		D77F81B01D2A957400E6FF3E /* WSTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTag.swift; path = Source/WSTag.swift; sourceTree = SOURCE_ROOT; };
 		D77F81B11D2A957400E6FF3E /* WSTagsField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagsField.swift; path = Source/WSTagsField.swift; sourceTree = SOURCE_ROOT; };
 		D77F81B21D2A957400E6FF3E /* WSTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagView.swift; path = Source/WSTagView.swift; sourceTree = SOURCE_ROOT; };
@@ -80,6 +82,7 @@
 				D78C9FF21D2A6AFD004F4BFF /* WSTagsField.h */,
 				D77F81B01D2A957400E6FF3E /* WSTag.swift */,
 				D77F81B11D2A957400E6FF3E /* WSTagsField.swift */,
+				125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */,
 				D77F81B21D2A957400E6FF3E /* WSTagView.swift */,
 				D78C9FF41D2A6AFD004F4BFF /* Info.plist */,
 			);
@@ -208,6 +211,7 @@
 				D77F81B31D2A957400E6FF3E /* WSTag.swift in Sources */,
 				D77F81B41D2A957400E6FF3E /* WSTagsField.swift in Sources */,
 				D77F81B51D2A957400E6FF3E /* WSTagView.swift in Sources */,
+				125AC6EC1F14D13F00137101 /* BackspaceDetectingTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
