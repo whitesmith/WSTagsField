@@ -41,20 +41,6 @@ class ViewController: UIViewController {
     }
     
     @IBAction func touchTest(_ sender: UIButton) {
-//        tagsField.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-//        tagsField.spaceBetweenTags = 10.0
-//        tagsField.font = .systemFont(ofSize: 12.0)
-//        tagsField.tintColor = .green
-//        tagsField.textColor = .black
-//        tagsField.fieldTextColor = .blue
-//        tagsField.selectedColor = .black
-//        tagsField.selectedTextColor = .red
-//        tagsField.delimiter = ","
-//        tagsField.returnKeyType = .go
-//        print(tagsField.tags)
-        
-//        // Dealloc test
-//        let field = WSTagsField()
         tagsField.addTag("test1")
         tagsField.addTag("test2")
         tagsField.addTag("test3")
