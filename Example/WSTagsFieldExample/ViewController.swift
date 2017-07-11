@@ -21,6 +21,7 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .lightGray
         tagsField.frame = tagsView.bounds
         tagsField.returnKeyType = .next
+        tagsField.delimiter = " "
 
         textFieldEventss()
     }

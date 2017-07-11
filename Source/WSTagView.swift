@@ -9,7 +9,6 @@
 import UIKit
 
 open class WSTagView: UIView {
-    fileprivate let backgroundLayer = CALayer()
     fileprivate let textLabel = UILabel()
 
     open var displayText: String = "" {
@@ -67,10 +66,9 @@ open class WSTagView: UIView {
 
     public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
-        backgroundLayer.backgroundColor = tintColor.cgColor
-        backgroundLayer.cornerRadius = 3.0
-        backgroundLayer.masksToBounds = true
-        layer.addSublayer(backgroundLayer)
+        self.backgroundColor = tintColor
+        self.layer.cornerRadius = 3.0
+        self.layer.masksToBounds = true
 
         textColor = .white
         selectedColor = .gray
@@ -95,30 +93,31 @@ open class WSTagView: UIView {
         assert(false, "Not implemented")
     }
 
+    fileprivate func updateColors() {
+        self.backgroundColor = selected ? selectedColor : tintColor
+        textLabel.textColor = selected ? selectedTextColor : textColor
+    }
+
     internal func updateContent(animated: Bool) {
-        if animated {
-            if selected {
-                backgroundLayer.backgroundColor = selectedColor?.cgColor
-                textLabel.textColor = selectedTextColor
-            }
-            
-            UIView.animate(
-                withDuration: 0.03,
-                animations: {
-                    self.backgroundLayer.backgroundColor = self.selected ? self.selectedColor?.cgColor : self.tintColor.cgColor
-                    self.textLabel.textColor = self.selected ? self.selectedTextColor : self.textColor
-                },
-                completion: { _ in
-                    if !self.selected {
-                        self.backgroundLayer.backgroundColor = self.tintColor.cgColor
-                        self.textLabel.textColor = self.textColor
-                    }
-                }
-            )
-        } else {
-            backgroundLayer.backgroundColor = selected ? selectedColor?.cgColor : tintColor.cgColor
-            textLabel.textColor = selected ? selectedTextColor : textColor
+        guard animated else {
+            updateColors()
+            return
         }
+
+        UIView.animate(withDuration: 0.3,
+                       animations: { [weak self] in
+                        self?.updateColors()
+                        if self?.selected ?? false {
+                            self?.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
+                        }
+        },
+                       completion: { [weak self] _ in
+                        if self?.selected ?? false {
+                            UIView.animate(withDuration: 0.6) { [weak self] in
+                                self?.transform = CGAffineTransform.identity
+                            }
+                        }
+        })
     }
 
     // MARK: - Size Measurements
@@ -157,7 +156,6 @@ open class WSTagView: UIView {
     // MARK: - Laying out
     open override func layoutSubviews() {
         super.layoutSubviews()
-        backgroundLayer.frame = bounds
         textLabel.frame = bounds.insetBy(dx: Constants.TagViewXPadding, dy: Constants.TagViewYPadding)
         if frame.width == 0 || frame.height == 0 {
             frame.size = self.intrinsicContentSize

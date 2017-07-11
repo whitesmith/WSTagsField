@@ -27,10 +27,13 @@ open class WSTagsField: UIView {
         didSet { tagViews.forEach { $0.selectedTextColor = self.selectedTextColor } }
     }
     
-    open var delimiter: String? {
-        didSet { tagViews.forEach { $0.displayDelimiter = self.delimiter ?? "" } }
+    open var delimiter: String = "" {
+        didSet { tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" } }
     }
-    
+    open var displayDelimiter: Bool = false {
+        didSet { tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" } }
+    }
+
     open var fieldTextColor: UIColor? {
         didSet { textField.textColor = fieldTextColor }
     }
@@ -176,7 +179,7 @@ open class WSTagsField: UIView {
         tagView.textColor = self.textColor
         tagView.selectedColor = self.selectedColor
         tagView.selectedTextColor = self.selectedTextColor
-        tagView.displayDelimiter = self.delimiter ?? ""
+        tagView.displayDelimiter = self.displayDelimiter ? self.delimiter : ""
 
         tagView.onDidRequestSelection = { [weak self] tagView in
             self?.selectTagView(tagView, animated: true)
@@ -288,6 +291,11 @@ open class WSTagsField: UIView {
 
     open func selectTagView(_ tagView: WSTagView, animated: Bool = false) {
         if self.readOnly { return }
+        
+        if tagView.selected {
+            tagView.onDidRequestDelete?(tagView, nil)
+            return
+        }
         
         tagView.selected = true
         tagViews.filter { $0 != tagView }.forEach {
@@ -464,11 +472,7 @@ extension WSTagsField {
     }
     
     fileprivate func updatePlaceholderTextVisibility() {
-        if tags.count > 0 {
-            textField.placeholder = nil
-        } else {
-            textField.placeholder = self.placeholder
-        }
+        textField.placeholder = tags.count > 0 ? nil : self.placeholder
     }
 }
 
@@ -489,6 +493,11 @@ extension WSTagsField: UITextFieldDelegate {
 
     public func textField(_ textField: UITextField,
                           shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if string == delimiter {
+            tokenizeTextFieldText()
+            return false
+        }
+
         return true
     }
 
