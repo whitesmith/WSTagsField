@@ -15,6 +15,7 @@ class ViewController: UIViewController {
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        tagsField.frame = tagsView.bounds
         tagsView.addSubview(tagsField)
         
         tagsField.placeholder = "Enter a tag"
@@ -22,6 +23,8 @@ class ViewController: UIViewController {
         tagsField.frame = tagsView.bounds
         tagsField.returnKeyType = .next
         tagsField.delimiter = " "
+        
+        tagsField.maxHeight = 100.0
 
         textFieldEventss()
     }

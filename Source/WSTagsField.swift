@@ -8,7 +8,7 @@
 
 import UIKit
 
-open class WSTagsField: UIView {
+open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
 
     open override var tintColor: UIColor! {
@@ -30,7 +30,12 @@ open class WSTagsField: UIView {
     open var delimiter: String = "" {
         didSet { tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" } }
     }
+    
     open var displayDelimiter: Bool = false {
+        didSet { tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" } }
+    }
+
+    open var maxHeight: CGFloat = CGFloat.infinity {
         didSet { tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" } }
     }
 
@@ -123,13 +128,17 @@ open class WSTagsField: UIView {
         return CGSize(width: self.frame.size.width - padding.left - padding.right, height: max(45, self.intrinsicContentHeight))
     }
 
-    open override func layoutSubviews() {
-        super.layoutSubviews()
-        tagViews.forEach {
-            $0.setNeedsLayout()
-        }
+    open override func willMove(toSuperview newSuperview: UIView?) {
+        super.willMove(toSuperview: newSuperview)
+        
+        tagViews.forEach { $0.setNeedsLayout() }
         repositionViews()
     }
+//    open override func layoutSubviews() {
+//        super.layoutSubviews()
+//        tagViews.forEach { $0.setNeedsLayout() }
+//        repositionViews()
+//    }
 
     /// Take the text inside of the field and make it a Tag.
     open func acceptCurrentTextAsTag() {
@@ -363,6 +372,9 @@ extension WSTagsField {
 // MARK: Private functions
 extension WSTagsField {
     fileprivate func internalInit() {
+        self.isScrollEnabled = false
+        self.showsHorizontalScrollIndicator = false
+        
         textColor = .white
         selectedColor = .gray
         selectedTextColor = .black
@@ -458,16 +470,26 @@ extension WSTagsField {
         
         if oldContentHeight != self.intrinsicContentHeight {
             let newContentHeight = intrinsicContentSize.height
-            onDidChangeHeightTo?(self, newContentHeight)
-
-            if constraints.isEmpty {
+            
+            self.isScrollEnabled = newContentHeight >= self.maxHeight
+            
+            self.contentSize.width = self.bounds.width
+            self.contentSize.height = newContentHeight
+            if constraints.isEmpty && newContentHeight < self.maxHeight {
                 frame.size.height = newContentHeight
             }
         } else
         if frame.size.height != oldContentHeight && constraints.isEmpty {
-            frame.size.height = oldContentHeight
+            self.isScrollEnabled = oldContentHeight >= self.maxHeight
+            
+            if oldContentHeight < self.maxHeight {
+                frame.size.height = oldContentHeight
+            }
         }
 
+        if self.isScrollEnabled {
+            self.scrollRectToVisible(textField.frame, animated: false)
+        }
         setNeedsDisplay()
     }
     
