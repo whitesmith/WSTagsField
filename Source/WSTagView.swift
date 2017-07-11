@@ -38,44 +38,36 @@ open class WSTagView: UIView {
     }
 
     open override var tintColor: UIColor! {
-        didSet {
-            updateContent(animated: false)
-        }
+        didSet { updateContent(animated: false) }
     }
 
     open var selectedColor: UIColor? {
-        didSet {
-            updateContent(animated: false)
-        }
+        didSet { updateContent(animated: false) }
     }
 
     open var textColor: UIColor? {
-        didSet {
-            updateContent(animated: false)
-        }
+        didSet { updateContent(animated: false) }
     }
 
     open var selectedTextColor: UIColor? {
-        didSet {
-            updateContent(animated: false)
-        }
+        didSet { updateContent(animated: false) }
     }
 
-    internal var onDidRequestDelete: Optional<(_ tagView: WSTagView, _ replacementText: String?)->()>
-    internal var onDidRequestSelection: Optional<(_ tagView: WSTagView)->()>
-    internal var onDidInputText: Optional<(_ tagView: WSTagView, _ text: String)->()>
+    internal var onDidRequestDelete: ((_ tagView: WSTagView, _ replacementText: String?) -> Void)?
+    internal var onDidRequestSelection: ((_ tagView: WSTagView) -> Void)?
+    internal var onDidInputText: ((_ tagView: WSTagView, _ text: String) -> Void)?
 
     open var selected: Bool = false {
         didSet {
             if selected && !isFirstResponder {
-                let _ = becomeFirstResponder()
-            } else if !selected && isFirstResponder {
-                let _ = resignFirstResponder()
+                _ = becomeFirstResponder()
+            } else
+            if !selected && isFirstResponder {
+                _ = resignFirstResponder()
             }
             updateContent(animated: true)
         }
     }
-
 
     public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
@@ -113,13 +105,14 @@ open class WSTagView: UIView {
                 backgroundLayer.backgroundColor = selectedColor?.cgColor
                 textLabel.textColor = selectedTextColor
             }
+            
             UIView.animate(
                 withDuration: 0.03,
                 animations: {
                     self.backgroundLayer.backgroundColor = self.selected ? self.selectedColor?.cgColor : self.tintColor.cgColor
                     self.textLabel.textColor = self.selected ? self.selectedTextColor : self.textColor
                 },
-                completion: { finished in
+                completion: { _ in
                     if !self.selected {
                         self.backgroundLayer.backgroundColor = self.tintColor.cgColor
                         self.textLabel.textColor = self.textColor
@@ -132,41 +125,40 @@ open class WSTagView: UIView {
         }
     }
 
-
     // MARK: - Size Measurements
-
     open override var intrinsicContentSize: CGSize {
         let labelIntrinsicSize = textLabel.intrinsicContentSize
-        return CGSize(width: labelIntrinsicSize.width + 2 * WSTagView.xPadding, height: labelIntrinsicSize.height + 2 * WSTagView.yPadding)
+        return CGSize(width: labelIntrinsicSize.width + 2 * WSTagView.xPadding,
+                      height: labelIntrinsicSize.height + 2 * WSTagView.yPadding)
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        let fittingSize = CGSize(width: size.width - 2.0 * WSTagView.xPadding, height: size.height - 2.0 * WSTagView.yPadding)
+        let fittingSize = CGSize(width: size.width - 2.0 * WSTagView.xPadding,
+                                 height: size.height - 2.0 * WSTagView.yPadding)
         let labelSize = textLabel.sizeThatFits(fittingSize)
-        return CGSize(width: labelSize.width + 2.0 * WSTagView.xPadding, height: labelSize.height + 2.0 * WSTagView.yPadding)
+        return CGSize(width: labelSize.width + 2.0 * WSTagView.xPadding,
+                      height: labelSize.height + 2.0 * WSTagView.yPadding)
     }
 
     open func sizeToFit(_ size: CGSize) -> CGSize {
         if intrinsicContentSize.width > size.width {
-            return CGSize(width: size.width, height: self.frame.size.height)
+            return CGSize(width: size.width,
+                          height: self.frame.size.height)
         }
         return intrinsicContentSize
     }
 
-
     // MARK: - Attributed Text
-
     fileprivate func updateLabelText() {
         // Unselected shows "[displayText]," and selected is "[displayText]"
         textLabel.text = displayText + displayDelimiter
         // Expand Label
         let intrinsicSize = self.intrinsicContentSize
-        frame = CGRect(x: 0, y: 0, width: intrinsicSize.width, height: intrinsicSize.height)
+        frame = CGRect(x: 0, y: 0, width: intrinsicSize.width,
+                       height: intrinsicSize.height)
     }
 
-
     // MARK: - Laying out
-
     open override func layoutSubviews() {
         super.layoutSubviews()
         backgroundLayer.frame = bounds
@@ -176,12 +168,8 @@ open class WSTagView: UIView {
         }
     }
 
-
     // MARK: - First Responder (needed to capture keyboard)
-
-    open override var canBecomeFirstResponder: Bool {
-        return true
-    }
+    open override var canBecomeFirstResponder: Bool { return true }
 
     open override func becomeFirstResponder() -> Bool {
         let didBecomeFirstResponder = super.becomeFirstResponder()
@@ -195,13 +183,9 @@ open class WSTagView: UIView {
         return didResignFirstResponder
     }
 
-
     // MARK: - Gesture Recognizers
-
     func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer) {
-        if let didRequestSelectionEvent = onDidRequestSelection {
-            didRequestSelectionEvent(self)
-        }
+        onDidRequestSelection?(self)
     }
 
 }
@@ -213,27 +197,20 @@ extension WSTagView: UIKeyInput {
     }
 
     public func insertText(_ text: String) {
-        if let didInputText = onDidInputText {
-            didInputText(self, text)
-        }
+        onDidInputText?(self, text)
     }
     
     public func deleteBackward() {
-        if let didRequestDeleteEvent = onDidRequestDelete {
-            didRequestDeleteEvent(self, nil)
-        }
+        onDidRequestDelete?(self, nil)
     }
     
 }
 
 extension WSTagView: UITextInputTraits {
-  
   // Solves an issue where autocorrect suggestions were being
   // offered when a tag is highlighted.
   public var autocorrectionType: UITextAutocorrectionType {
-      get {
-          return .no
-      }
+      get { return .no }
       set { }
   }
   

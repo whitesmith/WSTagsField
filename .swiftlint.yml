@@ -1,0 +1,11 @@
+line_length: 130
+
+disabled_rules:
+  - variable_name
+  - trailing_whitespace
+  - todo
+  - valid_docs
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - Carthage
+  - Pods

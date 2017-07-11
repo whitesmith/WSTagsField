@@ -21,31 +21,31 @@ open class WSTagsField: UIView {
 
     open override var tintColor: UIColor! {
         didSet {
-            tagViews.forEach() { $0.tintColor = self.tintColor }
+            tagViews.forEach { $0.tintColor = self.tintColor }
         }
     }
 
     open var textColor: UIColor? {
         didSet {
-            tagViews.forEach() { $0.textColor = self.textColor }
+            tagViews.forEach { $0.textColor = self.textColor }
         }
     }
 
     open var selectedColor: UIColor? {
         didSet {
-            tagViews.forEach() { $0.selectedColor = self.selectedColor }
+            tagViews.forEach { $0.selectedColor = self.selectedColor }
         }
     }
 
     open var selectedTextColor: UIColor? {
         didSet {
-            tagViews.forEach() { $0.selectedTextColor = self.selectedTextColor }
+            tagViews.forEach { $0.selectedTextColor = self.selectedTextColor }
         }
     }
 
     open var delimiter: String? {
         didSet {
-            tagViews.forEach() { $0.displayDelimiter = self.delimiter ?? "" }
+            tagViews.forEach { $0.displayDelimiter = self.delimiter ?? "" }
         }
     }
 
@@ -64,7 +64,7 @@ open class WSTagsField: UIView {
     open var font: UIFont? {
         didSet {
             textField.font = font
-            tagViews.forEach() { $0.font = self.font }
+            tagViews.forEach { $0.font = self.font }
         }
     }
 
@@ -153,11 +153,7 @@ open class WSTagsField: UIView {
     }
   
     @available(iOS, unavailable)
-    override open var inputAccessoryView: UIView? {
-        get {
-            return super.inputAccessoryView
-        }
-    }
+    override open var inputAccessoryView: UIView? { return super.inputAccessoryView }
 
     open var inputFieldAccessoryView: UIView? {
         get {
@@ -236,7 +232,7 @@ open class WSTagsField: UIView {
 
     /// Take the text inside of the field and make it a Tag.
     open func acceptCurrentTextAsTag() {
-        if let currentText = tokenizeTextFieldText() , (self.textField.text?.isEmpty ?? true) == false {
+        if let currentText = tokenizeTextFieldText(), (self.textField.text?.isEmpty ?? true) == false {
             self.addTag(currentText)
         }
     }
@@ -251,19 +247,19 @@ open class WSTagsField: UIView {
     }
 
     open func endEditing() {
-        // NOTE: We used to check if .isFirstResponder and then resign first responder, but sometimes we noticed that it would be the first responder, but still return isFirstResponder=NO. So always attempt to resign without checking.
+        // NOTE: We used to check if .isFirstResponder and then resign first responder, but sometimes we noticed 
+        // that it would be the first responder, but still return isFirstResponder=NO. 
+        // So always attempt to resign without checking.
         self.textField.resignFirstResponder()
     }
 
-
     // MARK: - Adding / Removing Tags
-
     open func addTags(_ tags: [String]) {
-        tags.forEach() { addTag($0) }
+        tags.forEach { addTag($0) }
     }
 
     open func addTags(_ tags: [WSTag]) {
-        tags.forEach() { addTag($0) }
+        tags.forEach { addTag($0) }
     }
 
     open func addTag(_ tag: String) {
@@ -302,8 +298,7 @@ open class WSTagsField: UIView {
         tagView.onDidInputText = { [weak self] tagView, text in
             if text == "\n" {
                 self?.selectNextTag()
-            }
-            else {
+            } else {
                 self?.textField.becomeFirstResponder()
                 self?.textField.text = text
             }
@@ -351,9 +346,7 @@ open class WSTagsField: UIView {
     }
 
     open func removeTags() {
-        self.tags.enumerated().reversed().forEach { index, tag in
-            removeTagAtIndex(index)
-        }
+        self.tags.enumerated().reversed().forEach { index, _ in removeTagAtIndex(index) }
     }
 
     @discardableResult
@@ -371,14 +364,12 @@ open class WSTagsField: UIView {
         return nil
     }
 
-
     // MARK: - Actions
     open func onTextFieldDidChange(_ sender: AnyObject) {
         if let didChangeTextEvent = onDidChangeText {
             didChangeTextEvent(self, textField.text)
         }
     }
-
 
     // MARK: - Tag selection
     open func selectNextTag() {
@@ -414,12 +405,11 @@ open class WSTagsField: UIView {
     }
 
     open func unselectAllTagViewsAnimated(_ animated: Bool = false) {
-        tagViews.forEach() {
+        tagViews.forEach {
             $0.selected = false
             onDidUnselectTagView?(self, $0)
         }
     }
-
 }
 
 extension WSTagsField {
@@ -508,8 +498,7 @@ extension WSTagsField {
             textFieldRect.origin.x = curX
             textFieldRect.size.width = availableWidthForTextField
             textField.isHidden = false
-        }
-        else {
+        } else {
             textField.isHidden = true
         }
         self.textField.frame = textFieldRect
@@ -526,20 +515,18 @@ extension WSTagsField {
             if constraints.isEmpty {
                 frame.size.height = newContentHeight
             }
+        } else
+        if frame.size.height != oldContentHeight && constraints.isEmpty {
+            frame.size.height = oldContentHeight
         }
-        else if frame.size.height != oldContentHeight {
-            if constraints.isEmpty {
-                frame.size.height = oldContentHeight
-            }
-        }
+
         setNeedsDisplay()
     }
     
     fileprivate func updatePlaceholderTextVisibility() {
         if tags.count > 0 {
             textField.placeholder = nil
-        }
-        else {
+        } else {
             textField.placeholder = self.placeholder
         }
     }
@@ -568,12 +555,13 @@ extension WSTagsField: UITextFieldDelegate {
         return shouldDoDefaultBehavior
     }
 
-    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+    public func textField(_ textField: UITextField,
+                          shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
         return true
     }
 
 }
 
-public func ==(lhs: UITextField, rhs: WSTagsField) -> Bool {
+public func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
     return lhs == rhs.textField
 }

@@ -15,7 +15,7 @@ protocol BackspaceDetectingTextFieldDelegate: UITextFieldDelegate {
 
 class BackspaceDetectingTextField: UITextField {
     
-    var onDeleteBackwards: Optional<()->()>
+    var onDeleteBackwards: (() -> Void)?
     
     init() {
         super.init(frame: CGRect.zero)
@@ -26,9 +26,7 @@ class BackspaceDetectingTextField: UITextField {
     }
     
     override func deleteBackward() {
-        if let deleteBackwardsEvent = onDeleteBackwards {
-            deleteBackwardsEvent()
-        }
+        onDeleteBackwards?()
         // Call super afterwards. The `text` property will return text prior to the delete.
         super.deleteBackward()
     }

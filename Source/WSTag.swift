@@ -26,6 +26,6 @@ public struct WSTag: Hashable {
 
 }
 
-public func ==(lhs: WSTag, rhs: WSTag) -> Bool {
+public func == (lhs: WSTag, rhs: WSTag) -> Bool {
     return lhs.equals(rhs)
 }
