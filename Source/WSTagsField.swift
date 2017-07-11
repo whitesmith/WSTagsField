@@ -12,45 +12,31 @@ open class WSTagsField: UIView {
     fileprivate let textField = BackspaceDetectingTextField()
 
     open override var tintColor: UIColor! {
-        didSet {
-            tagViews.forEach { $0.tintColor = self.tintColor }
-        }
+        didSet { tagViews.forEach { $0.tintColor = self.tintColor } }
     }
-    
+
     open var textColor: UIColor? {
-        didSet {
-            tagViews.forEach { $0.textColor = self.textColor }
-        }
+        didSet { tagViews.forEach { $0.textColor = self.textColor } }
     }
-    
+
     open var selectedColor: UIColor? {
-        didSet {
-            tagViews.forEach { $0.selectedColor = self.selectedColor }
-        }
+        didSet { tagViews.forEach { $0.selectedColor = self.selectedColor } }
     }
     
     open var selectedTextColor: UIColor? {
-        didSet {
-            tagViews.forEach { $0.selectedTextColor = self.selectedTextColor }
-        }
+        didSet { tagViews.forEach { $0.selectedTextColor = self.selectedTextColor } }
     }
     
     open var delimiter: String? {
-        didSet {
-            tagViews.forEach { $0.displayDelimiter = self.delimiter ?? "" }
-        }
+        didSet { tagViews.forEach { $0.displayDelimiter = self.delimiter ?? "" } }
     }
     
     open var fieldTextColor: UIColor? {
-        didSet {
-            textField.textColor = fieldTextColor
-        }
+        didSet { textField.textColor = fieldTextColor }
     }
     
     open var placeholder: String = "Tags" {
-        didSet {
-            updatePlaceholderTextVisibility()
-        }
+        didSet { updatePlaceholderTextVisibility() }
     }
     
     open var font: UIFont? {
