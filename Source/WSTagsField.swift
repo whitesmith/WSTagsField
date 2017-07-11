@@ -16,50 +16,50 @@ open class WSTagsField: UIView {
             tagViews.forEach { $0.tintColor = self.tintColor }
         }
     }
-
+    
     open var textColor: UIColor? {
         didSet {
             tagViews.forEach { $0.textColor = self.textColor }
         }
     }
-
+    
     open var selectedColor: UIColor? {
         didSet {
             tagViews.forEach { $0.selectedColor = self.selectedColor }
         }
     }
-
+    
     open var selectedTextColor: UIColor? {
         didSet {
             tagViews.forEach { $0.selectedTextColor = self.selectedTextColor }
         }
     }
-
+    
     open var delimiter: String? {
         didSet {
             tagViews.forEach { $0.displayDelimiter = self.delimiter ?? "" }
         }
     }
-
+    
     open var fieldTextColor: UIColor? {
         didSet {
             textField.textColor = fieldTextColor
         }
     }
-
+    
     open var placeholder: String = "Tags" {
         didSet {
             updatePlaceholderTextVisibility()
         }
     }
-
+    
     open var font: UIFont? {
         didSet {
             textField.font = font
             tagViews.forEach { $0.font = self.font }
         }
     }
-
+    
     open var readOnly: Bool = false {
         didSet {
             unselectAllTagViewsAnimated()
@@ -67,93 +67,13 @@ open class WSTagsField: UIView {
             repositionViews()
         }
     }
-
+    
     open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
-        didSet {
-            repositionViews()
-        }
+        didSet { repositionViews() }
     }
-
+    
     open var spaceBetweenTags: CGFloat = 2.0 {
-        didSet {
-            repositionViews()
-        }
-    }
-    
-    public var keyboardType: UIKeyboardType {
-        get {
-            return textField.keyboardType
-        }
-        
-        set {
-            textField.keyboardType = newValue
-        }
-    }
-    
-    public var returnKeyType: UIReturnKeyType {
-        get {
-            return textField.returnKeyType
-        }
-        set {
-            textField.returnKeyType = newValue
-        }
-    }
-  
-    public var spellCheckingType: UITextSpellCheckingType {
-        get {
-            return textField.spellCheckingType
-        }
-        set {
-            textField.spellCheckingType = newValue
-        }
-    }
-  
-    public var autocapitalizationType: UITextAutocapitalizationType {
-        get {
-            return textField.autocapitalizationType
-        }
-        set {
-            textField.autocapitalizationType = newValue
-        }
-    }
-  
-    public var autocorrectionType: UITextAutocorrectionType {
-        get {
-            return textField.autocorrectionType
-        }
-        set {
-            textField.autocorrectionType = newValue
-        }
-    }
-  
-    public var enablesReturnKeyAutomatically: Bool {
-        get {
-            return textField.enablesReturnKeyAutomatically
-        }
-        set {
-            textField.enablesReturnKeyAutomatically = newValue
-        }
-    }
-  
-    public var text: String? {
-        get {
-            return textField.text
-        }
-        set {
-            textField.text = newValue
-        }
-    }
-  
-    @available(iOS, unavailable)
-    override open var inputAccessoryView: UIView? { return super.inputAccessoryView }
-
-    open var inputFieldAccessoryView: UIView? {
-        get {
-            return textField.inputAccessoryView
-        }
-        set {
-            textField.inputAccessoryView = newValue
-        }
+        didSet { repositionViews() }
     }
 
     open fileprivate(set) var tags = [WSTag]()
@@ -209,7 +129,7 @@ open class WSTagsField: UIView {
         super.init(coder: aDecoder)
         internalInit()
     }
-
+    
     open override var intrinsicContentSize: CGSize {
         return CGSize(width: self.frame.size.width - padding.left - padding.right, height: max(45, self.intrinsicContentHeight))
     }
@@ -400,6 +320,53 @@ open class WSTagsField: UIView {
     }
 }
 
+// MARK: TextField Properties
+extension WSTagsField {
+    public var keyboardType: UIKeyboardType {
+        get { return textField.keyboardType }
+        set { textField.keyboardType = newValue }
+    }
+    
+    public var returnKeyType: UIReturnKeyType {
+        get { return textField.returnKeyType }
+        set { textField.returnKeyType = newValue }
+    }
+    
+    public var spellCheckingType: UITextSpellCheckingType {
+        get { return textField.spellCheckingType }
+        set { textField.spellCheckingType = newValue }
+    }
+    
+    public var autocapitalizationType: UITextAutocapitalizationType {
+        get { return textField.autocapitalizationType }
+        set { textField.autocapitalizationType = newValue }
+    }
+    
+    public var autocorrectionType: UITextAutocorrectionType {
+        get { return textField.autocorrectionType }
+        set { textField.autocorrectionType = newValue }
+    }
+    
+    public var enablesReturnKeyAutomatically: Bool {
+        get { return textField.enablesReturnKeyAutomatically }
+        set { textField.enablesReturnKeyAutomatically = newValue }
+    }
+    
+    public var text: String? {
+        get { return textField.text }
+        set { textField.text = newValue }
+    }
+    
+    @available(iOS, unavailable)
+    override open var inputAccessoryView: UIView? { return super.inputAccessoryView }
+    
+    open var inputFieldAccessoryView: UIView? {
+        get { return textField.inputAccessoryView }
+        set { textField.inputAccessoryView = newValue }
+    }
+}
+
+// MARK: Private functions
 extension WSTagsField {
     fileprivate func internalInit() {
         textColor = .white
