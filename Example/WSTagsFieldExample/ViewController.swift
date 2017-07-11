@@ -10,18 +10,17 @@ import UIKit
 import WSTagsField
 
 class ViewController: UIViewController {
-
-    let tagsField = WSTagsField()
-    let testButton = UIButton(type: .system)
-    let readOnlyToggleButton = UIButton(type: .system)
+    fileprivate let tagsField = WSTagsField()
+    @IBOutlet fileprivate weak var tagsView: UIView!
 
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
+        
         tagsField.placeholder = "Enter a tag"
-        tagsField.backgroundColor = .white
+        tagsField.backgroundColor = .lightGray
         tagsField.frame = CGRect(x: 0, y: 44, width: 200, height: 44)
-        view.addSubview(tagsField)
+        tagsView.addSubview(tagsField)
+        tagsField.frame = tagsView.bounds
         tagsField.returnKeyType = .next
 
         // Events
@@ -56,27 +55,19 @@ class ViewController: UIViewController {
         tagsField.onDidUnselectTagView = { _, tagView in
             print("Unselect \(tagView)")
         }
-
-        testButton.frame = CGRect(x: 0, y: 250, width: 100, height: 44)
-        testButton.backgroundColor = .white
-        testButton.setTitle("Test", for: UIControlState())
-        view.addSubview(testButton)
-        testButton.addTarget(self, action: #selector(didTouchTestButton), for: .touchUpInside)
-        
-        readOnlyToggleButton.frame = CGRect(x: 0, y: 300, width: 120, height: 44)
-        readOnlyToggleButton.backgroundColor = .white
-        readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
-        view.addSubview(readOnlyToggleButton)
-        readOnlyToggleButton.addTarget(self, action: #selector(didTouchReadOnlyToggleButton), for: .touchUpInside)
-
-        //tagsField.addTag("Salvador Sobral")
-        //tagsField.addTag("EuroVision")
-        //tagsField.addTag("Portugal")
-        //tagsField.addTag("Lasdkjasop POAKSd jalskdj kajsld ka")
-        //tagsField.addTag("🇵🇹")
+    }
+    
+    override func viewWillLayoutSubviews() {
+        tagsField.frame = tagsView.bounds
     }
 
-    func didTouchTestButton(_ sender: AnyObject) {
+    @IBAction func touchReadOnly(_ sender: UIButton) {
+        tagsField.readOnly = !tagsField.readOnly
+        sender.isSelected = tagsField.readOnly
+        
+    }
+    
+    @IBAction func touchTest(_ sender: UIButton) {
         tagsField.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
         tagsField.spaceBetweenTags = 10.0
         tagsField.font = .systemFont(ofSize: 12.0)
@@ -88,7 +79,7 @@ class ViewController: UIViewController {
         tagsField.delimiter = ","
         tagsField.returnKeyType = .go
         print(tagsField.tags)
-
+        
         // Dealloc test
         let field = WSTagsField()
         field.addTag("test1")
@@ -97,15 +88,6 @@ class ViewController: UIViewController {
         field.addTag("test4")
     }
     
-    func didTouchReadOnlyToggleButton(_ sender: AnyObject) {
-        tagsField.readOnly = !tagsField.readOnly
-        if tagsField.readOnly {
-            readOnlyToggleButton.setTitle("Enable Editing", for: UIControlState())
-        } else {
-            readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
-        }
-    }
-
     override func viewDidAppear(_ animated: Bool) {
         if tagsField.isEditing == false {
             tagsField.beginEditing()
