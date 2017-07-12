@@ -57,6 +57,9 @@ open class WSTagsField: UIScrollView {
     open var placeholder: String = "Tags" {
         didSet { updatePlaceholderTextVisibility() }
     }
+    open var placeholderAlwayVisible: Bool = false {
+        didSet { updatePlaceholderTextVisibility() }
+    }
     
     open var font: UIFont? {
         didSet {
@@ -500,7 +503,10 @@ extension WSTagsField {
     }
     
     fileprivate func updatePlaceholderTextVisibility() {
-        textField.placeholder = tags.count > 0 ? nil : self.placeholder
+        textField.placeholder = tags.count > 0 ? nil : placeholder
+        if placeholderAlwayVisible {
+            textField.placeholder = placeholder
+        }
     }
 }
 

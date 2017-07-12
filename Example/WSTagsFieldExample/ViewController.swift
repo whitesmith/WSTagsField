@@ -24,6 +24,7 @@ class ViewController: UIViewController {
         tagsField.returnKeyType = .next
         tagsField.delimiter = " "
         
+        tagsField.placeholderAlwayVisible = true
         tagsField.maxHeight = 100.0
 
         textFieldEventss()
