@@ -134,11 +134,6 @@ open class WSTagsField: UIScrollView {
         tagViews.forEach { $0.setNeedsLayout() }
         repositionViews()
     }
-//    open override func layoutSubviews() {
-//        super.layoutSubviews()
-//        tagViews.forEach { $0.setNeedsLayout() }
-//        repositionViews()
-//    }
 
     /// Take the text inside of the field and make it a Tag.
     open func acceptCurrentTextAsTag() {
