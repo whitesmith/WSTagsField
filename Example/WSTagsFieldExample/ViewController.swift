@@ -75,7 +75,7 @@ extension ViewController {
             print("DidEndEditing")
         }
         
-        tagsField.onDidChangeHeightTo = { sender, height in
+        tagsField.onDidChangeHeightTo = { _, height in
             print("HeightTo \(height)")
         }
         

@@ -10,6 +10,17 @@ import UIKit
 
 open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
+    
+    open override var isFirstResponder: Bool {
+        guard super.isFirstResponder == false,
+            textField.isFirstResponder == false else { return true }
+
+        for i in 0..<tagViews.count where tagViews[i].isFirstResponder {
+            return true
+        }
+
+        return false
+    }
 
     open override var tintColor: UIColor! {
         didSet { tagViews.forEach { $0.tintColor = self.tintColor } }
