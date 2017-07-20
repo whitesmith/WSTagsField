@@ -193,11 +193,11 @@ extension WSTagView: UIKeyInput {
     public func insertText(_ text: String) {
         onDidInputText?(self, text)
     }
-    
+
     public func deleteBackward() {
         onDidRequestDelete?(self, nil)
     }
-    
+
 }
 
 extension WSTagView: UITextInputTraits {
@@ -207,5 +207,5 @@ extension WSTagView: UITextInputTraits {
       get { return .no }
       set { }
   }
-  
+
 }
