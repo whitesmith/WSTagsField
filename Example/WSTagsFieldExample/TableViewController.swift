@@ -33,7 +33,10 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TagsViewCell.self), for: indexPath) as! TagsViewCell
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TagsViewCell.self),
+                                                       for: indexPath) as? TagsViewCell else {
+                                                        return UITableViewCell(style: .default, reuseIdentifier: nil)
+        }
 
         cell.tagsField.onDidChangeHeightTo = { _ in
             tableView.beginUpdates()

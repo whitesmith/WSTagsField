@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		125AC6EC1F14D13F00137101 /* BackspaceDetectingTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */; };
+		125AC6EF1F14D6A600137101 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = 125AC6EE1F14D6A600137101 /* Constants.swift */; };
 		D77F81B31D2A957400E6FF3E /* WSTag.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B01D2A957400E6FF3E /* WSTag.swift */; };
 		D77F81B41D2A957400E6FF3E /* WSTagsField.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B11D2A957400E6FF3E /* WSTagsField.swift */; };
 		D77F81B51D2A957400E6FF3E /* WSTagView.swift in Sources */ = {isa = PBXBuildFile; fileRef = D77F81B21D2A957400E6FF3E /* WSTagView.swift */; };
@@ -26,6 +28,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = BackspaceDetectingTextField.swift; path = Source/BackspaceDetectingTextField.swift; sourceTree = SOURCE_ROOT; };
+		125AC6EE1F14D6A600137101 /* Constants.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = Constants.swift; path = Source/Constants.swift; sourceTree = SOURCE_ROOT; };
 		D77F81B01D2A957400E6FF3E /* WSTag.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTag.swift; path = Source/WSTag.swift; sourceTree = SOURCE_ROOT; };
 		D77F81B11D2A957400E6FF3E /* WSTagsField.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagsField.swift; path = Source/WSTagsField.swift; sourceTree = SOURCE_ROOT; };
 		D77F81B21D2A957400E6FF3E /* WSTagView.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; name = WSTagView.swift; path = Source/WSTagView.swift; sourceTree = SOURCE_ROOT; };
@@ -77,11 +81,13 @@
 		D78C9FF11D2A6AFD004F4BFF /* WSTagsField */ = {
 			isa = PBXGroup;
 			children = (
-				D78C9FF21D2A6AFD004F4BFF /* WSTagsField.h */,
+				125AC6EB1F14D13F00137101 /* BackspaceDetectingTextField.swift */,
+				125AC6EE1F14D6A600137101 /* Constants.swift */,
+				D78C9FF41D2A6AFD004F4BFF /* Info.plist */,
 				D77F81B01D2A957400E6FF3E /* WSTag.swift */,
+				D78C9FF21D2A6AFD004F4BFF /* WSTagsField.h */,
 				D77F81B11D2A957400E6FF3E /* WSTagsField.swift */,
 				D77F81B21D2A957400E6FF3E /* WSTagView.swift */,
-				D78C9FF41D2A6AFD004F4BFF /* Info.plist */,
 			);
 			path = WSTagsField;
 			sourceTree = "<group>";
@@ -117,6 +123,7 @@
 				D78C9FEB1D2A6AFD004F4BFF /* Frameworks */,
 				D78C9FEC1D2A6AFD004F4BFF /* Headers */,
 				D78C9FED1D2A6AFD004F4BFF /* Resources */,
+				125AC6ED1F14D41100137101 /* Swift Lint */,
 			);
 			buildRules = (
 			);
@@ -200,14 +207,33 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		125AC6ED1F14D41100137101 /* Swift Lint */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "Swift Lint";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if which swiftlint >/dev/null; then\nswiftlint\nelse\necho \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		D78C9FEA1D2A6AFD004F4BFF /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				125AC6EF1F14D6A600137101 /* Constants.swift in Sources */,
 				D77F81B31D2A957400E6FF3E /* WSTag.swift in Sources */,
 				D77F81B41D2A957400E6FF3E /* WSTagsField.swift in Sources */,
 				D77F81B51D2A957400E6FF3E /* WSTagView.swift in Sources */,
+				125AC6EC1F14D13F00137101 /* BackspaceDetectingTextField.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
