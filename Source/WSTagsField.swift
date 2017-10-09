@@ -89,10 +89,10 @@ open class WSTagsField: UIScrollView {
     fileprivate var intrinsicContentHeight: CGFloat = 0.0
 
     // MARK: - Events
-    /// Called when the text field begins editing.
+    /// Called when the text field ends editing.
     open var onDidEndEditing: ((WSTagsField) -> Void)?
 
-    /// Called when the text field ends editing.
+    /// Called when the text field begins editing.
     open var onDidBeginEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field should return.
