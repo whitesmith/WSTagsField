@@ -38,7 +38,7 @@ class TableViewController: UITableViewController {
                                                         return UITableViewCell(style: .default, reuseIdentifier: nil)
         }
 
-        cell.tagsField.onDidChangeHeightTo = { _ in
+        cell.tagsField.onDidChangeHeightTo = { _, _ in
             tableView.beginUpdates()
             tableView.endUpdates()
         }
