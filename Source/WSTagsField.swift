@@ -89,10 +89,10 @@ open class WSTagsField: UIScrollView {
     fileprivate var intrinsicContentHeight: CGFloat = 0.0
 
     // MARK: - Events
-    /// Called when the text field begins editing.
+    /// Called when the text field ends editing.
     open var onDidEndEditing: ((WSTagsField) -> Void)?
 
-    /// Called when the text field ends editing.
+    /// Called when the text field begins editing.
     open var onDidBeginEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field should return.
@@ -449,7 +449,12 @@ extension WSTagsField {
         curX += max(0, Constants.TEXT_FIELD_HSPACE - self.spaceBetweenTags)
         let textBoundary: CGFloat = isOnFirstLine ? firstLineRightBoundary : rightBoundary
         var availableWidthForTextField: CGFloat = textBoundary - curX
-        if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
+      
+        if textField.isEnabled {
+          var textFieldRect = CGRect.zero
+          textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
+          
+          if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
             isOnFirstLine = false
             // If in the future we add more UI elements below the tags,
             // isOnFirstLine will be useful, and this calculation is important.
@@ -459,22 +464,19 @@ extension WSTagsField {
             totalHeight += Constants.STANDARD_ROW_HEIGHT
             // Adjust the width
             availableWidthForTextField = rightBoundary - curX
+          }
+          textFieldRect.origin.y = curY
+          textFieldRect.origin.x = curX
+          textFieldRect.size.width = availableWidthForTextField
+          self.textField.frame = textFieldRect
+          textField.isHidden = false
         }
-
-        var textFieldRect = CGRect.zero
-        textFieldRect.origin.y = curY
-        textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
-        if textField.isEnabled {
-            textFieldRect.origin.x = curX
-            textFieldRect.size.width = availableWidthForTextField
-            textField.isHidden = false
-        } else {
-            textField.isHidden = true
+        else {
+          textField.isHidden = true
         }
-        self.textField.frame = textFieldRect
 
         let oldContentHeight: CGFloat = self.intrinsicContentHeight
-        intrinsicContentHeight = max(totalHeight, textFieldRect.maxY + padding.bottom)
+        intrinsicContentHeight = max(totalHeight, curY + Constants.STANDARD_ROW_HEIGHT + Constants.VSPACE + padding.bottom)
         invalidateIntrinsicContentSize()
 
         if oldContentHeight != self.intrinsicContentHeight {
