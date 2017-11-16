@@ -57,6 +57,11 @@ open class WSTagsField: UIScrollView {
     open var placeholder: String = "Tags" {
         didSet { updatePlaceholderTextVisibility() }
     }
+
+    open var placeholderColor: UIColor? {
+        didSet { updatePlaceholderTextVisibility() }
+    }
+
     open var placeholderAlwayVisible: Bool = false {
         didSet { updatePlaceholderTextVisibility() }
     }
