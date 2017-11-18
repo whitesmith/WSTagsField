@@ -29,11 +29,11 @@ tagsField.selectedTextColor = .red
 tagsField.delimiter = ","
 
 // Events
-tagsField.onDidAddTag = { _ in
+tagsField.onDidAddTag = { (_,_) in
     print("DidAddTag")
 }
 
-tagsField.onDidRemoveTag = { _ in
+tagsField.onDidRemoveTag = { (_,_) in
     print("DidRemoveTag")
 }
 
