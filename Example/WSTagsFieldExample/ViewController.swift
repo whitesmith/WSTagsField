@@ -23,6 +23,7 @@ class ViewController: UIViewController {
         tagsField.frame = tagsView.bounds
         tagsField.returnKeyType = .next
         tagsField.delimiter = " "
+        tagsField.tagCornerRadius = 3.0
 
         tagsField.placeholderAlwayVisible = true
         tagsField.maxHeight = 100.0
