@@ -10,18 +10,24 @@ import Foundation
 
 public struct WSTag: Hashable {
 
+    public let id: String
+    
     public let text: String
+    
+    public var isSelectedToBeRemoved: Bool
 
     public init(_ text: String) {
+        self.id = UUID().uuidString.lowercased()
         self.text = text
+        self.isSelectedToBeRemoved = false
     }
 
     public var hashValue: Int {
-        return self.text.hashValue
+        return self.id.hashValue
     }
 
     public func equals(_ other: WSTag) -> Bool {
-        return self.text == other.text
+        return (self.id == other.id) && (self.text == other.text)
     }
 
 }

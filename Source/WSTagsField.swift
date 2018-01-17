@@ -211,6 +211,7 @@ open class WSTagsField: UIScrollView {
             }
             // Then remove the view from our data
             if let index = self?.tagViews.index(of: tagView) {
+                self?.tags[index].isSelectedToBeRemoved = true
                 self?.removeTagAtIndex(index)
             }
         }
