@@ -529,6 +529,15 @@ extension WSTagsField: UITextFieldDelegate {
 
     public func textField(_ textField: UITextField,
                           shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+
+        /** Discussion
+        * if delimiter.isEmpty, the deleteBackward() action will tokenize the text
+        * the delete backwards key invoces a replacement with an empty string and a range.length = selection.length
+        */
+        if delimiter.isEmpty && string.isEmpty && range.length > 0 {
+          return true
+        }
+
         if string == delimiter {
             tokenizeTextFieldText()
             return false
