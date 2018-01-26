@@ -50,6 +50,10 @@ open class WSTagsField: UIScrollView {
         didSet { tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" } }
     }
 
+    open var tagCornerRadius: CGFloat = 3.0 {
+        didSet { tagViews.forEach { $0.cornerRadius = self.tagCornerRadius } }
+    }
+
     open var fieldTextColor: UIColor? {
         didSet { textField.textColor = fieldTextColor }
     }
@@ -203,6 +207,7 @@ open class WSTagsField: UIScrollView {
         tagView.selectedColor = self.selectedColor
         tagView.selectedTextColor = self.selectedTextColor
         tagView.displayDelimiter = self.displayDelimiter ? self.delimiter : ""
+        tagView.cornerRadius = self.tagCornerRadius
 
         tagView.onDidRequestSelection = { [weak self] tagView in
             self?.selectTagView(tagView, animated: true)

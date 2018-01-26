@@ -32,6 +32,13 @@ open class WSTagView: UIView {
         }
     }
 
+    open var cornerRadius: CGFloat = 3.0 {
+        didSet {
+            self.layer.cornerRadius = cornerRadius
+            setNeedsDisplay()
+        }
+    }
+
     open override var tintColor: UIColor! {
         didSet { updateContent(animated: false) }
     }
@@ -67,7 +74,7 @@ open class WSTagView: UIView {
     public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
         self.backgroundColor = tintColor
-        self.layer.cornerRadius = 3.0
+        self.layer.cornerRadius = cornerRadius
         self.layer.masksToBounds = true
 
         textColor = .white
