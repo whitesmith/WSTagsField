@@ -292,7 +292,7 @@ open class WSTagsField: UIScrollView {
     }
 
     // MARK: - Actions
-    open func onTextFieldDidChange(_ sender: AnyObject) {
+    @objc open func onTextFieldDidChange(_ sender: AnyObject) {
         onDidChangeText?(self, textField.text)
     }
 
@@ -459,11 +459,11 @@ extension WSTagsField {
         curX += max(0, Constants.TEXT_FIELD_HSPACE - self.spaceBetweenTags)
         let textBoundary: CGFloat = isOnFirstLine ? firstLineRightBoundary : rightBoundary
         var availableWidthForTextField: CGFloat = textBoundary - curX
-      
+
         if textField.isEnabled {
           var textFieldRect = CGRect.zero
           textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
-          
+
           if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
             isOnFirstLine = false
             // If in the future we add more UI elements below the tags,
@@ -480,8 +480,7 @@ extension WSTagsField {
           textFieldRect.size.width = availableWidthForTextField
           self.textField.frame = textFieldRect
           textField.isHidden = false
-        }
-        else {
+        } else {
           textField.isHidden = true
         }
 
