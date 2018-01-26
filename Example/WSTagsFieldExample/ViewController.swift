@@ -19,6 +19,7 @@ class ViewController: UIViewController {
         tagsView.addSubview(tagsField)
 
         tagsField.placeholder = "Enter a tag"
+        tagsField.placeholderColor = .red
         tagsField.backgroundColor = .lightGray
         tagsField.frame = tagsView.bounds
         tagsField.returnKeyType = .next
