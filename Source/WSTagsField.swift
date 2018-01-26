@@ -518,9 +518,9 @@ extension WSTagsField {
     }
 
     private func attributedPlaceholder() -> NSAttributedString {
-        var attributes: [String: Any]?
+        var attributes: [NSAttributedStringKey: Any]?
         if let placeholderColor = placeholderColor {
-            attributes = [NSForegroundColorAttributeName: placeholderColor]
+            attributes = [NSAttributedStringKey.foregroundColor: placeholderColor]
         }
         return NSAttributedString(string: placeholder, attributes: attributes)
     }
