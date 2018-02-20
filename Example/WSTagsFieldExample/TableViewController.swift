@@ -11,10 +11,13 @@ import WSTagsField
 
 class TableViewController: UITableViewController {
 
-    let records = ["Festival", "Salvador", "EuroVision", "Beer"]
+    let records = ["Festival", "Salvador", "EuroVision", "Beer", "The Room", "The Disaster Movie", "Let's Go", "Bibofir", "The Shape of Water", "It", "American History", "Beautiful", "Sicario"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Refresh", style: .done, target: self, action: #selector(self.refreshButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Add tag", style: .plain, target: self, action: #selector(self.addRandomTagTapped))
+
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
         tableView.allowsSelection = false
@@ -24,8 +27,15 @@ class TableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         tableView.reloadData()
-        //tableView.beginUpdates()
-        //tableView.endUpdates()
+    }
+
+    @objc func refreshButtonTapped() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+
+    @objc func addRandomTagTapped() {
+
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,10 +43,11 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TagsViewCell.self),
-                                                       for: indexPath) as? TagsViewCell else {
-                                                        return UITableViewCell(style: .default, reuseIdentifier: nil)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TagsViewCell.self), for: indexPath) as? TagsViewCell else {
+            return UITableViewCell(style: .default, reuseIdentifier: nil)
         }
+
+        //cell.tagsField.padding = UIEdgeInsets.zero
 
         cell.tagsField.onDidChangeHeightTo = { _, _ in
             tableView.beginUpdates()
@@ -55,7 +66,7 @@ class TagsViewCell: UITableViewCell {
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tagsField.placeholder = "Enter a tag"
-        tagsField.backgroundColor = .white
+        tagsField.backgroundColor = .gray
         //tagsField.frame = CGRect(x: 0, y: 0, width: 300, height: 44)
         tagsField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(tagsField)

@@ -10,7 +10,9 @@ import UIKit
 import WSTagsField
 
 class ViewController: UIViewController {
+
     fileprivate let tagsField = WSTagsField()
+
     @IBOutlet fileprivate weak var tagsView: UIView!
 
     override func viewDidLoad() {
@@ -54,9 +56,15 @@ class ViewController: UIViewController {
         tagsField.addTag("test3")
         tagsField.addTag("test4")
     }
+
+    @IBAction func touchTableView(_ sender: UIButton) {
+        present(UINavigationController(rootViewController: TableViewController()), animated: true, completion: nil)
+    }
+
 }
 
 extension ViewController {
+
     fileprivate func textFieldEventss() {
         tagsField.onDidAddTag = { _, _ in
             print("DidAddTag")
@@ -90,4 +98,5 @@ extension ViewController {
             print("Unselect \(tagView)")
         }
     }
+
 }
