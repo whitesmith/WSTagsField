@@ -20,6 +20,8 @@ class ViewController: UIViewController {
         tagsField.frame = tagsView.bounds
         tagsView.addSubview(tagsField)
 
+        tagsField.tagLayoutMargins = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
+        tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
         tagsField.placeholder = "Enter a tag"
         tagsField.placeholderColor = .red
         tagsField.backgroundColor = .lightGray
@@ -32,7 +34,7 @@ class ViewController: UIViewController {
         tagsField.placeholderAlwayVisible = true
         tagsField.maxHeight = 100.0
 
-        textFieldEventss()
+        textFieldEvents()
     }
 
     override func viewDidAppear(_ animated: Bool) {
@@ -65,7 +67,7 @@ class ViewController: UIViewController {
 
 extension ViewController {
 
-    fileprivate func textFieldEventss() {
+    fileprivate func textFieldEvents() {
         tagsField.onDidAddTag = { _, _ in
             print("DidAddTag")
         }
