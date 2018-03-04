@@ -46,8 +46,10 @@ open class WSTagView: UIView {
     }
     open var borderColor: UIColor? {
         didSet {
-            if let borderColor = borderColor { self.layer.borderColor = borderColor.cgColor }
-            setNeedsDisplay()
+            if let borderColor = borderColor {
+                self.layer.borderColor = borderColor.cgColor
+                setNeedsDisplay()
+            }
         }
     }
 
