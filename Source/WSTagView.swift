@@ -38,6 +38,18 @@ open class WSTagView: UIView {
             setNeedsDisplay()
         }
     }
+    open var borderWidth: CGFloat = 0.0 {
+        didSet {
+            self.layer.borderWidth = borderWidth
+            setNeedsDisplay()
+        }
+    }
+    open var borderColor: UIColor? {
+        didSet {
+            if let borderColor = borderColor { self.layer.borderColor = borderColor.cgColor }
+            setNeedsDisplay()
+        }
+    }
 
     open override var tintColor: UIColor! {
         didSet { updateContent(animated: false) }
