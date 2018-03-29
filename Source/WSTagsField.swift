@@ -11,6 +11,11 @@ import UIKit
 open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
 
+    /// Max number of lines of tags can display in WSTagsField before its contents become scrollable. Default value is 0, which means WSTagsField always resize to fit all tags.
+    open var numberOfLines: Int = 0 {
+        didSet { repositionViews() }
+    }
+
     open override var isFirstResponder: Bool {
         guard super.isFirstResponder == false,
             textField.isFirstResponder == false else { return true }
@@ -28,6 +33,10 @@ open class WSTagsField: UIScrollView {
 
     open var textColor: UIColor? {
         didSet { tagViews.forEach { $0.textColor = self.textColor } }
+    }
+
+    open var normalBackgroundColor: UIColor? {
+        didSet { tagViews.forEach { $0.normalBackgroundColor = self.normalBackgroundColor } }
     }
 
     open var selectedColor: UIColor? {
@@ -93,7 +102,11 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
+//    open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
+//        didSet { repositionViews() }
+//    }
+
+    open override var contentInset: UIEdgeInsets {
         didSet { repositionViews() }
     }
 
@@ -101,9 +114,19 @@ open class WSTagsField: UIScrollView {
         didSet { repositionViews() }
     }
 
+    open var lineSpace: CGFloat = 2.0 {
+        didSet { repositionViews() }
+    }
+
+    /// The layoutMargins to be applied to tag view. Default value is UIEdgeInsets.zero.
+    open var tagLayoutMargins: UIEdgeInsets = .zero {
+        didSet { repositionViews() }
+    }
+
     open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
     fileprivate var intrinsicContentHeight: CGFloat = 0.0
+    fileprivate var contentHeight: CGFloat = 0.0
 
     // MARK: - Events
     /// Called when the text field ends editing.
@@ -156,7 +179,7 @@ open class WSTagsField: UIScrollView {
     }
 
     open override var intrinsicContentSize: CGSize {
-        return CGSize(width: self.frame.size.width - padding.left - padding.right, height: max(45, self.intrinsicContentHeight))
+        return CGSize(width: self.frame.size.width, height: self.intrinsicContentHeight)
     }
 
     open override func willMove(toSuperview newSuperview: UIView?) {
@@ -212,12 +235,14 @@ open class WSTagsField: UIScrollView {
         tagView.font = self.font
         tagView.tintColor = self.tintColor
         tagView.textColor = self.textColor
+        tagView.normalBackgroundColor = self.normalBackgroundColor
         tagView.selectedColor = self.selectedColor
         tagView.selectedTextColor = self.selectedTextColor
         tagView.displayDelimiter = self.displayDelimiter ? self.delimiter : ""
         tagView.cornerRadius = self.tagCornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
+        tagView.layoutMargins = self.tagLayoutMargins
 
         tagView.onDidRequestSelection = { [weak self] tagView in
             self?.selectTagView(tagView, animated: true)
@@ -350,6 +375,11 @@ open class WSTagsField: UIScrollView {
             onDidUnselectTagView?(self, $0)
         }
     }
+
+    // MARK: internal & private properties or methods
+
+    // Reposition tag views when bounds changes.
+    fileprivate var observer: NSKeyValueObservation?
 }
 
 // MARK: TextField Properties
@@ -419,6 +449,15 @@ extension WSTagsField {
         textField.textColor = fieldTextColor
         addSubview(textField)
 
+        observer = self.observe(\.layer.bounds, options: [.old, .new]) { [weak self] sender, change in
+//            print("bounds change: \(change.newValue)")
+            guard change.oldValue?.size.width != change.newValue?.size.width else {
+                return
+            }
+            
+            self?.repositionViews()
+        }
+
         textField.onDeleteBackwards = { [weak self] in
             if self?.readOnly ?? true { return }
 
@@ -430,15 +469,15 @@ extension WSTagsField {
 
         textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: .editingChanged)
 
-        intrinsicContentHeight = Constants.STANDARD_ROW_HEIGHT
+        intrinsicContentHeight = Constants.STANDARD_ROW_HEIGHT + self.contentInset.vertical
         repositionViews()
     }
 
     fileprivate func repositionViews() {
-        let rightBoundary: CGFloat = self.bounds.width - padding.right
+        let rightBoundary: CGFloat = self.bounds.width - contentInset.right
         let firstLineRightBoundary: CGFloat = rightBoundary
-        var curX: CGFloat = padding.left
-        var curY: CGFloat = padding.top
+        var curX: CGFloat = 0.0 //padding.left
+        var curY: CGFloat = 0.0 //padding.top
         var totalHeight: CGFloat = Constants.STANDARD_ROW_HEIGHT
         var isOnFirstLine = true
 
@@ -450,8 +489,8 @@ extension WSTagsField {
             let tagBoundary = isOnFirstLine ? firstLineRightBoundary : rightBoundary
             if curX + tagRect.width > tagBoundary {
                 // Need a new line
-                curX = padding.left
-                curY += Constants.STANDARD_ROW_HEIGHT + Constants.VSPACE
+                curX = 0 //padding.left
+                curY += Constants.STANDARD_ROW_HEIGHT + lineSpace
                 totalHeight += Constants.STANDARD_ROW_HEIGHT
                 isOnFirstLine = false
             }
@@ -479,8 +518,8 @@ extension WSTagsField {
             // If in the future we add more UI elements below the tags,
             // isOnFirstLine will be useful, and this calculation is important.
             // So leaving it set here, and marking the warning to ignore it
-            curX = padding.left + Constants.TEXT_FIELD_HSPACE
-            curY += Constants.STANDARD_ROW_HEIGHT + Constants.VSPACE
+            curX = 0 + Constants.TEXT_FIELD_HSPACE
+            curY += Constants.STANDARD_ROW_HEIGHT + lineSpace
             totalHeight += Constants.STANDARD_ROW_HEIGHT
             // Adjust the width
             availableWidthForTextField = rightBoundary - curX
@@ -494,28 +533,37 @@ extension WSTagsField {
           textField.isHidden = true
         }
 
-        let oldContentHeight: CGFloat = self.intrinsicContentHeight
-        intrinsicContentHeight = max(totalHeight, curY + Constants.STANDARD_ROW_HEIGHT + Constants.VSPACE + padding.bottom)
+//        let oldContentHeight: CGFloat = self.contentHeight
+        contentHeight = max(totalHeight, curY + Constants.STANDARD_ROW_HEIGHT)
+        intrinsicContentHeight = min(maxHeight, maxHeightBasedOnNumberOfLines, contentHeight + contentInset.vertical)
         invalidateIntrinsicContentSize()
-
-        if oldContentHeight != self.intrinsicContentHeight {
-            let newContentHeight = intrinsicContentSize.height
-
-            self.isScrollEnabled = newContentHeight >= self.maxHeight
-
-            self.contentSize.width = self.bounds.width
-            self.contentSize.height = newContentHeight
-            if constraints.isEmpty && newContentHeight < self.maxHeight {
-                frame.size.height = newContentHeight
-            }
-        } else
-        if frame.size.height != oldContentHeight && constraints.isEmpty {
-            self.isScrollEnabled = oldContentHeight >= self.maxHeight
-
-            if oldContentHeight < self.maxHeight {
-                frame.size.height = oldContentHeight
-            }
+        if constraints.isEmpty {
+            frame.size.height = intrinsicContentHeight
         }
+
+        self.isScrollEnabled = contentHeight + contentInset.vertical >= intrinsicContentHeight
+        self.contentSize.width = self.bounds.width - contentInset.horizontal
+        self.contentSize.height = contentHeight
+//        print("contentSize: \(contentSize), intrinsicContentSize: \(intrinsicContentSize)")
+
+//        if oldContentHeight != self.contentHeight {
+////            let newContentHeight = intrinsicContentSize.height
+//
+//            self.isScrollEnabled = contentHeight >= self.maxHeight
+//
+//            self.contentSize.width = self.bounds.width
+//            self.contentSize.height = contentHeight
+////            if constraints.isEmpty && contentHeight < self.maxHeight {
+////                frame.size.height = newContentHeight
+////            }
+//
+//        } else if frame.size.height != oldContentHeight && constraints.isEmpty {
+//            self.isScrollEnabled = oldContentHeight >= self.maxHeight
+//
+////            if oldContentHeight < self.maxHeight {
+////                frame.size.height = oldContentHeight
+////            }
+//        }
 
         if self.isScrollEnabled {
             self.scrollRectToVisible(textField.frame, animated: false)
@@ -533,6 +581,13 @@ extension WSTagsField {
             attributes = [NSAttributedStringKey.foregroundColor: placeholderColor]
         }
         return NSAttributedString(string: placeholder, attributes: attributes)
+    }
+
+    private var maxHeightBasedOnNumberOfLines: CGFloat {
+        guard self.numberOfLines > 0 else {
+            return CGFloat.infinity
+        }
+        return contentInset.vertical + Constants.STANDARD_ROW_HEIGHT * CGFloat(numberOfLines) + lineSpace * CGFloat(numberOfLines - 1)
     }
 }
 
