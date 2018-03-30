@@ -150,16 +150,18 @@ open class WSTagView: UIView {
     // MARK: - Size Measurements
     open override var intrinsicContentSize: CGSize {
         let labelIntrinsicSize = textLabel.intrinsicContentSize
-        return CGSize(width: labelIntrinsicSize.width + layoutMargins.horizontal,
-                      height: labelIntrinsicSize.height + 2 * layoutMargins.vertical)
+        return CGSize(width: labelIntrinsicSize.width + layoutMargins.left + layoutMargins.right,
+                      height: labelIntrinsicSize.height + layoutMargins.top + layoutMargins.bottom)
     }
 
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
-        let fittingSize = CGSize(width: size.width - layoutMargins.horizontal,
-                                 height: size.height - layoutMargins.vertical)
+        let layoutMarginsHorizontal = layoutMargins.left + layoutMargins.right
+        let layoutMarginsVertical = layoutMargins.top + layoutMargins.bottom
+        let fittingSize = CGSize(width: size.width - layoutMarginsHorizontal,
+                                 height: size.height - layoutMarginsVertical)
         let labelSize = textLabel.sizeThatFits(fittingSize)
-        return CGSize(width: labelSize.width + 2.0 * layoutMargins.horizontal,
-                      height: labelSize.height + 2.0 * layoutMargins.vertical)
+        return CGSize(width: labelSize.width + layoutMarginsHorizontal,
+                      height: labelSize.height + layoutMarginsVertical)
     }
 
     open func sizeToFit(_ size: CGSize) -> CGSize {

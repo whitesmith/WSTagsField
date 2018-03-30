@@ -25,6 +25,7 @@ class ViewController: UIViewController {
         tagsField.returnKeyType = .next
         tagsField.delimiter = " "
         tagsField.tagCornerRadius = 3.0
+        tagsField.normalBackgroundColor = tagsField.tintColor
 
         tagsField.placeholderAlwayVisible = true
         tagsField.maxHeight = 100.0

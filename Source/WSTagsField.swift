@@ -35,6 +35,7 @@ open class WSTagsField: UIScrollView {
         didSet { tagViews.forEach { $0.textColor = self.textColor } }
     }
 
+    /// Background color for tag view in normal(non-selected) state.
     open var normalBackgroundColor: UIColor? {
         didSet { tagViews.forEach { $0.normalBackgroundColor = self.normalBackgroundColor } }
     }
@@ -469,7 +470,7 @@ extension WSTagsField {
 
         textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: .editingChanged)
 
-        intrinsicContentHeight = Constants.STANDARD_ROW_HEIGHT + self.contentInset.vertical
+        intrinsicContentHeight = Constants.STANDARD_ROW_HEIGHT + contentInset.top + contentInset.bottom
         repositionViews()
     }
 
@@ -535,14 +536,14 @@ extension WSTagsField {
 
 //        let oldContentHeight: CGFloat = self.contentHeight
         contentHeight = max(totalHeight, curY + Constants.STANDARD_ROW_HEIGHT)
-        intrinsicContentHeight = min(maxHeight, maxHeightBasedOnNumberOfLines, contentHeight + contentInset.vertical)
+        intrinsicContentHeight = min(maxHeight, maxHeightBasedOnNumberOfLines, contentHeight + contentInset.top + contentInset.bottom)
         invalidateIntrinsicContentSize()
         if constraints.isEmpty {
             frame.size.height = intrinsicContentHeight
         }
 
-        self.isScrollEnabled = contentHeight + contentInset.vertical >= intrinsicContentHeight
-        self.contentSize.width = self.bounds.width - contentInset.horizontal
+        self.isScrollEnabled = contentHeight + contentInset.top + contentInset.bottom >= intrinsicContentHeight
+        self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
         self.contentSize.height = contentHeight
 //        print("contentSize: \(contentSize), intrinsicContentSize: \(intrinsicContentSize)")
 
@@ -587,7 +588,7 @@ extension WSTagsField {
         guard self.numberOfLines > 0 else {
             return CGFloat.infinity
         }
-        return contentInset.vertical + Constants.STANDARD_ROW_HEIGHT * CGFloat(numberOfLines) + lineSpace * CGFloat(numberOfLines - 1)
+        return contentInset.top + contentInset.bottom + Constants.STANDARD_ROW_HEIGHT * CGFloat(numberOfLines) + lineSpace * CGFloat(numberOfLines - 1)
     }
 }
 
