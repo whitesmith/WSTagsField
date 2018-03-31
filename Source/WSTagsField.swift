@@ -103,9 +103,10 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-//    open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
-//        didSet { repositionViews() }
-//    }
+    @available(*, unavailable, message: "Use contentInset instead.")
+    open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
+        didSet { repositionViews() }
+    }
 
     open override var contentInset: UIEdgeInsets {
         didSet { repositionViews() }
@@ -477,8 +478,8 @@ extension WSTagsField {
     fileprivate func repositionViews() {
         let rightBoundary: CGFloat = self.bounds.width - contentInset.right
         let firstLineRightBoundary: CGFloat = rightBoundary
-        var curX: CGFloat = 0.0 //padding.left
-        var curY: CGFloat = 0.0 //padding.top
+        var curX: CGFloat = 0.0
+        var curY: CGFloat = 0.0
         var totalHeight: CGFloat = Constants.STANDARD_ROW_HEIGHT
         var isOnFirstLine = true
 
@@ -490,7 +491,7 @@ extension WSTagsField {
             let tagBoundary = isOnFirstLine ? firstLineRightBoundary : rightBoundary
             if curX + tagRect.width > tagBoundary {
                 // Need a new line
-                curX = 0 //padding.left
+                curX = 0
                 curY += Constants.STANDARD_ROW_HEIGHT + lineSpace
                 totalHeight += Constants.STANDARD_ROW_HEIGHT
                 isOnFirstLine = false
