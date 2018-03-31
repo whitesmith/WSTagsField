@@ -38,7 +38,8 @@ class ViewController: UIViewController {
         tagsField.beginEditing()
     }
 
-    override func viewWillLayoutSubviews() {
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
         tagsField.frame = tagsView.bounds
     }
 
