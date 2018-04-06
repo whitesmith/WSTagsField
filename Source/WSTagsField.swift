@@ -476,7 +476,7 @@ extension WSTagsField {
     }
 
     fileprivate func repositionViews() {
-        let rightBoundary: CGFloat = self.bounds.width - contentInset.right
+        let rightBoundary: CGFloat = self.bounds.width - contentInset.left - contentInset.right
         let firstLineRightBoundary: CGFloat = rightBoundary
         var curX: CGFloat = 0.0
         var curY: CGFloat = 0.0
