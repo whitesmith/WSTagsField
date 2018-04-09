@@ -62,11 +62,6 @@ open class WSTagView: UIView {
         didSet { updateContent(animated: false) }
     }
 
-    /// Background color to be used for normal state.
-    open var normalBackgroundColor: UIColor? {
-        didSet { updateContent(animated: false) }
-    }
-
     open var textColor: UIColor? {
         didSet { updateContent(animated: false) }
     }
@@ -121,7 +116,7 @@ open class WSTagView: UIView {
     }
 
     fileprivate func updateColors() {
-        self.backgroundColor = selected ? selectedColor : normalBackgroundColor //tintColor
+        self.backgroundColor = selected ? selectedColor : tintColor
         textLabel.textColor = selected ? selectedTextColor : textColor
     }
 
