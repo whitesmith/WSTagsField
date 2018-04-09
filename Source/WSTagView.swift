@@ -188,7 +188,9 @@ open class WSTagView: UIView {
     }
 
     // MARK: - First Responder (needed to capture keyboard)
-    open override var canBecomeFirstResponder: Bool { return true }
+    open override var canBecomeFirstResponder: Bool {
+        return true
+    }
 
     open override func becomeFirstResponder() -> Bool {
         let didBecomeFirstResponder = super.becomeFirstResponder()
@@ -204,6 +206,9 @@ open class WSTagView: UIView {
 
     // MARK: - Gesture Recognizers
     @objc func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer) {
+        if selected {
+            return
+        }
         onDidRequestSelection?(self)
     }
 
@@ -226,11 +231,12 @@ extension WSTagView: UIKeyInput {
 }
 
 extension WSTagView: UITextInputTraits {
-  // Solves an issue where autocorrect suggestions were being
-  // offered when a tag is highlighted.
-  public var autocorrectionType: UITextAutocorrectionType {
-      get { return .no }
-      set { }
-  }
+
+    // Solves an issue where autocorrect suggestions were being
+    // offered when a tag is highlighted.
+    public var autocorrectionType: UITextAutocorrectionType {
+        get { return .no }
+        set { }
+    }
 
 }
