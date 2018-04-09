@@ -11,11 +11,6 @@ import UIKit
 open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
 
-    /// Max number of lines of tags can display in WSTagsField before its contents become scrollable. Default value is 0, which means WSTagsField always resize to fit all tags.
-    open var numberOfLines: Int = 0 {
-        didSet { repositionViews() }
-    }
-
     open override var isFirstResponder: Bool {
         guard super.isFirstResponder == false,
             textField.isFirstResponder == false else { return true }
@@ -27,25 +22,28 @@ open class WSTagsField: UIScrollView {
         return false
     }
 
-    /// Background color for tag view in normal(non-selected) state.
+    /// Background color for tag view in normal (non-selected) state.
     open override var tintColor: UIColor! {
         didSet {
             tagViews.forEach { $0.tintColor = self.tintColor }
         }
     }
 
+    /// Text color for tag view in normal (non-selected) state.
     open var textColor: UIColor? {
         didSet {
             tagViews.forEach { $0.textColor = self.textColor }
         }
     }
 
+    /// Background color for tag view in normal (selected) state.
     open var selectedColor: UIColor? {
         didSet {
             tagViews.forEach { $0.selectedColor = self.selectedColor }
         }
     }
 
+    /// Text color for tag view in normal (selected) state.
     open var selectedTextColor: UIColor? {
         didSet {
             tagViews.forEach { $0.selectedTextColor = self.selectedTextColor }
@@ -54,25 +52,38 @@ open class WSTagsField: UIScrollView {
 
     open var delimiter: String = "" {
         didSet {
-            tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" }
+            tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
 
-    open var displayDelimiter: Bool = false {
+    @available(*, unavailable, message: "Use 'isDelimiterVisible' instead.")
+    open var displayDelimiter: Bool = false
+
+    open var isDelimiterVisible: Bool = false {
         didSet {
-            tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" }
+            tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
 
     open var maxHeight: CGFloat = CGFloat.infinity {
         didSet {
-            tagViews.forEach { $0.displayDelimiter = self.displayDelimiter ? self.delimiter : "" }
+            tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
 
-    open var tagCornerRadius: CGFloat = 3.0 {
+    /// Max number of lines of tags can display in WSTagsField before its contents become scrollable. Default value is 0, which means WSTagsField always resize to fit all tags.
+    open var numberOfLines: Int = 0 {
         didSet {
-            tagViews.forEach { $0.cornerRadius = self.tagCornerRadius }
+            repositionViews()
+        }
+    }
+
+    @available(*, unavailable, message: "Use 'cornerRadius' instead.")
+    open var tagCornerRadius: CGFloat = 3.0
+
+    open var cornerRadius: CGFloat = 3.0 {
+        didSet {
+            tagViews.forEach { $0.cornerRadius = self.cornerRadius }
         }
     }
 
@@ -112,7 +123,10 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    open var placeholderAlwayVisible: Bool = false {
+    @available(*, unavailable, message: "Use 'placeholderAlwaysVisible' instead.")
+    open var placeholderAlwayVisible: Bool = false
+
+    open var placeholderAlwaysVisible: Bool = false {
         didSet {
             updatePlaceholderTextVisibility()
         }
@@ -134,11 +148,7 @@ open class WSTagsField: UIScrollView {
     }
 
     @available(*, unavailable, message: "Use 'contentInset' instead.")
-    open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
-        didSet {
-            repositionViews()
-        }
-    }
+    open var padding: UIEdgeInsets = UIEdgeInsets.zero
 
     open override var contentInset: UIEdgeInsets {
         didSet {
@@ -152,7 +162,7 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    open var lineSpace: CGFloat = 2.0 {
+    open var spaceBetweenLines: CGFloat = 2.0 {
         didSet {
             repositionViews()
         }
@@ -204,7 +214,7 @@ open class WSTagsField: UIScrollView {
 
     fileprivate var oldIntrinsicContentHeight: CGFloat = 0
 
-    open var estimatedInitialMaxLayoutWidth: CGFloat {
+    fileprivate var estimatedInitialMaxLayoutWidth: CGFloat {
         // Workaround: https://stackoverflow.com/questions/42342402/how-can-i-create-a-view-has-intrinsiccontentsize-just-like-uilabel
         // "So how the system knows the label's width so that it can calculate the height before layoutSubviews"
         // Re: "It calculates it. It asks “around” first by checking the last constraint (if there is one) for width. It asks it subviews (your custom class) for its constrains and then makes the calculations."
@@ -309,8 +319,8 @@ open class WSTagsField: UIScrollView {
         tagView.textColor = self.textColor
         tagView.selectedColor = self.selectedColor
         tagView.selectedTextColor = self.selectedTextColor
-        tagView.displayDelimiter = self.displayDelimiter ? self.delimiter : ""
-        tagView.cornerRadius = self.tagCornerRadius
+        tagView.displayDelimiter = self.isDelimiterVisible ? self.delimiter : ""
+        tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
         tagView.layoutMargins = self.layoutMargins
@@ -463,7 +473,9 @@ open class WSTagsField: UIScrollView {
 }
 
 // MARK: TextField Properties
+
 extension WSTagsField {
+
     public var keyboardType: UIKeyboardType {
         get { return textField.keyboardType }
         set { textField.keyboardType = newValue }
@@ -500,12 +512,15 @@ extension WSTagsField {
     }
 
     @available(iOS, unavailable)
-    override open var inputAccessoryView: UIView? { return super.inputAccessoryView }
+    override open var inputAccessoryView: UIView? {
+        return super.inputAccessoryView
+    }
 
     open var inputFieldAccessoryView: UIView? {
         get { return textField.inputAccessoryView }
         set { textField.inputAccessoryView = newValue }
     }
+
 }
 
 // MARK: Private functions
@@ -583,7 +598,7 @@ extension WSTagsField {
             if curX + tagRect.width > maxWidth {
                 // Need a new line
                 curX = 0
-                curY += Constants.STANDARD_ROW_HEIGHT + lineSpace
+                curY += Constants.STANDARD_ROW_HEIGHT + spaceBetweenLines
                 totalHeight += Constants.STANDARD_ROW_HEIGHT
             }
 
@@ -609,7 +624,7 @@ extension WSTagsField {
                 // isOnFirstLine will be useful, and this calculation is important.
                 // So leaving it set here, and marking the warning to ignore it
                 curX = 0 + Constants.TEXT_FIELD_HSPACE
-                curY += Constants.STANDARD_ROW_HEIGHT + lineSpace
+                curY += Constants.STANDARD_ROW_HEIGHT + spaceBetweenLines
                 totalHeight += Constants.STANDARD_ROW_HEIGHT
                 // Adjust the width
                 availableWidthForTextField = maxWidth - curX
@@ -667,7 +682,7 @@ extension WSTagsField {
     }
 
     fileprivate func updatePlaceholderTextVisibility() {
-        textField.attributedPlaceholder = (placeholderAlwayVisible || tags.count == 0) ? attributedPlaceholder() : nil
+        textField.attributedPlaceholder = (placeholderAlwaysVisible || tags.count == 0) ? attributedPlaceholder() : nil
     }
 
     private func attributedPlaceholder() -> NSAttributedString {
@@ -682,7 +697,7 @@ extension WSTagsField {
         guard self.numberOfLines > 0 else {
             return CGFloat.infinity
         }
-        return contentInset.top + contentInset.bottom + Constants.STANDARD_ROW_HEIGHT * CGFloat(numberOfLines) + lineSpace * CGFloat(numberOfLines - 1)
+        return contentInset.top + contentInset.bottom + Constants.STANDARD_ROW_HEIGHT * CGFloat(numberOfLines) + spaceBetweenLines * CGFloat(numberOfLines - 1)
     }
 
 }

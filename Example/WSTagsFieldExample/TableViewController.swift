@@ -70,7 +70,7 @@ class TagsViewCell: UITableViewCell {
         tagsField.addTag("alksjlkasd4")
         tagsField.addTag("alksjlkasdsds5")
 
-        tagsField.placeholderAlwayVisible = true
+        tagsField.placeholderAlwaysVisible = true
         tagsField.backgroundColor = .lightGray
 
         tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)

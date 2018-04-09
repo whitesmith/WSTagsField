@@ -15,18 +15,23 @@ An iOS text field that represents different Tags.
 ## Usage
 
 ``` swift
-
 let tagsField = WSTagsField()
-tagsField.backgroundColor = .white
-tagsField.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
+tagsField.layoutMargins = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
+tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+tagsField.spaceBetweenLines = 5.0
 tagsField.spaceBetweenTags = 10.0
 tagsField.font = .systemFont(ofSize: 12.0)
+tagsField.backgroundColor = .white
 tagsField.tintColor = .green
 tagsField.textColor = .black
 tagsField.fieldTextColor = .blue
 tagsField.selectedColor = .black
 tagsField.selectedTextColor = .red
 tagsField.delimiter = ","
+tagsField.isDelimiterVisible = true
+tagsField.placeholderColor = .green
+tagsField.placeholderAlwaysVisible = true
+tagsField.returnKeyType = .next
 
 // Events
 tagsField.onDidAddTag = { (_,_) in
@@ -109,7 +114,7 @@ let package = Package(
 )
 ```
 
-(**Note** that the Swift Package Manager is still in early design and development, for more infomation checkout its repository)
+(**Note** that the Swift Package Manager is still in early design and development, for more information checkout its repository)
 
 #### Manually
 
@@ -118,7 +123,7 @@ Download all the source files and drop them into your project.
 ## Requirements
 
 * iOS 8.0+
-* Xcode 8 (Swift 3.0)
+* Xcode 9 (Swift 4.0)
 
 # Contributing
 

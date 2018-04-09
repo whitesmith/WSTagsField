@@ -23,8 +23,8 @@ class ViewController: UIViewController {
         //tagsField.translatesAutoresizingMaskIntoConstraints = false
         //tagsField.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
-        tagsField.tagCornerRadius = 3.0
-        tagsField.lineSpace = 10
+        tagsField.cornerRadius = 3.0
+        tagsField.spaceBetweenLines = 10
         tagsField.spaceBetweenTags = 10
 
         //tagsField.numberOfLines = 3
@@ -35,7 +35,7 @@ class ViewController: UIViewController {
 
         tagsField.placeholder = "Enter a tag"
         tagsField.placeholderColor = .red
-        tagsField.placeholderAlwayVisible = true
+        tagsField.placeholderAlwaysVisible = true
         tagsField.backgroundColor = .lightGray
         tagsField.frame = tagsView.bounds
         tagsField.returnKeyType = .next
@@ -62,20 +62,20 @@ class ViewController: UIViewController {
     @IBAction func touchChangeAppearance(_ sender: UIButton) {
         tagsField.layoutMargins = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
         tagsField.contentInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2) //old padding
-        tagsField.tagCornerRadius = 10.0
-        tagsField.lineSpace = 2
+        tagsField.cornerRadius = 10.0
+        tagsField.spaceBetweenLines = 2
         tagsField.spaceBetweenTags = 2
         tagsField.tintColor = .red
         tagsField.textColor = .blue
         tagsField.selectedColor = .yellow
         tagsField.selectedTextColor = .black
         tagsField.delimiter = ","
-        tagsField.displayDelimiter = true
+        tagsField.isDelimiterVisible = true
         tagsField.borderWidth = 2
         tagsField.borderColor = .blue
         tagsField.fieldTextColor = .green
         tagsField.placeholderColor = .green
-        tagsField.placeholderAlwayVisible = false
+        tagsField.placeholderAlwaysVisible = false
     }
 
     @IBAction func touchAddRandomTags(_ sender: UIButton) {
