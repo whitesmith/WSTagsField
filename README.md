@@ -3,7 +3,7 @@
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
 [![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/WSTagsField.svg)](https://cocoapods.org/pods/WSTagsField)
-[![Swift 3.1](https://img.shields.io/badge/Swift-3.1-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift 4.1](https://img.shields.io/badge/Swift-4.1-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](http://www.apple.com/ios/)
 [![Build Status](https://www.bitrise.io/app/059bc89743c769dc.svg?token=Wu0zdJtTsCQlVFSG1XuGIw&branch=master)](https://www.bitrise.io/app/059bc89743c769dc)
 [![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
@@ -95,7 +95,7 @@ You will also need to make sure you're opting into using frameworks:
 use_frameworks!
 ```
 
-Then run `pod install` with CocoaPods 1.1.0.beta.1 or newer.
+Then run `pod install` with CocoaPods 1.1.0 or newer.
 
 #### <img src="https://raw.githubusercontent.com/ricardopereira/resources/master/img/swiftpm.png" width="24" height="24"> [SwiftPM]
 
@@ -132,4 +132,4 @@ The best way to contribute is by submitting a pull request. We'll do our best to
 # Credits
 ![Whitesmith](http://i.imgur.com/Si2l3kd.png)
 
-This project was heavily inspired by [CLTokenInputView](https://github.com/clusterinc/CLTokenInputView).
+This project was inspired by [CLTokenInputView](https://github.com/clusterinc/CLTokenInputView).
