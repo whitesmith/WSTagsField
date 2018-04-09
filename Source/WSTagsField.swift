@@ -17,17 +17,8 @@ public enum WSTagAcceptOption {
 open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
 
+    /// Dedicated text field delegate.
     open weak var textDelegate: UITextFieldDelegate?
-
-    open override var isFirstResponder: Bool {
-        guard super.isFirstResponder == false,
-            textField.isFirstResponder == false else { return true }
-
-        for i in 0..<tagViews.count where tagViews[i].isFirstResponder {
-            return true
-        }
-        return false
-    }
 
     /// Background color for tag view in normal (non-selected) state.
     open override var tintColor: UIColor! {
@@ -155,7 +146,7 @@ open class WSTagsField: UIScrollView {
     }
 
     open var acceptTagOption: WSTagAcceptOption = .return
-  
+
     @available(*, unavailable, message: "Use 'contentInset' instead.")
     open var padding: UIEdgeInsets = UIEdgeInsets.zero
 
@@ -177,15 +168,22 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    open override var isFirstResponder: Bool {
+        guard super.isFirstResponder == false, textField.isFirstResponder == false else {
+            return true
+        }
+
+        for i in 0..<tagViews.count where tagViews[i].isFirstResponder {
+            return true
+        }
+
+        return false
+    }
+
     open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
 
     // MARK: - Events
-    /// Called when the text field ends editing.
-    open var onDidEndEditing: ((WSTagsField) -> Void)?
-
-    /// Called when the text field begins editing.
-    open var onDidBeginEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field should return.
     open var onShouldAcceptTag: ((WSTagsField) -> Bool)?
@@ -714,12 +712,12 @@ extension WSTagsField {
 extension WSTagsField: UITextFieldDelegate {
 
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        onDidBeginEditing?(self)
+        textDelegate?.textFieldDidBeginEditing?(textField)
         unselectAllTagViewsAnimated(true)
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        onDidEndEditing?(self)
+        textDelegate?.textFieldDidEndEditing?(textField)
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
