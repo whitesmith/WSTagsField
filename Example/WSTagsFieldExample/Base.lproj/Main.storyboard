@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="13771" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
+<document type="com.apple.InterfaceBuilder3.CocoaTouch.Storyboard.XIB" version="3.0" toolsVersion="14109" targetRuntime="iOS.CocoaTouch" propertyAccessControl="none" useAutolayout="YES" useTraitCollections="YES" colorMatched="YES" initialViewController="BYZ-38-t0r">
     <device id="retina4_7" orientation="portrait">
         <adaptation id="fullscreen"/>
     </device>
     <dependencies>
         <deployment identifier="iOS"/>
-        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13772"/>
+        <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="14088"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -36,9 +36,9 @@
                                     <constraint firstAttribute="height" constant="30" id="A0r-dA-Uze"/>
                                     <constraint firstAttribute="width" constant="96" id="NHA-Wx-Fff"/>
                                 </constraints>
-                                <state key="normal" title="Test"/>
+                                <state key="normal" title="Add more"/>
                                 <connections>
-                                    <action selector="touchTest:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yha-iS-pTq"/>
+                                    <action selector="touchAddRandomTags:" destination="BYZ-38-t0r" eventType="touchUpInside" id="yha-iS-pTq"/>
                                 </connections>
                             </button>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="Zn5-cr-FP4">
@@ -70,12 +70,26 @@
                                     <action selector="touchTableView:" destination="BYZ-38-t0r" eventType="touchUpInside" id="EGU-p9-OWG"/>
                                 </connections>
                             </button>
+                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="hNh-DH-stu">
+                                <rect key="frame" x="120" y="261" width="140" height="30"/>
+                                <color key="backgroundColor" red="0.80000001190000003" green="1" blue="0.40000000600000002" alpha="1" colorSpace="calibratedRGB"/>
+                                <constraints>
+                                    <constraint firstAttribute="height" constant="30" id="0Qq-tp-j29"/>
+                                    <constraint firstAttribute="width" constant="140" id="afh-gM-Scw"/>
+                                </constraints>
+                                <state key="normal" title="Change appearance"/>
+                                <connections>
+                                    <action selector="touchChangeAppearance:" destination="BYZ-38-t0r" eventType="touchUpInside" id="w8a-xg-VNq"/>
+                                </connections>
+                            </button>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="OQ5-3f-lGx" firstAttribute="top" secondItem="y3c-jy-aDJ" secondAttribute="bottom" constant="8" id="8JB-6b-Ed0"/>
+                            <constraint firstItem="hNh-DH-stu" firstAttribute="top" secondItem="bWD-ns-6kE" secondAttribute="top" id="A2d-e9-n9M"/>
                             <constraint firstItem="Zn5-cr-FP4" firstAttribute="trailing" secondItem="8bC-Xf-vdC" secondAttribute="trailingMargin" id="EIu-Yn-exa"/>
                             <constraint firstItem="OQ5-3f-lGx" firstAttribute="leading" secondItem="8bC-Xf-vdC" secondAttribute="leadingMargin" id="Ic3-sD-boQ"/>
+                            <constraint firstItem="hNh-DH-stu" firstAttribute="leading" secondItem="bWD-ns-6kE" secondAttribute="trailing" constant="8" id="Nzr-hu-MoV"/>
                             <constraint firstItem="Zn5-cr-FP4" firstAttribute="top" secondItem="OQ5-3f-lGx" secondAttribute="bottom" constant="81" id="SG5-Of-iRB"/>
                             <constraint firstItem="Tkn-N6-LfL" firstAttribute="top" secondItem="bWD-ns-6kE" secondAttribute="bottom" constant="15" id="XZh-e8-QyN"/>
                             <constraint firstItem="Tkn-N6-LfL" firstAttribute="leading" secondItem="OQ5-3f-lGx" secondAttribute="leading" id="aUE-9d-Ieb"/>
