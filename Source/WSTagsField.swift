@@ -27,6 +27,7 @@ open class WSTagsField: UIScrollView {
         return false
     }
 
+    /// Background color for tag view in normal(non-selected) state.
     open override var tintColor: UIColor! {
         didSet {
             tagViews.forEach { $0.tintColor = self.tintColor }
@@ -37,11 +38,6 @@ open class WSTagsField: UIScrollView {
         didSet {
             tagViews.forEach { $0.textColor = self.textColor }
         }
-    }
-
-    /// Background color for tag view in normal(non-selected) state.
-    open var normalBackgroundColor: UIColor? {
-        didSet { tagViews.forEach { $0.normalBackgroundColor = self.normalBackgroundColor } }
     }
 
     open var selectedColor: UIColor? {
@@ -79,12 +75,22 @@ open class WSTagsField: UIScrollView {
             tagViews.forEach { $0.cornerRadius = self.tagCornerRadius }
         }
     }
+
     open var borderWidth: CGFloat = 0.0 {
-        didSet { tagViews.forEach { $0.borderWidth = self.borderWidth } }
+        didSet {
+            tagViews.forEach { $0.borderWidth = self.borderWidth }
+        }
     }
+
     open var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor { tagViews.forEach { $0.borderColor = borderColor } }
+        }
+    }
+
+    open override var layoutMargins: UIEdgeInsets {
+        didSet {
+            tagViews.forEach { $0.layoutMargins = self.layoutMargins }
         }
     }
 
@@ -127,7 +133,7 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    @available(*, unavailable, message: "Use contentInset instead.")
+    @available(*, unavailable, message: "Use 'contentInset' instead.")
     open var padding: UIEdgeInsets = UIEdgeInsets(top: 10.0, left: 8.0, bottom: 10.0, right: 8.0) {
         didSet {
             repositionViews()
@@ -135,7 +141,9 @@ open class WSTagsField: UIScrollView {
     }
 
     open override var contentInset: UIEdgeInsets {
-        didSet { repositionViews() }
+        didSet {
+            repositionViews()
+        }
     }
 
     open var spaceBetweenTags: CGFloat = 2.0 {
@@ -145,18 +153,13 @@ open class WSTagsField: UIScrollView {
     }
 
     open var lineSpace: CGFloat = 2.0 {
-        didSet { repositionViews() }
-    }
-
-    /// The layoutMargins to be applied to tag view. Default value is UIEdgeInsets.zero.
-    open var tagLayoutMargins: UIEdgeInsets = .zero {
-        didSet { repositionViews() }
+        didSet {
+            repositionViews()
+        }
     }
 
     open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
-    fileprivate var intrinsicContentHeight: CGFloat = 0.0
-    fileprivate var contentHeight: CGFloat = 0.0
 
     // MARK: - Events
     /// Called when the text field ends editing.
@@ -197,6 +200,45 @@ open class WSTagsField: UIScrollView {
      */
     open var onDidChangeHeightTo: ((WSTagsField, _ height: CGFloat) -> Void)?
 
+    // MARK: - Properties
+
+    fileprivate var oldIntrinsicContentHeight: CGFloat = 0
+
+    open var estimatedInitialMaxLayoutWidth: CGFloat {
+        // Workaround: https://stackoverflow.com/questions/42342402/how-can-i-create-a-view-has-intrinsiccontentsize-just-like-uilabel
+        // "So how the system knows the label's width so that it can calculate the height before layoutSubviews"
+        // Re: "It calculates it. It asks “around” first by checking the last constraint (if there is one) for width. It asks it subviews (your custom class) for its constrains and then makes the calculations."
+        // This is necessary because, while using the WSTagsField in a `UITableViewCell` with a dynamic height, the `intrinsicContentSize` is called first than the `layoutSubviews`, which leads to an unknown view width when AutoLayout is being used.
+        if let superview = superview {
+            var layoutWidth = superview.frame.width
+            for constraint in superview.constraints where constraint.firstItem === self && constraint.secondItem === superview {
+                if constraint.firstAttribute == .leading && constraint.secondAttribute == .leading {
+                    layoutWidth -= constraint.constant
+                }
+                if constraint.firstAttribute == .trailing && constraint.secondAttribute == .trailing {
+                    layoutWidth += constraint.constant
+                }
+            }
+            return layoutWidth
+        }
+        else {
+            for constraint in constraints where constraint.firstAttribute == .width {
+                return constraint.constant
+            }
+        }
+
+        return 200 //default estimation
+    }
+
+    open var preferredMaxLayoutWidth: CGFloat {
+        return bounds.width == 0 ? estimatedInitialMaxLayoutWidth : bounds.width
+    }
+
+    open override var intrinsicContentSize: CGSize {
+        return CGSize(width: self.frame.size.width,
+                      height: min(maxHeight, maxHeightBasedOnNumberOfLines, calculateContentHeight(layoutWidth: preferredMaxLayoutWidth) + contentInset.top + contentInset.bottom))
+    }
+
     // MARK: -
     public override init(frame: CGRect) {
         super.init(frame: frame)
@@ -206,10 +248,6 @@ open class WSTagsField: UIScrollView {
     public required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         internalInit()
-    }
-
-    open override var intrinsicContentSize: CGSize {
-        return CGSize(width: self.frame.size.width, height: self.intrinsicContentHeight)
     }
 
     open override func willMove(toSuperview newSuperview: UIView?) {
@@ -269,14 +307,13 @@ open class WSTagsField: UIScrollView {
         tagView.font = self.font
         tagView.tintColor = self.tintColor
         tagView.textColor = self.textColor
-        tagView.normalBackgroundColor = self.normalBackgroundColor
         tagView.selectedColor = self.selectedColor
         tagView.selectedTextColor = self.selectedTextColor
         tagView.displayDelimiter = self.displayDelimiter ? self.delimiter : ""
         tagView.cornerRadius = self.tagCornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
-        tagView.layoutMargins = self.tagLayoutMargins
+        tagView.layoutMargins = self.layoutMargins
 
         tagView.onDidRequestSelection = { [weak self] tagView in
             self?.selectTagView(tagView, animated: true)
@@ -369,7 +406,9 @@ open class WSTagsField: UIScrollView {
     // MARK: - Tag selection
 
     open func selectNextTag() {
-        guard let selectedIndex = tagViews.index(where: { $0.selected }) else { return }
+        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+            return
+        }
 
         let nextIndex = tagViews.index(after: selectedIndex)
         if nextIndex < tagViews.count {
@@ -379,7 +418,9 @@ open class WSTagsField: UIScrollView {
     }
 
     open func selectPrevTag() {
-        guard let selectedIndex = tagViews.index(where: { $0.selected }) else { return }
+        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+            return
+        }
 
         let prevIndex = tagViews.index(before: selectedIndex)
         if prevIndex >= 0 {
@@ -389,7 +430,9 @@ open class WSTagsField: UIScrollView {
     }
 
     open func selectTagView(_ tagView: WSTagView, animated: Bool = false) {
-        if self.readOnly { return }
+        if self.readOnly {
+            return
+        }
 
         if tagView.selected {
             tagView.onDidRequestDelete?(tagView, nil)
@@ -415,7 +458,8 @@ open class WSTagsField: UIScrollView {
     // MARK: internal & private properties or methods
 
     // Reposition tag views when bounds changes.
-    fileprivate var observer: NSKeyValueObservation?
+    fileprivate var layerBoundsObserver: NSKeyValueObservation?
+
 }
 
 // MARK: TextField Properties
@@ -487,12 +531,10 @@ extension WSTagsField {
         textField.textColor = fieldTextColor
         addSubview(textField)
 
-        observer = self.observe(\.layer.bounds, options: [.old, .new]) { [weak self] sender, change in
-//            print("bounds change: \(change.newValue)")
+        layerBoundsObserver = self.observe(\.layer.bounds, options: [.old, .new]) { [weak self] sender, change in
             guard change.oldValue?.size.width != change.newValue?.size.width else {
                 return
             }
-            
             self?.repositionViews()
         }
 
@@ -507,56 +549,62 @@ extension WSTagsField {
 
         textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: .editingChanged)
 
-        intrinsicContentHeight = Constants.STANDARD_ROW_HEIGHT + contentInset.top + contentInset.bottom
         repositionViews()
     }
 
-    fileprivate func repositionViews() {
-        if self.bounds.width == 0 {
+    fileprivate func calculateContentHeight(layoutWidth: CGFloat) -> CGFloat {
+        var totalRect: CGRect = .null
+        enumerateItemRects(layoutWidth: layoutWidth) { (_, tagRect: CGRect?, textFieldRect: CGRect?) in
+            if let tagRect = tagRect {
+                totalRect = tagRect.union(totalRect)
+            }
+            else if let textFieldRect = textFieldRect {
+                totalRect = textFieldRect.union(totalRect)
+            }
+        }
+        return totalRect.height
+    }
+
+    fileprivate func enumerateItemRects(layoutWidth: CGFloat, using closure: (_ tagView: WSTagView?, _ tagRect: CGRect?, _ textFieldRect: CGRect?) -> Void) {
+        if layoutWidth == 0 {
             return
         }
 
-        let rightBoundary: CGFloat = self.bounds.width - contentInset.left - contentInset.right
-        let firstLineRightBoundary: CGFloat = rightBoundary
+        let maxWidth: CGFloat = layoutWidth - contentInset.left - contentInset.right
         var curX: CGFloat = 0.0
         var curY: CGFloat = 0.0
         var totalHeight: CGFloat = Constants.STANDARD_ROW_HEIGHT
-        var isOnFirstLine = true
 
-        // Position Tag views
+        // Tag views Rects
         var tagRect = CGRect.null
         for tagView in tagViews {
-            tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(self.intrinsicContentSize))
+            tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(.init(width: maxWidth, height: 0)))
 
-            let tagBoundary = isOnFirstLine ? firstLineRightBoundary : rightBoundary
-            if curX + tagRect.width > tagBoundary {
+            if curX + tagRect.width > maxWidth {
                 // Need a new line
                 curX = 0
                 curY += Constants.STANDARD_ROW_HEIGHT + lineSpace
                 totalHeight += Constants.STANDARD_ROW_HEIGHT
-                isOnFirstLine = false
             }
 
             tagRect.origin.x = curX
             // Center our tagView vertically within STANDARD_ROW_HEIGHT
             tagRect.origin.y = curY + ((Constants.STANDARD_ROW_HEIGHT - tagRect.height)/2.0)
-            tagView.frame = tagRect
-            tagView.setNeedsLayout()
+
+            closure(tagView, tagRect, nil)
 
             curX = tagRect.maxX + self.spaceBetweenTags
         }
 
         // Always indent TextField by a little bit
         curX += max(0, Constants.TEXT_FIELD_HSPACE - self.spaceBetweenTags)
-        let textBoundary: CGFloat = isOnFirstLine ? firstLineRightBoundary : rightBoundary
-        var availableWidthForTextField: CGFloat = textBoundary - curX
+        var availableWidthForTextField: CGFloat = maxWidth - curX
 
         if textField.isEnabled {
             var textFieldRect = CGRect.zero
             textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
 
             if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
-                isOnFirstLine = false
                 // If in the future we add more UI elements below the tags,
                 // isOnFirstLine will be useful, and this calculation is important.
                 // So leaving it set here, and marking the warning to ignore it
@@ -564,32 +612,56 @@ extension WSTagsField {
                 curY += Constants.STANDARD_ROW_HEIGHT + lineSpace
                 totalHeight += Constants.STANDARD_ROW_HEIGHT
                 // Adjust the width
-                availableWidthForTextField = rightBoundary - curX
+                availableWidthForTextField = maxWidth - curX
             }
             textFieldRect.origin.y = curY
             textFieldRect.origin.x = curX
             textFieldRect.size.width = availableWidthForTextField
-            textField.frame = textFieldRect
-            textField.isHidden = false
-        } else {
-            textField.isHidden = true
+
+            closure(nil, nil, textFieldRect)
+        }
+    }
+
+    fileprivate func repositionViews() {
+        if self.bounds.width == 0 {
+            return
         }
 
-        let oldContentHeight: CGFloat = self.intrinsicContentHeight
-        contentHeight = max(totalHeight, curY + Constants.STANDARD_ROW_HEIGHT)
-        intrinsicContentHeight = min(maxHeight, maxHeightBasedOnNumberOfLines, contentHeight + contentInset.top + contentInset.bottom)
+        var contentRect: CGRect = .null
+        enumerateItemRects(layoutWidth: self.bounds.width) { (tagView: WSTagView?, tagRect: CGRect?, textFieldRect: CGRect?) in
+            if let tagRect = tagRect, let tagView = tagView {
+                tagView.frame = tagRect
+                tagView.setNeedsLayout()
+                contentRect = tagRect.union(contentRect)
+            }
+            else if let textFieldRect = textFieldRect {
+                textField.frame = textFieldRect
+                contentRect = textFieldRect.union(contentRect)
+            }
+        }
+
+        textField.isHidden = !textField.isEnabled
+
         invalidateIntrinsicContentSize()
+        let newIntrinsicContentHeight = intrinsicContentSize.height
 
         if constraints.isEmpty {
-            frame.size.height = intrinsicContentHeight
+            frame.size.height = newIntrinsicContentHeight.rounded()
         }
 
-        self.isScrollEnabled = contentHeight + contentInset.top + contentInset.bottom >= intrinsicContentHeight
+        if oldIntrinsicContentHeight != newIntrinsicContentHeight {
+            if let didChangeHeightToEvent = self.onDidChangeHeightTo {
+                didChangeHeightToEvent(self, newIntrinsicContentHeight)
+            }
+            oldIntrinsicContentHeight = newIntrinsicContentHeight
+        }
+
+        self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
         self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
-        self.contentSize.height = contentHeight
+        self.contentSize.height = contentRect.height
 
         if self.isScrollEnabled {
-            // TODO: this isn't working. Need to think in a workaround.
+            // FIXME: this isn't working. Need to think in a workaround.
             //self.scrollRectToVisible(textField.frame, animated: false)
         }
     }
