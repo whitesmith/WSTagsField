@@ -32,6 +32,7 @@ tagsField.isDelimiterVisible = true
 tagsField.placeholderColor = .green
 tagsField.placeholderAlwaysVisible = true
 tagsField.returnKeyType = .next
+tagsField.acceptTagOption = .space
 
 // Events
 tagsField.onDidAddTag = { (_,_) in
@@ -44,14 +45,6 @@ tagsField.onDidRemoveTag = { (_,_) in
 
 tagsField.onDidChangeText = { _, text in
     print("DidChangeText")
-}
-
-tagsField.onDidBeginEditing = { _ in
-    print("DidBeginEditing")
-}
-
-tagsField.onDidEndEditing = { _ in
-    print("DidEndEditing")
 }
 
 tagsField.onDidChangeHeightTo = { sender, height in

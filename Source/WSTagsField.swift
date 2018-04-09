@@ -145,6 +145,7 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    /// By default, the return key is used to create a tag in the field. You can change it, i.e., to use comma or space key instead.
     open var acceptTagOption: WSTagAcceptOption = .return
 
     @available(*, unavailable, message: "Use 'contentInset' instead.")
