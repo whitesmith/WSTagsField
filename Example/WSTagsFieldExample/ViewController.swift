@@ -15,7 +15,7 @@ class ViewController: UIViewController {
 
     @IBOutlet fileprivate weak var tagsView: UIView!
     @IBOutlet weak var anotherField: UITextField!
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         tagsField.frame = tagsView.bounds
@@ -39,7 +39,10 @@ class ViewController: UIViewController {
         tagsField.placeholderAlwaysVisible = true
         tagsField.backgroundColor = .lightGray
         tagsField.returnKeyType = .next
-        tagsField.delimiter = " "
+        tagsField.delimiter = ""
+
+        tagsField.textDelegate = self
+        //tagsField.acceptTagOption = .space
 
         textFieldEvents()
     }
@@ -95,23 +98,15 @@ extension ViewController {
 
     fileprivate func textFieldEvents() {
         tagsField.onDidAddTag = { _, _ in
-            print("DidAddTag")
+            print("onDidAddTag")
         }
 
         tagsField.onDidRemoveTag = { _, _ in
-            print("DidRemoveTag")
+            print("onDidRemoveTag")
         }
 
         tagsField.onDidChangeText = { _, text in
             print("onDidChangeText")
-        }
-
-        tagsField.onDidBeginEditing = { _ in
-            print("DidBeginEditing")
-        }
-
-        tagsField.onDidEndEditing = { _ in
-            print("DidEndEditing")
         }
 
         tagsField.onDidChangeHeightTo = { _, height in
