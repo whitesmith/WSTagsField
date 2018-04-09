@@ -126,20 +126,22 @@ open class WSTagView: UIView {
             return
         }
 
-        UIView.animate(withDuration: 0.3,
-                       animations: { [weak self] in
-                        self?.updateColors()
-                        if self?.selected ?? false {
-                            self?.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
-                        }
-        },
-                       completion: { [weak self] _ in
-                        if self?.selected ?? false {
-                            UIView.animate(withDuration: 0.6) { [weak self] in
-                                self?.transform = CGAffineTransform.identity
-                            }
-                        }
-        })
+        UIView.animate(
+            withDuration: 0.2,
+            animations: { [weak self] in
+                self?.updateColors()
+                if self?.selected ?? false {
+                    self?.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
+                }
+            },
+            completion: { [weak self] _ in
+                if self?.selected ?? false {
+                    UIView.animate(withDuration: 0.4) { [weak self] in
+                        self?.transform = CGAffineTransform.identity
+                    }
+                }
+            }
+        )
     }
 
     // MARK: - Size Measurements
