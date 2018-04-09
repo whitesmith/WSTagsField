@@ -11,10 +11,13 @@ import WSTagsField
 
 class TableViewController: UITableViewController {
 
-    let records = ["Festival", "Salvador", "EuroVision", "Beer"]
+    let records = ["Festival", "Salvador", "EuroVision", "Beer", "The Room", "The Disaster Movie", "Let's Go", "Bibofir", "The Shape of Water", "It", "American History", "Beautiful", "Sicario"]
 
     override func viewDidLoad() {
         super.viewDidLoad()
+        navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Refresh", style: .done, target: self, action: #selector(self.refreshButtonTapped))
+        navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(self.closeTapped))
+
         tableView.rowHeight = UITableViewAutomaticDimension
         tableView.estimatedRowHeight = 44
         tableView.allowsSelection = false
@@ -24,8 +27,15 @@ class TableViewController: UITableViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(true)
         tableView.reloadData()
-        //tableView.beginUpdates()
-        //tableView.endUpdates()
+    }
+
+    @objc func refreshButtonTapped() {
+        tableView.beginUpdates()
+        tableView.endUpdates()
+    }
+
+    @objc func closeTapped() {
+        dismiss(animated: true, completion: nil)
     }
 
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
@@ -33,9 +43,8 @@ class TableViewController: UITableViewController {
     }
 
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TagsViewCell.self),
-                                                       for: indexPath) as? TagsViewCell else {
-                                                        return UITableViewCell(style: .default, reuseIdentifier: nil)
+        guard let cell = tableView.dequeueReusableCell(withIdentifier: String(describing: TagsViewCell.self), for: indexPath) as? TagsViewCell else {
+            return UITableViewCell(style: .default, reuseIdentifier: nil)
         }
 
         cell.tagsField.onDidChangeHeightTo = { _, _ in
@@ -54,25 +63,28 @@ class TagsViewCell: UITableViewCell {
 
     override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
-        tagsField.placeholder = "Enter a tag"
-        tagsField.backgroundColor = .white
-        //tagsField.frame = CGRect(x: 0, y: 0, width: 300, height: 44)
+        tagsField.addTag("alksjlkasd")
+        tagsField.addTag("alksjlkasd1")
+        tagsField.addTag("alksjlkasd2")
+        tagsField.addTag("alksjlkasd3")
+        tagsField.addTag("alksjlkasd4")
+        tagsField.addTag("alksjlkasdsds5")
+
+        tagsField.placeholderAlwayVisible = true
+        tagsField.backgroundColor = .lightGray
+
+        tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10)
+        tagsField.layoutMargins = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
+
         tagsField.translatesAutoresizingMaskIntoConstraints = false
         contentView.addSubview(tagsField)
 
         NSLayoutConstraint.activate([
             tagsField.topAnchor.constraint(equalTo: contentView.topAnchor),
-            tagsField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
-            tagsField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            //tagsField.heightAnchor.constraint(greaterThanOrEqualToConstant: 44),
-            //tagsField.heightAnchor.constraint(equalToConstant: 44),
-            //tagsField.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
+            tagsField.leadingAnchor.constraint(equalTo: contentView.leadingAnchor, constant: 10),
+            tagsField.trailingAnchor.constraint(equalTo: contentView.trailingAnchor, constant: -10),
             contentView.bottomAnchor.constraint(equalTo: tagsField.bottomAnchor)
         ])
-
-        tagsField.addTag("alksjlkasd")
-        tagsField.addTag("alksjlkasd1")
-        tagsField.addTag("alksjlkasd2")
     }
 
     required init?(coder aDecoder: NSCoder) {

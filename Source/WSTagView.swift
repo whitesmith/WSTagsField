@@ -62,11 +62,6 @@ open class WSTagView: UIView {
         didSet { updateContent(animated: false) }
     }
 
-    /// Background color to be used for normal state.
-    open var normalBackgroundColor: UIColor? {
-        didSet { updateContent(animated: false) }
-    }
-
     open var textColor: UIColor? {
         didSet { updateContent(animated: false) }
     }
@@ -121,7 +116,7 @@ open class WSTagView: UIView {
     }
 
     fileprivate func updateColors() {
-        self.backgroundColor = selected ? selectedColor : normalBackgroundColor //tintColor
+        self.backgroundColor = selected ? selectedColor : tintColor
         textLabel.textColor = selected ? selectedTextColor : textColor
     }
 
@@ -131,20 +126,22 @@ open class WSTagView: UIView {
             return
         }
 
-        UIView.animate(withDuration: 0.3,
-                       animations: { [weak self] in
-                        self?.updateColors()
-                        if self?.selected ?? false {
-                            self?.transform = CGAffineTransform(scaleX: 1.25, y: 1.25)
-                        }
-        },
-                       completion: { [weak self] _ in
-                        if self?.selected ?? false {
-                            UIView.animate(withDuration: 0.6) { [weak self] in
-                                self?.transform = CGAffineTransform.identity
-                            }
-                        }
-        })
+        UIView.animate(
+            withDuration: 0.2,
+            animations: { [weak self] in
+                self?.updateColors()
+                if self?.selected ?? false {
+                    self?.transform = CGAffineTransform(scaleX: 1.15, y: 1.15)
+                }
+            },
+            completion: { [weak self] _ in
+                if self?.selected ?? false {
+                    UIView.animate(withDuration: 0.4) { [weak self] in
+                        self?.transform = CGAffineTransform.identity
+                    }
+                }
+            }
+        )
     }
 
     // MARK: - Size Measurements
@@ -167,7 +164,7 @@ open class WSTagView: UIView {
     open func sizeToFit(_ size: CGSize) -> CGSize {
         if intrinsicContentSize.width > size.width {
             return CGSize(width: size.width,
-                          height: self.frame.size.height)
+                          height: intrinsicContentSize.height)
         }
         return intrinsicContentSize
     }
@@ -178,8 +175,7 @@ open class WSTagView: UIView {
         textLabel.text = displayText + displayDelimiter
         // Expand Label
         let intrinsicSize = self.intrinsicContentSize
-        frame = CGRect(x: 0, y: 0, width: intrinsicSize.width,
-                       height: intrinsicSize.height)
+        frame = CGRect(x: 0, y: 0, width: intrinsicSize.width, height: intrinsicSize.height)
     }
 
     // MARK: - Laying out
@@ -192,7 +188,9 @@ open class WSTagView: UIView {
     }
 
     // MARK: - First Responder (needed to capture keyboard)
-    open override var canBecomeFirstResponder: Bool { return true }
+    open override var canBecomeFirstResponder: Bool {
+        return true
+    }
 
     open override func becomeFirstResponder() -> Bool {
         let didBecomeFirstResponder = super.becomeFirstResponder()
@@ -208,6 +206,9 @@ open class WSTagView: UIView {
 
     // MARK: - Gesture Recognizers
     @objc func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer) {
+        if selected {
+            return
+        }
         onDidRequestSelection?(self)
     }
 
@@ -230,11 +231,12 @@ extension WSTagView: UIKeyInput {
 }
 
 extension WSTagView: UITextInputTraits {
-  // Solves an issue where autocorrect suggestions were being
-  // offered when a tag is highlighted.
-  public var autocorrectionType: UITextAutocorrectionType {
-      get { return .no }
-      set { }
-  }
+
+    // Solves an issue where autocorrect suggestions were being
+    // offered when a tag is highlighted.
+    public var autocorrectionType: UITextAutocorrectionType {
+        get { return .no }
+        set { }
+    }
 
 }
