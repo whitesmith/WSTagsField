@@ -1,9 +1,8 @@
-line_length: 130
-
 disabled_rules:
   - variable_name
   - todo
   - valid_docs
+  - line_length
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
