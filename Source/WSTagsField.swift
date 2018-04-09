@@ -8,19 +8,17 @@
 
 import UIKit
 
+public enum WSTagAcceptOption {
+    case `return`
+    case comma
+    case space
+}
+
 open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
 
-    open override var isFirstResponder: Bool {
-        guard super.isFirstResponder == false,
-            textField.isFirstResponder == false else { return true }
-
-        for i in 0..<tagViews.count where tagViews[i].isFirstResponder {
-            return true
-        }
-
-        return false
-    }
+    /// Dedicated text field delegate.
+    open weak var textDelegate: UITextFieldDelegate?
 
     /// Background color for tag view in normal (non-selected) state.
     open override var tintColor: UIColor! {
@@ -147,6 +145,8 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    open var acceptTagOption: WSTagAcceptOption = .return
+
     @available(*, unavailable, message: "Use 'contentInset' instead.")
     open var padding: UIEdgeInsets = UIEdgeInsets.zero
 
@@ -168,18 +168,25 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    open override var isFirstResponder: Bool {
+        guard super.isFirstResponder == false, textField.isFirstResponder == false else {
+            return true
+        }
+
+        for i in 0..<tagViews.count where tagViews[i].isFirstResponder {
+            return true
+        }
+
+        return false
+    }
+
     open fileprivate(set) var tags = [WSTag]()
     internal var tagViews = [WSTagView]()
 
     // MARK: - Events
-    /// Called when the text field ends editing.
-    open var onDidEndEditing: ((WSTagsField) -> Void)?
-
-    /// Called when the text field begins editing.
-    open var onDidBeginEditing: ((WSTagsField) -> Void)?
 
     /// Called when the text field should return.
-    open var onShouldReturn: ((WSTagsField) -> Bool)?
+    open var onShouldAcceptTag: ((WSTagsField) -> Bool)?
 
     /// Called when the text field text has changed. You should update your autocompleting UI based on the text supplied.
     open var onDidChangeText: ((WSTagsField, _ text: String?) -> Void)?
@@ -705,35 +712,35 @@ extension WSTagsField {
 extension WSTagsField: UITextFieldDelegate {
 
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        onDidBeginEditing?(self)
+        textDelegate?.textFieldDidBeginEditing?(textField)
         unselectAllTagViewsAnimated(true)
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
-        onDidEndEditing?(self)
+        textDelegate?.textFieldDidEndEditing?(textField)
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        tokenizeTextFieldText()
-        return onShouldReturn?(self) ?? false
+        if acceptTagOption == .return && onShouldAcceptTag?(self) ?? true {
+            tokenizeTextFieldText()
+            return true
+        }
+        if let textFieldShouldReturn = textDelegate?.textFieldShouldReturn, textFieldShouldReturn(textField) {
+            tokenizeTextFieldText()
+            return true
+        }
+        return false
     }
 
-    public func textField(_ textField: UITextField,
-                          shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-
-        /** Discussion
-        * if delimiter.isEmpty, the deleteBackward() action will tokenize the text
-        * the delete backwards key invoces a replacement with an empty string and a range.length = selection.length
-        */
-        if delimiter.isEmpty && string.isEmpty && range.length > 0 {
-          return true
-        }
-
-        if string == delimiter {
+    public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
+        if acceptTagOption == .comma && string == "," && onShouldAcceptTag?(self) ?? true {
             tokenizeTextFieldText()
             return false
         }
-
+        if acceptTagOption == .space && string == " " && onShouldAcceptTag?(self) ?? true {
+            tokenizeTextFieldText()
+            return false
+        }
         return true
     }
 
