@@ -1,0 +1,16 @@
+disabled_rules:
+  - variable_name
+  - todo
+  - valid_docs
+  - line_length
+  - operator_whitespace
+  - unused_closure_parameter
+  - statement_position
+  - file_length
+  - function_body_length
+  - type_body_length
+
+excluded: # paths to ignore during linting. Takes precedence over `included`.
+  - Carthage
+  - Pods
+  - Example

@@ -11,32 +11,99 @@ import WSTagsField
 
 class ViewController: UIViewController {
 
-    let tagsField = WSTagsField()
-    let anotherField = UITextField()
-    let testButton = UIButton(type: .system)
-    let readOnlyToggleButton = UIButton(type: .system)
+    fileprivate let tagsField = WSTagsField()
 
+    @IBOutlet fileprivate weak var tagsView: UIView!
+    @IBOutlet weak var anotherField: UITextField!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-        view.backgroundColor = .red
-        tagsField.placeholder = "Enter a tag"
-        tagsField.backgroundColor = .white
-        tagsField.frame = CGRect(x: 0, y: 44, width: 200, height: 44)
-        tagsField.delegate = self
-        view.addSubview(tagsField)
-        tagsField.returnKeyType = .next
+        tagsField.frame = tagsView.bounds
+        tagsView.addSubview(tagsField)
 
-        // Events
-        tagsField.onDidAddTag = { _ in
+        //tagsField.translatesAutoresizingMaskIntoConstraints = false
+        //tagsField.heightAnchor.constraint(equalToConstant: 150).isActive = true
+
+        tagsField.cornerRadius = 3.0
+        tagsField.spaceBetweenLines = 10
+        tagsField.spaceBetweenTags = 10
+
+        //tagsField.numberOfLines = 3
+        //tagsField.maxHeight = 100.0
+
+        tagsField.layoutMargins = UIEdgeInsets(top: 2, left: 6, bottom: 2, right: 6)
+        tagsField.contentInset = UIEdgeInsets(top: 10, left: 10, bottom: 10, right: 10) //old padding
+
+        tagsField.placeholder = "Enter a tag"
+        tagsField.placeholderColor = .red
+        tagsField.placeholderAlwaysVisible = true
+        tagsField.backgroundColor = .lightGray
+        tagsField.returnKeyType = .next
+        tagsField.delimiter = " "
+
+        textFieldEvents()
+    }
+
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        tagsField.beginEditing()
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tagsField.frame = tagsView.bounds
+    }
+
+    @IBAction func touchReadOnly(_ sender: UIButton) {
+        tagsField.readOnly = !tagsField.readOnly
+        sender.isSelected = tagsField.readOnly
+    }
+
+    @IBAction func touchChangeAppearance(_ sender: UIButton) {
+        tagsField.layoutMargins = UIEdgeInsets(top: 1, left: 1, bottom: 1, right: 1)
+        tagsField.contentInset = UIEdgeInsets(top: 2, left: 2, bottom: 2, right: 2) //old padding
+        tagsField.cornerRadius = 10.0
+        tagsField.spaceBetweenLines = 2
+        tagsField.spaceBetweenTags = 2
+        tagsField.tintColor = .red
+        tagsField.textColor = .blue
+        tagsField.selectedColor = .yellow
+        tagsField.selectedTextColor = .black
+        tagsField.delimiter = ","
+        tagsField.isDelimiterVisible = true
+        tagsField.borderWidth = 2
+        tagsField.borderColor = .blue
+        tagsField.fieldTextColor = .green
+        tagsField.placeholderColor = .green
+        tagsField.placeholderAlwaysVisible = false
+    }
+
+    @IBAction func touchAddRandomTags(_ sender: UIButton) {
+        tagsField.addTag(NSUUID().uuidString)
+        tagsField.addTag(NSUUID().uuidString)
+        tagsField.addTag(NSUUID().uuidString)
+        tagsField.addTag(NSUUID().uuidString)
+    }
+
+    @IBAction func touchTableView(_ sender: UIButton) {
+        present(UINavigationController(rootViewController: TableViewController()), animated: true, completion: nil)
+    }
+
+}
+
+extension ViewController {
+
+    fileprivate func textFieldEvents() {
+        tagsField.onDidAddTag = { _, _ in
             print("DidAddTag")
         }
 
-        tagsField.onDidRemoveTag = { _ in
+        tagsField.onDidRemoveTag = { _, _ in
             print("DidRemoveTag")
         }
 
         tagsField.onDidChangeText = { _, text in
-
+            print("onDidChangeText")
         }
 
         tagsField.onDidBeginEditing = { _ in
@@ -47,7 +114,7 @@ class ViewController: UIViewController {
             print("DidEndEditing")
         }
 
-        tagsField.onDidChangeHeightTo = { sender, height in
+        tagsField.onDidChangeHeightTo = { _, height in
             print("HeightTo \(height)")
         }
 
@@ -58,55 +125,6 @@ class ViewController: UIViewController {
         tagsField.onDidUnselectTagView = { _, tagView in
             print("Unselect \(tagView)")
         }
-
-        anotherField.frame = CGRect(x: 0, y: 250, width: 120, height: 44)
-        anotherField.backgroundColor = .white
-        anotherField.placeholder = "another field"
-        anotherField.delegate = self
-        view.addSubview(anotherField)
-
-        testButton.frame = CGRect(x: 0, y: 300, width: 100, height: 44)
-        testButton.backgroundColor = .white
-        testButton.setTitle("Test", for: UIControlState())
-        view.addSubview(testButton)
-        testButton.addTarget(self, action: #selector(didTouchTestButton), for: .touchUpInside)
-        
-        readOnlyToggleButton.frame = CGRect(x: 0, y: 350, width: 120, height: 44)
-        readOnlyToggleButton.backgroundColor = .white
-        readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
-        view.addSubview(readOnlyToggleButton)
-        readOnlyToggleButton.addTarget(self, action: #selector(didTouchReadOnlyToggleButton), for: .touchUpInside)
-    }
-
-    func didTouchTestButton(_ sender: AnyObject) {
-        tagsField.padding = UIEdgeInsets(top: 0, left: 0, bottom: 0, right: 0)
-        tagsField.spaceBetweenTags = 10.0
-        tagsField.font = .systemFont(ofSize: 12.0)
-        tagsField.tintColor = .green
-        tagsField.textColor = .black
-        tagsField.fieldTextColor = .blue
-        tagsField.selectedColor = .black
-        tagsField.selectedTextColor = .red
-        tagsField.delimiter = ","
-        tagsField.acceptTagOption = .space
-        tagsField.returnKeyType = .go
-        print(tagsField.tags)
-    }
-    
-    func didTouchReadOnlyToggleButton(_ sender: AnyObject) {
-        tagsField.readOnly = !tagsField.readOnly
-        if tagsField.readOnly {
-            readOnlyToggleButton.setTitle("Enable Editing", for: UIControlState())
-        } else {
-            readOnlyToggleButton.setTitle("Read Only", for: UIControlState())
-        }
-    }
-
-    override func viewDidAppear(_ animated: Bool) {
-        if tagsField.isEditing == false {
-            tagsField.beginEditing()
-        }
-        super.viewDidAppear(animated)
     }
 
 }
