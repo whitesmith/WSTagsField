@@ -589,7 +589,8 @@ extension WSTagsField {
         self.contentSize.height = contentHeight
 
         if self.isScrollEnabled {
-            self.scrollRectToVisible(textField.frame, animated: false)
+            // TODO: this isn't working. Need to think in a workaround.
+            //self.scrollRectToVisible(textField.frame, animated: false)
         }
     }
 
