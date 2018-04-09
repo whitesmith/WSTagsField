@@ -164,7 +164,7 @@ open class WSTagView: UIView {
     open func sizeToFit(_ size: CGSize) -> CGSize {
         if intrinsicContentSize.width > size.width {
             return CGSize(width: size.width,
-                          height: self.frame.size.height)
+                          height: intrinsicContentSize.height)
         }
         return intrinsicContentSize
     }
@@ -175,8 +175,7 @@ open class WSTagView: UIView {
         textLabel.text = displayText + displayDelimiter
         // Expand Label
         let intrinsicSize = self.intrinsicContentSize
-        frame = CGRect(x: 0, y: 0, width: intrinsicSize.width,
-                       height: intrinsicSize.height)
+        frame = CGRect(x: 0, y: 0, width: intrinsicSize.width, height: intrinsicSize.height)
     }
 
     // MARK: - Laying out
