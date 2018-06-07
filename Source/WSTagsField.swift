@@ -337,6 +337,7 @@ open class WSTagsField: UIScrollView {
         tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
+        tagView.keyboardAppearanceType = self.keyboardAppearance
         tagView.layoutMargins = self.layoutMargins
 
         tagView.onDidRequestSelection = { [weak self] tagView in
