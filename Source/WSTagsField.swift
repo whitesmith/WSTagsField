@@ -257,6 +257,10 @@ open class WSTagsField: UIScrollView {
                       height: min(maxHeight, maxHeightBasedOnNumberOfLines, calculateContentHeight(layoutWidth: preferredMaxLayoutWidth) + contentInset.top + contentInset.bottom))
     }
 
+    open override func sizeThatFits(_ size: CGSize) -> CGSize {
+        return .init(width: size.width, height: calculateContentHeight(layoutWidth: size.width) + contentInset.top + contentInset.bottom)
+    }
+
     // MARK: -
     public override init(frame: CGRect) {
         super.init(frame: frame)
