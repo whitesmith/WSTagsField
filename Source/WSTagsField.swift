@@ -137,6 +137,12 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    open var keyboardAppearance: UIKeyboardAppearance = .default {
+        didSet {
+            tagViews.forEach { $0.keyboardAppearanceType = self.keyboardAppearance }
+        }
+    }
+
     open var readOnly: Bool = false {
         didSet {
             unselectAllTagViewsAnimated()
