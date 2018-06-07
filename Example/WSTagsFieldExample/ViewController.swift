@@ -79,6 +79,7 @@ class ViewController: UIViewController {
         tagsField.fieldTextColor = .green
         tagsField.placeholderColor = .green
         tagsField.placeholderAlwaysVisible = false
+        tagsField.font = UIFont.systemFont(ofSize: 9)
     }
 
     @IBAction func touchAddRandomTags(_ sender: UIButton) {
