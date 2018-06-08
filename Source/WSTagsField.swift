@@ -580,7 +580,7 @@ extension WSTagsField {
             }
         }
 
-        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: .editingChanged)
+        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: UIControl.Event.editingChanged)
 
         repositionViews()
     }
@@ -704,9 +704,9 @@ extension WSTagsField {
     }
 
     private func attributedPlaceholder() -> NSAttributedString {
-        var attributes: [NSAttributedStringKey: Any]?
+        var attributes: [NSAttributedString.Key: Any]?
         if let placeholderColor = placeholderColor {
-            attributes = [NSAttributedStringKey.foregroundColor: placeholderColor]
+            attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
         }
         return NSAttributedString(string: placeholder, attributes: attributes)
     }
@@ -760,3 +760,12 @@ extension WSTagsField: UITextFieldDelegate {
 public func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
     return lhs == rhs.textField
 }
+
+#if swift(>=4.2)
+
+// Workaround for bugs.swift.org/browse/SR-7879
+extension UIEdgeInsets {
+    static let zero = UIEdgeInsets()
+}
+
+#endif
