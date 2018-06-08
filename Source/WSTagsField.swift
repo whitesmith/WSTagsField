@@ -272,6 +272,12 @@ open class WSTagsField: UIScrollView {
         internalInit()
     }
 
+    deinit {
+        if ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 11, let observer = layerBoundsObserver {
+            removeObserver(observer, forKeyPath: "layer.bounds")
+        }
+    }
+
     open override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
         tagViews.forEach { $0.setNeedsLayout() }
