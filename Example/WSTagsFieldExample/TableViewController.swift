@@ -47,9 +47,9 @@ class TableViewController: UITableViewController {
             return UITableViewCell(style: .default, reuseIdentifier: nil)
         }
 
-        cell.tagsField.onDidChangeHeightTo = { _, _ in
-            tableView.beginUpdates()
-            tableView.endUpdates()
+        cell.tagsField.onDidChangeHeightTo = { [weak tableView] _, _ in
+            tableView?.beginUpdates()
+            tableView?.endUpdates()
         }
 
         return cell
