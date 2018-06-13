@@ -51,6 +51,12 @@ tagsField.onDidChangeHeightTo = { sender, height in
     print("HeightTo \(height)")
 }
 
+tagsField.onValidateTag = { tag, tags in
+    // custom validations, called before tag is added to tags list
+    return tag.text != "#" && !tags.contains(where: { $0.text.uppercased() == tag.text.uppercased() })
+}
+
+
 ```
 
 ## Installation
