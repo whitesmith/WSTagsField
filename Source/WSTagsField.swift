@@ -326,8 +326,19 @@ open class WSTagsField: UIScrollView {
         addTag(WSTag(tag))
     }
 
+    open var validator: ((WSTag, [WSTag]) -> Bool)?
+
+    open var ignoreCaseWhenAdding: Bool = false
+
     open func addTag(_ tag: WSTag) {
-        if self.tags.contains(tag) { return }
+
+        if let validator = validator, !validator(tag, self.tags) {
+            return
+        } else if ignoreCaseWhenAdding {
+            if self.tags.contains(where: { $0.text.uppercased() == tag.text.uppercased() }) { return }
+        } else {
+            if self.tags.contains(tag) { return }
+        }
 
         self.tags.append(tag)
 
