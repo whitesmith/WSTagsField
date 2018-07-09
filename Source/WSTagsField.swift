@@ -389,6 +389,61 @@ open class WSTagsField: UIScrollView {
         repositionViews()
     }
 
+    open func addTag(_ tag: String, backgroundColor: UIColor) {
+        if self.tags.contains(WSTag(tag)) { return }
+
+        self.tags.append(WSTag(tag))
+
+        let tagView = WSTagView(tag: WSTag(tag))
+        tagView.font = self.font
+        tagView.tintColor = backgroundColor
+        tagView.textColor = self.textColor
+        tagView.selectedColor = self.selectedColor
+        tagView.selectedTextColor = self.selectedTextColor
+        tagView.displayDelimiter = self.isDelimiterVisible ? self.delimiter : ""
+        tagView.cornerRadius = self.cornerRadius
+        tagView.borderWidth = self.borderWidth
+        tagView.borderColor = self.borderColor
+        tagView.layoutMargins = self.layoutMargins
+
+        tagView.onDidRequestSelection = { [weak self] tagView in
+            self?.selectTagView(tagView, animated: true)
+        }
+
+        tagView.onDidRequestDelete = { [weak self] tagView, replacementText in
+            // First, refocus the text field
+            self?.textField.becomeFirstResponder()
+            if (replacementText?.isEmpty ?? false) == false {
+                self?.textField.text = replacementText
+            }
+            // Then remove the view from our data
+            if let index = self?.tagViews.index(of: tagView) {
+                self?.removeTagAtIndex(index)
+            }
+        }
+
+        tagView.onDidInputText = { [weak self] tagView, text in
+            if text == "\n" {
+                self?.selectNextTag()
+            } else {
+                self?.textField.becomeFirstResponder()
+                self?.textField.text = text
+            }
+        }
+
+        self.tagViews.append(tagView)
+        addSubview(tagView)
+
+        self.textField.text = ""
+        onDidAddTag?(self, WSTag(tag))
+
+        // Clearing text programmatically doesn't call this automatically
+        onTextFieldDidChange(self.textField)
+
+        updatePlaceholderTextVisibility()
+        repositionViews()
+    }
+
     open func removeTag(_ tag: String) {
         removeTag(WSTag(tag))
     }
