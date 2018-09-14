@@ -75,6 +75,9 @@ open class WSTagsField: UIScrollView {
             repositionViews()
         }
     }
+    
+    /// Whether or not the WSTagsField should become scrollable
+    open var enableScrolling: Bool = true
 
     @available(*, unavailable, message: "Use 'cornerRadius' instead.")
     open var tagCornerRadius: CGFloat = 3.0
@@ -134,6 +137,13 @@ open class WSTagsField: UIScrollView {
         didSet {
             textField.font = font
             tagViews.forEach { $0.font = self.font }
+        }
+    }
+
+    open var keyboardAppearance: UIKeyboardAppearance = .default {
+        didSet {
+            textField.keyboardAppearance = self.keyboardAppearance
+            tagViews.forEach { $0.keyboardAppearanceType = self.keyboardAppearance }
         }
     }
 
@@ -204,6 +214,9 @@ open class WSTagsField: UIScrollView {
     /// Called when a tag has been unselected.
     open var onDidUnselectTagView: ((WSTagsField, _ tag: WSTagView) -> Void)?
 
+    /// Called before a tag is added to the tag list. Here you return false to discard tags you do not want to allow.
+    open var onValidateTag: ((WSTag, [WSTag]) -> Bool)?
+
     /**
      * Called when the user attempts to press the Return key with text partially typed.
      * @return A Tag for a match (typically the first item in the matching results),
@@ -273,8 +286,9 @@ open class WSTagsField: UIScrollView {
     }
 
     deinit {
-        if ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 11, let observer = layerBoundsObserver {
+        if let observer = layerBoundsObserver {
             removeObserver(observer, forKeyPath: "layer.bounds")
+            observer.invalidate()
         }
     }
 
@@ -327,7 +341,12 @@ open class WSTagsField: UIScrollView {
     }
 
     open func addTag(_ tag: WSTag) {
-        if self.tags.contains(tag) { return }
+
+        if let onValidateTag = onValidateTag, !onValidateTag(tag, self.tags) {
+            return
+        } else if self.tags.contains(tag) {
+            return
+        }
 
         self.tags.append(tag)
 
@@ -341,6 +360,7 @@ open class WSTagsField: UIScrollView {
         tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
+        tagView.keyboardAppearanceType = self.keyboardAppearance
         tagView.layoutMargins = self.layoutMargins
 
         tagView.onDidRequestSelection = { [weak self] tagView in
@@ -689,7 +709,9 @@ extension WSTagsField {
             oldIntrinsicContentHeight = newIntrinsicContentHeight
         }
 
-        self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
+        if self.enableScrolling {        
+            self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
+        }
         self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
         self.contentSize.height = contentRect.height
 
