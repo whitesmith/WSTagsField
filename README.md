@@ -3,7 +3,7 @@
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
 [![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/WSTagsField.svg)](https://cocoapods.org/pods/WSTagsField)
-[![Swift 4.1](https://img.shields.io/badge/Swift-4.1-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift 4.2](https://img.shields.io/badge/Swift-4.2-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](http://www.apple.com/ios/)
 [![Build Status](https://www.bitrise.io/app/059bc89743c769dc.svg?token=Wu0zdJtTsCQlVFSG1XuGIw&branch=master)](https://www.bitrise.io/app/059bc89743c769dc)
 [![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
@@ -96,23 +96,6 @@ use_frameworks!
 
 Then run `pod install` with CocoaPods 1.1.0 or newer.
 
-#### <img src="https://raw.githubusercontent.com/ricardopereira/resources/master/img/swiftpm.png" width="24" height="24"> [SwiftPM]
-
-[SwiftPM]: https://github.com/apple/swift-package-manager
-
-If your version of Swift supports the SPM, you just need to add WSTagsField as a dependency in your `Package.swift`:
-
-```swift
-let package = Package(
-    name: "YOUR_PROJECT_NAME",
-    dependencies: [
-        .Package(url: "https://github.com/whitesmith/WSTagsField.git", , versions: "2.0.0" ..< Version.max),
-        ...
-    ]
-    ...
-)
-```
-
 (**Note** that the Swift Package Manager is still in early design and development, for more information checkout its repository)
 
 #### Manually
@@ -121,8 +104,8 @@ Download all the source files and drop them into your project.
 
 ## Requirements
 
-* iOS 8.0+
-* Xcode 9 (Swift 4.0)
+* iOS 9.0+
+* Xcode 10 (Swift 4.2)
 
 # Contributing
 
