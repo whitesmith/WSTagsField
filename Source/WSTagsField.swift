@@ -142,6 +142,7 @@ open class WSTagsField: UIScrollView {
 
     open var keyboardAppearance: UIKeyboardAppearance = .default {
         didSet {
+            textField.keyboardAppearance = self.keyboardAppearance
             tagViews.forEach { $0.keyboardAppearanceType = self.keyboardAppearance }
         }
     }
