@@ -75,6 +75,9 @@ open class WSTagsField: UIScrollView {
             repositionViews()
         }
     }
+    
+    /// Whether or not the WSTagsField should become scrollable
+    open var enableScrolling: Bool = true
 
     @available(*, unavailable, message: "Use 'cornerRadius' instead.")
     open var tagCornerRadius: CGFloat = 3.0
@@ -697,7 +700,9 @@ extension WSTagsField {
             oldIntrinsicContentHeight = newIntrinsicContentHeight
         }
 
-        self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
+        if self.enableScrolling {        
+            self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
+        }
         self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
         self.contentSize.height = contentRect.height
 
