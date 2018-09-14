@@ -70,6 +70,8 @@ open class WSTagView: UIView {
         didSet { updateContent(animated: false) }
     }
 
+    open var keyboardAppearanceType: UIKeyboardAppearance = .default
+
     internal var onDidRequestDelete: ((_ tagView: WSTagView, _ replacementText: String?) -> Void)?
     internal var onDidRequestSelection: ((_ tagView: WSTagView) -> Void)?
     internal var onDidInputText: ((_ tagView: WSTagView, _ text: String) -> Void)?
@@ -236,6 +238,11 @@ extension WSTagView: UITextInputTraits {
     // offered when a tag is highlighted.
     public var autocorrectionType: UITextAutocorrectionType {
         get { return .no }
+        set { }
+    }
+
+    public var keyboardAppearance: UIKeyboardAppearance {
+        get { return keyboardAppearanceType }
         set { }
     }
 
