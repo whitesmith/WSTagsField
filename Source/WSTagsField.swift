@@ -274,7 +274,7 @@ open class WSTagsField: UIScrollView {
         return .init(width: size.width, height: calculateContentHeight(layoutWidth: size.width) + contentInset.top + contentInset.bottom)
     }
     
-    open var placeholderAttributes: [NSAttributedString.Key: NSAttributedString]?
+    open var placeholderAttributes: [NSAttributedString.Key: Any]?
 
     // MARK: -
     public override init(frame: CGRect) {
