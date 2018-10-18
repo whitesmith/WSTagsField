@@ -273,6 +273,8 @@ open class WSTagsField: UIScrollView {
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
         return .init(width: size.width, height: calculateContentHeight(layoutWidth: size.width) + contentInset.top + contentInset.bottom)
     }
+    
+    open var placeholderAttributes: [NSAttributedString.Key: NSAttributedString]?
 
     // MARK: -
     public override init(frame: CGRect) {
@@ -727,7 +729,9 @@ extension WSTagsField {
 
     private func attributedPlaceholder() -> NSAttributedString {
         var attributes: [NSAttributedString.Key: Any]?
-        if let placeholderColor = placeholderColor {
+        if let attr = placeholderAttributes {
+            attributes = attr
+        } else if let placeholderColor = placeholderColor {
             attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
         }
         return NSAttributedString(string: placeholder, attributes: attributes)
