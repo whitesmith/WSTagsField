@@ -183,7 +183,7 @@ open class WSTagView: UIView {
     // MARK: - Laying out
     open override func layoutSubviews() {
         super.layoutSubviews()
-        textLabel.frame = bounds.inset(by: layoutMargins)
+        textLabel.frame = UIEdgeInsetsInsetRect(bounds,layoutMargins)
         if frame.width == 0 || frame.height == 0 {
             frame.size = self.intrinsicContentSize
         }
