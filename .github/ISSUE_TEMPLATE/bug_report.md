@@ -1,3 +1,9 @@
+---
+name: Bug report
+about: Create a report to help us fix a problem with WSTagsField
+
+---
+
 ### Which version of the WSTagsField are you using? 
 E.g. `1.0.11`
 
