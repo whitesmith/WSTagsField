@@ -413,7 +413,7 @@ open class WSTagsField: UIScrollView {
             isScrolling = true
             let xPos = tagsWidth < 100.0 ? overflow - (tagsWidth + 10.0) : overflow - 75.0
             UIView.animate(withDuration: 0.2, animations: {
-                self.setContentOffset(CGPoint(x: xPos, y: -10.0), animated: true)
+                self.setContentOffset(CGPoint(x: xPos, y: 0), animated: true)
             }, completion: { _ in
                 self.isScrolling = false
             })
