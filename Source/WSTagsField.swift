@@ -16,7 +16,6 @@ public enum WSTagAcceptOption {
 
 open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
-    fileprivate let clearButton = UIButton(frame: CGRect.zero)
     
     /// Dedicated text field delegate.
     open weak var textDelegate: UITextFieldDelegate?
@@ -605,16 +604,6 @@ extension WSTagsField {
         textField.textColor = fieldTextColor
         addSubview(textField)
         
-        clearButton.backgroundColor = .white
-        clearButton.setImage(UIImage(named: "IconClear"), for: .normal)
-        clearButton.translatesAutoresizingMaskIntoConstraints = false
-        clearButton.heightAnchor.constraint(equalToConstant: 19.0).isActive = true
-        clearButton.widthAnchor.constraint(equalToConstant: 19.0).isActive = true
-        clearButton.trailingAnchor.constraint(equalTo: trailingAnchor, constant: -16.0).isActive = true
-        clearButton.centerYAnchor.constraint(equalTo: centerYAnchor).isActive = true
-        clearButton.addTarget(self, action: #selector(clearTextField), for: .touchUpInside)
-        clearButton.isHidden = true
-        
         layerBoundsObserver = self.observe(\.layer.bounds, options: [.old, .new]) { [weak self] sender, change in
             guard change.oldValue?.size.width != change.newValue?.size.width else {
                 return
@@ -685,15 +674,6 @@ extension WSTagsField {
             
             closure(nil, nil, textFieldRect)
         }
-    }
-    
-    func toggleClearButton(show: Bool) {
-        clearButton.isHidden = !show
-    }
-    
-    @objc fileprivate func clearTextField() {
-        textField.text = ""
-        removeTags()
     }
     
     fileprivate func repositionViews() {
@@ -770,7 +750,6 @@ extension WSTagsField {
 extension WSTagsField: UITextFieldDelegate {
     
     public func textFieldDidBeginEditing(_ textField: UITextField) {
-        toggleClearButton(show: true)
         textDelegate?.textFieldDidBeginEditing?(textField)
         unselectAllTagViewsAnimated(true)
     }
@@ -792,8 +771,6 @@ extension WSTagsField: UITextFieldDelegate {
     }
     
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        toggleClearButton(show: string != "")
-        
         if acceptTagOption == .comma && string == "," && onShouldAcceptTag?(self) ?? true {
             tokenizeTextFieldText()
             return false
