@@ -16,6 +16,10 @@ public enum WSTagAcceptOption {
 
 open class WSTagsField: UIScrollView {
     fileprivate let textField = BackspaceDetectingTextField()
+    var availableWidthForTextField: CGFloat = 0
+    var typing: Bool = false
+    var currentQueryWidth: CGFloat = 0
+    let scrollOverflowOffset: CGFloat = 7.0
     
     /// Dedicated text field delegate.
     open weak var textDelegate: UITextFieldDelegate?
@@ -118,6 +122,12 @@ open class WSTagsField: UIScrollView {
         }
     }
     
+    open var cachedPlaceholder: String = "Tags" {
+        didSet {
+            self.placeholder = cachedPlaceholder
+        }
+    }
+    
     open var placeholderColor: UIColor? {
         didSet {
             updatePlaceholderTextVisibility()
@@ -163,6 +173,7 @@ open class WSTagsField: UIScrollView {
     
     open override var contentInset: UIEdgeInsets {
         didSet {
+            print("CONTENT INSET")
             repositionViews()
         }
     }
@@ -402,18 +413,17 @@ open class WSTagsField: UIScrollView {
         // Clearing text programmatically doesn't call this automatically
         onTextFieldDidChange(self.textField)
         
-        updatePlaceholderTextVisibility()
+        placeholder = ""
         repositionViews()
         scrollToInput()
     }
     
     open func scrollToInput(force: Bool = false) {
         let overflow = contentSize.width - frame.width
-        if force || (contentSize.width > 350.0 && !isScrolling && contentOffset.x < overflow - 75.0) {
+        if force || overflow > 0 && !isScrolling {
             isScrolling = true
-            let xPos = tagsWidth < 100.0 ? overflow - (tagsWidth + 10.0) : overflow - 75.0
             UIView.animate(withDuration: 0.2, animations: {
-                self.setContentOffset(CGPoint(x: xPos, y: 0), animated: true)
+                self.setContentOffset(CGPoint(x: overflow + 5, y: 0), animated: true)
             }, completion: { _ in
                 self.isScrolling = false
             })
@@ -441,9 +451,12 @@ open class WSTagsField: UIScrollView {
         self.tags.remove(at: index)
         onDidRemoveTag?(self, removedTag)
         
+        if self.tags.count == 0 {
+            placeholder = cachedPlaceholder
+            setContentOffset(CGPoint(x: 0, y: 0), animated: false)
+        }
         updatePlaceholderTextVisibility()
         repositionViews()
-        scrollToInput(force: true)
     }
     
     open func removeTags() {
@@ -468,6 +481,21 @@ open class WSTagsField: UIScrollView {
     // MARK: - Actions
     
     @objc open func onTextFieldDidChange(_ sender: AnyObject) {
+        if let text = textField.text, let font = font {
+            typing = true
+            currentQueryWidth = text.width(withConstrainedHeight: 18.0, font: font)
+            if currentQueryWidth >= availableWidthForTextField - scrollOverflowOffset {
+                isScrolling = true
+                let totalWidth = CGFloat(tags.count) * spaceBetweenTags + tagsWidth + currentQueryWidth + contentInset.left + contentInset.right
+                let offset = max(totalWidth - self.frame.width, 5)
+                UIView.animate(withDuration: 0.1, animations: {
+                    self.repositionViews()
+                    self.setContentOffset(CGPoint(x: offset, y: 0), animated: true)
+                }, completion: { _ in
+                    self.isScrolling = false
+                })
+            }
+        }
         onDidChangeText?(self, textField.text)
     }
     
@@ -594,7 +622,6 @@ extension WSTagsField {
         selectedTextColor = .black
         
         clipsToBounds = true
-        
         textField.backgroundColor = .clear
         textField.autocorrectionType = UITextAutocorrectionType.no
         textField.autocapitalizationType = UITextAutocapitalizationType.none
@@ -621,7 +648,6 @@ extension WSTagsField {
         }
         
         textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: UIControl.Event.editingChanged)
-        
         repositionViews()
     }
     
@@ -663,14 +689,21 @@ extension WSTagsField {
         
         // Always indent TextField by a little bit
         curX += max(0, Constants.TEXT_FIELD_HSPACE - self.spaceBetweenTags)
-        let availableWidthForTextField: CGFloat = max(233.0, maxWidth - curX)
+        availableWidthForTextField = max(10, maxWidth - curX)
         
         if textField.isEnabled {
             var textFieldRect = CGRect.zero
             textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
             textFieldRect.origin.y = curY
             textFieldRect.origin.x = curX
-            textFieldRect.size.width = availableWidthForTextField
+            
+            
+            if typing && currentQueryWidth >= availableWidthForTextField - scrollOverflowOffset {
+                textFieldRect.size.width = max(currentQueryWidth + scrollOverflowOffset, 154)
+            } else {
+                textFieldRect.size.width = availableWidthForTextField
+            }
+            
             
             closure(nil, nil, textFieldRect)
         }
@@ -692,6 +725,9 @@ extension WSTagsField {
             }
             else if let textFieldRect = textFieldRect {
                 textField.frame = textFieldRect
+                let textFieldText = textField.text
+                textField.text = textFieldText
+                textField.setNeedsLayout()
                 contentRect = textFieldRect.union(contentRect)
             }
         }
@@ -712,10 +748,14 @@ extension WSTagsField {
             oldIntrinsicContentHeight = newIntrinsicContentHeight
         }
         
-        if self.enableScrolling {
-            self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
+        self.isScrollEnabled = true
+        if typing {
+            let totalTagsWidth = CGFloat(tags.count) * spaceBetweenTags + tagsWidth
+            self.contentSize.width = totalTagsWidth + currentQueryWidth + contentInset.left + contentInset.right
+        } else {
+            let totalTagsWidth = CGFloat(tags.count) * spaceBetweenTags + tagsWidth
+            self.contentSize.width = totalTagsWidth + textField.frame.width + contentInset.left + contentInset.right
         }
-        self.contentSize.width = tagsWidth + textField.frame.width + contentInset.left + contentInset.right
         self.contentSize.height = contentRect.height
         
         if self.isScrollEnabled {
@@ -761,10 +801,12 @@ extension WSTagsField: UITextFieldDelegate {
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
         if acceptTagOption == .return && onShouldAcceptTag?(self) ?? true {
             tokenizeTextFieldText()
+            typing = false
             return true
         }
         if let textFieldShouldReturn = textDelegate?.textFieldShouldReturn, textFieldShouldReturn(textField) {
             tokenizeTextFieldText()
+            typing = false
             return true
         }
         return false
@@ -779,6 +821,7 @@ extension WSTagsField: UITextFieldDelegate {
             tokenizeTextFieldText()
             return false
         }
+        
         return true
     }
     
@@ -786,6 +829,15 @@ extension WSTagsField: UITextFieldDelegate {
 
 public func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
     return lhs == rhs.textField
+}
+
+extension String {
+    func width(withConstrainedHeight height: CGFloat, font: UIFont) -> CGFloat {
+        let constraintRect = CGSize(width: .greatestFiniteMagnitude, height: height)
+        let boundingBox = self.boundingRect(with: constraintRect, options: .usesLineFragmentOrigin, attributes: [NSAttributedStringKey.font: font], context: nil)
+        
+        return ceil(boundingBox.width)
+    }
 }
 
 #if swift(>=4.2)
@@ -796,4 +848,5 @@ extension UIEdgeInsets {
 }
 
 #endif
+
 
