@@ -32,7 +32,7 @@ open class WSTagView: UIView {
         }
     }
     
-    open var cornerRadius: CGFloat = 4.0 {
+    open var cornerRadius: CGFloat = 5.0 {
         didSet {
             self.layer.cornerRadius = cornerRadius
             setNeedsDisplay()
@@ -90,7 +90,7 @@ open class WSTagView: UIView {
     }
     
     
-    open let tagMargins: UIEdgeInsets = UIEdgeInsetsMake(2, 8, 2, 8)
+    open let tagMargins: UIEdgeInsets = UIEdgeInsetsMake(5, 8, 5, 8)
     
     public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
@@ -251,4 +251,5 @@ extension WSTagView: UITextInputTraits {
     }
     
 }
+
 
