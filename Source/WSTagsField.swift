@@ -191,8 +191,16 @@ open class WSTagsField: UIScrollView {
         return false
     }
 
+    open var allowsMultipleSelection: Bool = false {
+        didSet {
+            tagViews.forEach { $0.allowsMultipleSelection = allowsMultipleSelection }
+        }
+    }
+
+    open var autoSelectTagWhenAdded: Bool = false
+
     open fileprivate(set) var tags = [WSTag]()
-    internal var tagViews = [WSTagView]()
+    open var tagViews = [WSTagView]()
 
     // MARK: - Events
 
@@ -317,14 +325,20 @@ open class WSTagsField: UIScrollView {
 
     open func beginEditing() {
         self.textField.becomeFirstResponder()
-        self.unselectAllTagViewsAnimated(false)
+        if !allowsMultipleSelection {
+            self.unselectAllTagViewsAnimated(false)
+        }
     }
 
     open func endEditing() {
-        // NOTE: We used to check if .isFirstResponder and then resign first responder, but sometimes we noticed 
-        // that it would be the first responder, but still return isFirstResponder=NO. 
+        // NOTE: We used to check if .isFirstResponder and then resign first responder, but sometimes we noticed
+        // that it would be the first responder, but still return isFirstResponder=NO.
         // So always attempt to resign without checking.
         self.textField.resignFirstResponder()
+    }
+    
+    open func addInputAccessoryView(view: UIView) {
+        textField.inputAccessoryView = view
     }
 
     // MARK: - Adding / Removing Tags
@@ -362,15 +376,16 @@ open class WSTagsField: UIScrollView {
         tagView.borderColor = self.borderColor
         tagView.keyboardAppearanceType = self.keyboardAppearance
         tagView.layoutMargins = self.layoutMargins
+        tagView.allowsMultipleSelection = allowsMultipleSelection
 
         tagView.onDidRequestSelection = { [weak self] tagView in
-            self?.selectTagView(tagView, animated: true)
+            self?.toggleTagView(tagView, animated: true)
         }
 
         tagView.onDidRequestDelete = { [weak self] tagView, replacementText in
             // First, refocus the text field
             self?.textField.becomeFirstResponder()
-            if (replacementText?.isEmpty ?? false) == false {
+            if replacementText?.isEmpty == false {
                 self?.textField.text = replacementText
             }
             // Then remove the view from our data
@@ -401,6 +416,15 @@ open class WSTagsField: UIScrollView {
         repositionViews()
     }
 
+    open func setRemovable(tags: [String], removable: Bool = false) {
+        assert(tagViews.count > 0, "There are no tagViews. Did you call this method after adding tags?")
+        tagViews.filter { tags.contains($0.textLabel.text ?? "") }.forEach { $0.removable = removable }
+    }
+    
+    open func getSelectedTagStrings() -> [String] {
+        return tagViews.filter { $0.selected }.compactMap { $0.textLabel.text }
+    }
+
     open func removeTag(_ tag: String) {
         removeTag(WSTag(tag))
     }
@@ -415,6 +439,10 @@ open class WSTagsField: UIScrollView {
         if index < 0 || index >= self.tags.count { return }
 
         let tagView = self.tagViews[index]
+        if !tagView.removable {
+            return
+        }
+
         tagView.removeFromSuperview()
         self.tagViews.remove(at: index)
 
@@ -435,7 +463,18 @@ open class WSTagsField: UIScrollView {
         let text = self.textField.text?.trimmingCharacters(in: CharacterSet.whitespaces) ?? ""
         if text.isEmpty == false && (onVerifyTag?(self, text) ?? true) {
             let tag = WSTag(text)
+            if self.tags.contains(tag) {
+                self.textField.text = ""
+                return nil
+            }
+            
             addTag(tag)
+            if let tagView = tagViews.last, autoSelectTagWhenAdded {
+                //There's a bug that causes the text to be truncated during animation ("New York" becomes "New Y..."). This delays animating the TagView until after it's set in the TextField.
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.15) {
+                    self.toggleTagView(tagView, animated: false)
+                }
+            }
 
             self.textField.text = ""
             onTextFieldDidChange(self.textField)
@@ -477,23 +516,25 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    open func selectTagView(_ tagView: WSTagView, animated: Bool = false) {
+    open func toggleTagView(_ tagView: WSTagView, animated: Bool = false) {
         if self.readOnly {
             return
         }
-
+        
+        tagView.selected = !tagView.selected
+        
+        if !allowsMultipleSelection {
+            tagViews.filter { $0 != tagView }.forEach {
+                $0.selected = false
+                onDidUnselectTagView?(self, $0)
+            }
+        }
+        
         if tagView.selected {
-            tagView.onDidRequestDelete?(tagView, nil)
-            return
+            onDidSelectTagView?(self, tagView)
+        } else {
+            onDidUnselectTagView?(self, tagView)
         }
-
-        tagView.selected = true
-        tagViews.filter { $0 != tagView }.forEach {
-            $0.selected = false
-            onDidUnselectTagView?(self, $0)
-        }
-
-        onDidSelectTagView?(self, tagView)
     }
 
     open func unselectAllTagViewsAnimated(_ animated: Bool = false) {
@@ -592,10 +633,15 @@ extension WSTagsField {
         }
 
         textField.onDeleteBackwards = { [weak self] in
-            if self?.readOnly ?? true { return }
+            if self?.readOnly == true { return }
+            
+            if self?.allowsMultipleSelection == true, self?.textField.text?.isEmpty == true, let lastTag = self?.tags.last {
+                self?.removeTag(lastTag)
+                return
+            }
 
-            if self?.textField.text?.isEmpty ?? true, let tagView = self?.tagViews.last {
-                self?.selectTagView(tagView, animated: true)
+            if self?.textField.text?.isEmpty == true, let tagView = self?.tagViews.last {
+                self?.toggleTagView(tagView, animated: true)
                 self?.textField.resignFirstResponder()
             }
         }
@@ -709,7 +755,7 @@ extension WSTagsField {
             oldIntrinsicContentHeight = newIntrinsicContentHeight
         }
 
-        if self.enableScrolling {        
+        if self.enableScrolling {
             self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
         }
         self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
@@ -746,7 +792,9 @@ extension WSTagsField: UITextFieldDelegate {
 
     public func textFieldDidBeginEditing(_ textField: UITextField) {
         textDelegate?.textFieldDidBeginEditing?(textField)
-        unselectAllTagViewsAnimated(true)
+        if !allowsMultipleSelection {
+            unselectAllTagViewsAnimated(true)
+        }
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
