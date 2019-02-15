@@ -326,6 +326,10 @@ open class WSTagsField: UIScrollView {
         // So always attempt to resign without checking.
         self.textField.resignFirstResponder()
     }
+    
+    open override func reloadInputViews() {
+        self.textField.reloadInputViews()
+    }
 
     // MARK: - Adding / Removing Tags
     open func addTags(_ tags: [String]) {
