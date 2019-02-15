@@ -327,7 +327,7 @@ open class WSTagsField: UIScrollView {
         self.textField.resignFirstResponder()
     }
     
-    override open func reloadInputViews() {
+    open override func reloadInputViews() {
         self.textField.reloadInputViews()
     }
 
