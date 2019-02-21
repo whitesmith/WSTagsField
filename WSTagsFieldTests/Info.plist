@@ -15,10 +15,10 @@
 	<key>CFBundlePackageType</key>
 	<string>BNDL</string>
 	<key>CFBundleShortVersionString</key>
-	<string>4.0.0</string>
+	<string>$(SHARED_VERSION_NUMBER)</string>
 	<key>CFBundleSignature</key>
 	<string>????</string>
 	<key>CFBundleVersion</key>
-	<string>2018.09.14.18.31</string>
+	<string>$(SHARED_BUILD_NUMBER)</string>
 </dict>
 </plist>
