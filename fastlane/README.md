@@ -21,11 +21,16 @@ or alternatively using `brew cask install fastlane`
 fastlane ios test
 ```
 Runs all the tests
-### ios version_bump_project
+### ios bump_build_number_with_current_date
 ```
-fastlane ios version_bump_project
+fastlane ios bump_build_number_with_current_date
 ```
-Increment the verion and build number
+
+### ios bump_version
+```
+fastlane ios bump_version
+```
+Bump Version
 ### ios release
 ```
 fastlane ios release
