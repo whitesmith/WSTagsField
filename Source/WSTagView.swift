@@ -237,13 +237,11 @@ extension WSTagView: UITextInputTraits {
     // Solves an issue where autocorrect suggestions were being
     // offered when a tag is highlighted.
     public var autocorrectionType: UITextAutocorrectionType {
-        get { return .no }
-        set { }
+        return .no
     }
 
     public var keyboardAppearance: UIKeyboardAppearance {
-        get { return keyboardAppearanceType }
-        set { }
+        return keyboardAppearanceType
     }
 
 }

@@ -75,7 +75,7 @@ open class WSTagsField: UIScrollView {
             repositionViews()
         }
     }
-    
+
     /// Whether or not the WSTagsField should become scrollable
     open var enableScrolling: Bool = true
 
@@ -326,7 +326,7 @@ open class WSTagsField: UIScrollView {
         // So always attempt to resign without checking.
         self.textField.resignFirstResponder()
     }
-    
+
     open override func reloadInputViews() {
         self.textField.reloadInputViews()
     }
@@ -378,7 +378,7 @@ open class WSTagsField: UIScrollView {
                 self?.textField.text = replacementText
             }
             // Then remove the view from our data
-            if let index = self?.tagViews.index(of: tagView) {
+            if let index = self?.tagViews.firstIndex(of: tagView) {
                 self?.removeTagAtIndex(index)
             }
         }
@@ -410,7 +410,7 @@ open class WSTagsField: UIScrollView {
     }
 
     open func removeTag(_ tag: WSTag) {
-        if let index = self.tags.index(of: tag) {
+        if let index = self.tags.firstIndex(of: tag) {
             removeTagAtIndex(index)
         }
     }
@@ -458,7 +458,7 @@ open class WSTagsField: UIScrollView {
     // MARK: - Tag selection
 
     open func selectNextTag() {
-        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+        guard let selectedIndex = tagViews.firstIndex(where: { $0.selected }) else {
             return
         }
 
@@ -470,7 +470,7 @@ open class WSTagsField: UIScrollView {
     }
 
     open func selectPrevTag() {
-        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+        guard let selectedIndex = tagViews.firstIndex(where: { $0.selected }) else {
             return
         }
 
@@ -553,7 +553,7 @@ extension WSTagsField {
         set { textField.text = newValue }
     }
 
-    @available(iOS, unavailable)
+    @available(*, deprecated, message: "Use 'inputFieldAccessoryView' instead")
     override open var inputAccessoryView: UIView? {
         return super.inputAccessoryView
     }
@@ -713,7 +713,7 @@ extension WSTagsField {
             oldIntrinsicContentHeight = newIntrinsicContentHeight
         }
 
-        if self.enableScrolling {        
+        if self.enableScrolling {
             self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
         }
         self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
