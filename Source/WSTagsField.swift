@@ -112,6 +112,16 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    @available(iOSApplicationExtension 10.0, *)
+    open var fieldTextContentType: UITextContentType! {
+        set {
+            textField.textContentType = fieldTextContentType
+        }
+        get {
+            return textField.textContentType
+        }
+    }
+
     open var placeholder: String = "Tags" {
         didSet {
             updatePlaceholderTextVisibility()
@@ -345,10 +355,10 @@ open class WSTagsField: UIScrollView {
     }
 
     open func addTag(_ tag: WSTag) {
-
         if let onValidateTag = onValidateTag, !onValidateTag(tag, self.tags) {
             return
-        } else if self.tags.contains(tag) {
+        }
+        else if self.tags.contains(tag) {
             return
         }
 
