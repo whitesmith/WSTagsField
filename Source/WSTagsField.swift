@@ -75,7 +75,7 @@ open class WSTagsField: UIScrollView {
             repositionViews()
         }
     }
-    
+
     /// Whether or not the WSTagsField should become scrollable
     open var enableScrolling: Bool = true
 
@@ -326,7 +326,7 @@ open class WSTagsField: UIScrollView {
         // So always attempt to resign without checking.
         self.textField.resignFirstResponder()
     }
-    
+
     open override func reloadInputViews() {
         self.textField.reloadInputViews()
     }
@@ -553,7 +553,7 @@ extension WSTagsField {
         set { textField.text = newValue }
     }
 
-    @available(iOS, unavailable)
+    @available(*, deprecated, message: "Use 'inputFieldAccessoryView' instead")
     override open var inputAccessoryView: UIView? {
         return super.inputAccessoryView
     }
@@ -713,7 +713,7 @@ extension WSTagsField {
             oldIntrinsicContentHeight = newIntrinsicContentHeight
         }
 
-        if self.enableScrolling {        
+        if self.enableScrolling {
             self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
         }
         self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
