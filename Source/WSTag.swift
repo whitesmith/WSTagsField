@@ -16,10 +16,6 @@ public struct WSTag: Hashable {
         self.text = text
     }
 
-    public var hashValue: Int {
-        return self.text.hashValue
-    }
-
     public func equals(_ other: WSTag) -> Bool {
         return self.text == other.text
     }

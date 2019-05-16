@@ -76,6 +76,9 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    /// Whether or not the WSTagsField should become scrollable
+    open var enableScrolling: Bool = true
+
     @available(*, unavailable, message: "Use 'cornerRadius' instead.")
     open var tagCornerRadius: CGFloat = 3.0
 
@@ -109,6 +112,16 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    @available(iOS 10.0, *)
+    open var fieldTextContentType: UITextContentType! {
+        set {
+            textField.textContentType = fieldTextContentType
+        }
+        get {
+            return textField.textContentType
+        }
+    }
+
     open var placeholder: String = "Tags" {
         didSet {
             updatePlaceholderTextVisibility()
@@ -134,6 +147,13 @@ open class WSTagsField: UIScrollView {
         didSet {
             textField.font = font
             tagViews.forEach { $0.font = self.font }
+        }
+    }
+
+    open var keyboardAppearance: UIKeyboardAppearance = .default {
+        didSet {
+            textField.keyboardAppearance = self.keyboardAppearance
+            tagViews.forEach { $0.keyboardAppearanceType = self.keyboardAppearance }
         }
     }
 
@@ -276,8 +296,9 @@ open class WSTagsField: UIScrollView {
     }
 
     deinit {
-        if ProcessInfo.processInfo.operatingSystemVersion.majorVersion < 11, let observer = layerBoundsObserver {
+        if let observer = layerBoundsObserver {
             removeObserver(observer, forKeyPath: "layer.bounds")
+            observer.invalidate()
         }
     }
 
@@ -316,6 +337,10 @@ open class WSTagsField: UIScrollView {
         self.textField.resignFirstResponder()
     }
 
+    open override func reloadInputViews() {
+        self.textField.reloadInputViews()
+    }
+
     // MARK: - Adding / Removing Tags
     open func addTags(_ tags: [String]) {
         tags.forEach { addTag($0) }
@@ -330,10 +355,10 @@ open class WSTagsField: UIScrollView {
     }
 
     open func addTag(_ tag: WSTag) {
-
         if let onValidateTag = onValidateTag, !onValidateTag(tag, self.tags) {
             return
-        } else if self.tags.contains(tag) {
+        }
+        else if self.tags.contains(tag) {
             return
         }
 
@@ -349,6 +374,7 @@ open class WSTagsField: UIScrollView {
         tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
+        tagView.keyboardAppearanceType = self.keyboardAppearance
         tagView.layoutMargins = self.layoutMargins
 
         tagView.onDidRequestSelection = { [weak self] tagView in
@@ -362,7 +388,7 @@ open class WSTagsField: UIScrollView {
                 self?.textField.text = replacementText
             }
             // Then remove the view from our data
-            if let index = self?.tagViews.index(of: tagView) {
+            if let index = self?.tagViews.firstIndex(of: tagView) {
                 self?.removeTagAtIndex(index)
             }
         }
@@ -449,7 +475,7 @@ open class WSTagsField: UIScrollView {
     }
 
     open func removeTag(_ tag: WSTag) {
-        if let index = self.tags.index(of: tag) {
+        if let index = self.tags.firstIndex(of: tag) {
             removeTagAtIndex(index)
         }
     }
@@ -497,7 +523,7 @@ open class WSTagsField: UIScrollView {
     // MARK: - Tag selection
 
     open func selectNextTag() {
-        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+        guard let selectedIndex = tagViews.firstIndex(where: { $0.selected }) else {
             return
         }
 
@@ -509,7 +535,7 @@ open class WSTagsField: UIScrollView {
     }
 
     open func selectPrevTag() {
-        guard let selectedIndex = tagViews.index(where: { $0.selected }) else {
+        guard let selectedIndex = tagViews.firstIndex(where: { $0.selected }) else {
             return
         }
 
@@ -592,7 +618,7 @@ extension WSTagsField {
         set { textField.text = newValue }
     }
 
-    @available(iOS, unavailable)
+    @available(*, deprecated, message: "Use 'inputFieldAccessoryView' instead")
     override open var inputAccessoryView: UIView? {
         return super.inputAccessoryView
     }
@@ -643,7 +669,7 @@ extension WSTagsField {
             }
         }
 
-        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: .editingChanged)
+        textField.addTarget(self, action: #selector(onTextFieldDidChange(_:)), for: UIControl.Event.editingChanged)
 
         repositionViews()
     }
@@ -752,7 +778,9 @@ extension WSTagsField {
             oldIntrinsicContentHeight = newIntrinsicContentHeight
         }
 
-        self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
+        if self.enableScrolling {
+            self.isScrollEnabled = contentRect.height + contentInset.top + contentInset.bottom >= newIntrinsicContentHeight
+        }
         self.contentSize.width = self.bounds.width - contentInset.left - contentInset.right
         self.contentSize.height = contentRect.height
 
@@ -767,9 +795,9 @@ extension WSTagsField {
     }
 
     private func attributedPlaceholder() -> NSAttributedString {
-        var attributes: [NSAttributedStringKey: Any]?
+        var attributes: [NSAttributedString.Key: Any]?
         if let placeholderColor = placeholderColor {
-            attributes = [NSAttributedStringKey.foregroundColor: placeholderColor]
+            attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
         }
         return NSAttributedString(string: placeholder, attributes: attributes)
     }
@@ -823,3 +851,12 @@ extension WSTagsField: UITextFieldDelegate {
 public func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
     return lhs == rhs.textField
 }
+
+#if swift(>=4.2)
+
+// Workaround for bugs.swift.org/browse/SR-7879
+extension UIEdgeInsets {
+    static let zero = UIEdgeInsets()
+}
+
+#endif

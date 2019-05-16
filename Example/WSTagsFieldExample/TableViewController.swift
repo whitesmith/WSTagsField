@@ -18,7 +18,7 @@ class TableViewController: UITableViewController {
         navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Refresh", style: .done, target: self, action: #selector(self.refreshButtonTapped))
         navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(self.closeTapped))
 
-        tableView.rowHeight = UITableViewAutomaticDimension
+        tableView.rowHeight = UITableView.automaticDimension
         tableView.estimatedRowHeight = 44
         tableView.allowsSelection = false
         tableView.register(TagsViewCell.self, forCellReuseIdentifier: String(describing: TagsViewCell.self))
@@ -61,7 +61,7 @@ class TagsViewCell: UITableViewCell {
 
     let tagsField = WSTagsField()
 
-    override init(style: UITableViewCellStyle, reuseIdentifier: String?) {
+    override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
         super.init(style: style, reuseIdentifier: reuseIdentifier)
         tagsField.addTag("alksjlkasd")
         tagsField.addTag("alksjlkasd1")

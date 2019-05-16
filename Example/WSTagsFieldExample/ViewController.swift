@@ -40,6 +40,7 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .lightGray
         tagsField.returnKeyType = .next
         tagsField.delimiter = ""
+        tagsField.keyboardAppearance = .dark
 
         tagsField.textDelegate = self
         //tagsField.acceptTagOption = .space
@@ -98,12 +99,12 @@ class ViewController: UIViewController {
 extension ViewController {
 
     fileprivate func textFieldEvents() {
-        tagsField.onDidAddTag = { _, _ in
-            print("onDidAddTag")
+        tagsField.onDidAddTag = { field, tag in
+            print("onDidAddTag", tag.text)
         }
 
-        tagsField.onDidRemoveTag = { _, _ in
-            print("onDidRemoveTag")
+        tagsField.onDidRemoveTag = { field, tag in
+            print("onDidRemoveTag", tag.text)
         }
 
         tagsField.onDidChangeText = { _, text in

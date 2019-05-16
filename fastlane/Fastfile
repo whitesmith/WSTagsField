@@ -1,24 +1,97 @@
-fastlane_version "1.99.0"
-REQUIRED_XCODE_VERSION = "8.0"
+fastlane_version "2.100.0"
+REQUIRED_XCODE_VERSION = "10.1"
 default_platform :ios
+
+PROJECT_NAME = "WSTagsField"
 
 platform :ios do
   desc "Runs all the tests"
   lane :test do
-    scan project: "WSTagsField.xcodeproj"
+    scan project: "#{PROJECT_NAME}.xcodeproj"
   end
 
-  desc "Increment the verion and build number"
-  lane :version_bump_project do |options|
-    build_number = Time.new.strftime("%Y.%m.%d.%H.%M")
-    increment_build_number build_number: build_number
-    increment_version_number bump_type: options[:bump_type]
+  lane :bump_build_number_with_current_date do |options|
+    # Set build number to current date and time
+    build_number = Time.new.strftime("%Y.%-m.%-d.%-H.%-M")
+    ENV["BUILD_NUMBER"] = build_number
+    project = Xcodeproj::Project.open("../#{PROJECT_NAME}.xcodeproj")
+    project.build_configurations.each do |build|
+      current_build = build.build_settings['SHARED_BUILD_NUMBER']
+      puts "#{build.name}: current SHARED_BUILD_NUMBER is #{current_build}"
+      puts "#{build.name}: setting SHARED_BUILD_NUMBER with #{build_number}"
+      build.build_settings['SHARED_BUILD_NUMBER'] = build_number
+    end
+    puts "Available Targets:"
+    project.targets.each do |target|
+      puts " - #{target.name}"
+    end
+    project.save()
+  end
+
+  desc "Bump Version"
+  lane :bump_version do |options|
+    #ensure_git_status_clean(show_uncommitted_changes: true)
+
+    version_number = ""
+    build_number = ""
+
+    project = Xcodeproj::Project.open("../#{PROJECT_NAME}.xcodeproj")
+    project.build_configurations.each do |build|
+      # Version Number
+      current_version = build.build_settings['SHARED_VERSION_NUMBER']
+      puts "#{build.name}: current SHARED_VERSION_NUMBER is #{current_version}"
+
+      version_array = current_version.split(".").map(&:to_i)
+      case options[:bump_type]
+      when "patch"
+        version_array[2] = (version_array[2] ? version_array[2] : 0) + 1
+      when "minor"
+        version_array[1] = (version_array[1] ? version_array[1] : 0) + 1
+        version_array[2] = version_array[2] = 0
+      when "major"
+        version_array[0] = (version_array[0] ? version_array[0] : 0) + 1
+        version_array[1] = version_array[1] = 0
+        version_array[1] = version_array[2] = 0
+      end
+
+      if options[:omit_zero_patch_version] && version_array[2] == 0
+        version_array.pop()
+      end
+
+      version_number = version_array.join(".")
+      puts "#{build.name}: setting new SHARED_VERSION_NUMBER with #{version_number}"
+      build.build_settings['SHARED_VERSION_NUMBER'] = version_number
+      ENV["SHARED_VERSION_NUMBER"] = version_number
+
+      # Build Number
+      current_build = build.build_settings['SHARED_BUILD_NUMBER']
+      puts "#{build.name}: current SHARED_BUILD_NUMBER is #{current_build}"
+      build_number = Time.new.strftime("%Y.%-m.%-d.%-H.%-M")
+      puts "#{build.name}: setting new SHARED_BUILD_NUMBER with #{build_number}"
+      build.build_settings['SHARED_BUILD_NUMBER'] = build_number
+      ENV["SHARED_BUILD_NUMBER"] = build_number
+    end
+    puts "Available Targets:"
+    project.targets.each do |target|
+      puts " - #{target.name}"
+    end
+    project.save()
+
+    puts "Bump to v#{version_number} (#{build_number})"
   end
 
   desc "Prepare a new Release version"
   lane :release do |options|
-    version_bump_project bump_type: options[:bump]
+    ensure_git_status_clean(show_uncommitted_changes: true)
+
+    bump_version bump_type: options[:bump]
     version_bump_podspec bump_type: options[:bump]
+
     clean_build_artifacts
+
+    git_commit(path: [
+      "./#{PROJECT_NAME}.xcodeproj/project.pbxproj",
+      "./WSTagsField.podspec",
+    ], message: "Bump to v" + ENV["SHARED_VERSION_NUMBER"])
   end
 end

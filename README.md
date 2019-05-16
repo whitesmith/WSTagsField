@@ -1,11 +1,10 @@
 # WSTagsField
 
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
-[![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/WSTagsField.svg)](https://cocoapods.org/pods/WSTagsField)
-[![Swift 4.1](https://img.shields.io/badge/Swift-4.1-orange.svg?style=flat)](https://developer.apple.com/swift/)
+[![Swift 5](https://img.shields.io/badge/Swift-5-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](http://www.apple.com/ios/)
-[![Build Status](https://www.bitrise.io/app/059bc89743c769dc.svg?token=Wu0zdJtTsCQlVFSG1XuGIw&branch=master)](https://www.bitrise.io/app/059bc89743c769dc)
+[![Build Status](https://app.bitrise.io/app/059bc89743c769dc/status.svg?token=Wu0zdJtTsCQlVFSG1XuGIw&branch=master)]()
 [![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
 
 An iOS text field that represents different Tags.
@@ -35,20 +34,20 @@ tagsField.returnKeyType = .next
 tagsField.acceptTagOption = .space
 
 // Events
-tagsField.onDidAddTag = { (_,_) in
-    print("DidAddTag")
+tagsField.onDidAddTag = { field, tag in
+    print("DidAddTag", tag.text)
 }
 
-tagsField.onDidRemoveTag = { (_,_) in
-    print("DidRemoveTag")
+tagsField.onDidRemoveTag = { field, tag in
+    print("DidRemoveTag", tag.text)
 }
 
 tagsField.onDidChangeText = { _, text in
     print("DidChangeText")
 }
 
-tagsField.onDidChangeHeightTo = { sender, height in
-    print("HeightTo \(height)")
+tagsField.onDidChangeHeightTo = { _, height in
+    print("HeightTo", height)
 }
 
 tagsField.onValidateTag = { tag, tags in
@@ -56,7 +55,7 @@ tagsField.onValidateTag = { tag, tags in
     return tag.text != "#" && !tags.contains(where: { $0.text.uppercased() == tag.text.uppercased() })
 }
 
-
+print("List of Tags Strings:", tagsField.tags.map({$0.text}))
 ```
 
 ## Installation
@@ -94,26 +93,7 @@ You will also need to make sure you're opting into using frameworks:
 use_frameworks!
 ```
 
-Then run `pod install` with CocoaPods 1.1.0 or newer.
-
-#### <img src="https://raw.githubusercontent.com/ricardopereira/resources/master/img/swiftpm.png" width="24" height="24"> [SwiftPM]
-
-[SwiftPM]: https://github.com/apple/swift-package-manager
-
-If your version of Swift supports the SPM, you just need to add WSTagsField as a dependency in your `Package.swift`:
-
-```swift
-let package = Package(
-    name: "YOUR_PROJECT_NAME",
-    dependencies: [
-        .Package(url: "https://github.com/whitesmith/WSTagsField.git", , versions: "2.0.0" ..< Version.max),
-        ...
-    ]
-    ...
-)
-```
-
-(**Note** that the Swift Package Manager is still in early design and development, for more information checkout its repository)
+Then run `pod install` with CocoaPods 1.6.0 or newer.
 
 #### Manually
 
@@ -121,8 +101,8 @@ Download all the source files and drop them into your project.
 
 ## Requirements
 
-* iOS 8.0+
-* Xcode 9 (Swift 4.0)
+* iOS 9.0+
+* Xcode 10 (Swift 4)
 
 # Contributing
 

@@ -70,6 +70,8 @@ open class WSTagView: UIView {
         didSet { updateContent(animated: false) }
     }
 
+    open var keyboardAppearanceType: UIKeyboardAppearance = .default
+
     internal var onDidRequestDelete: ((_ tagView: WSTagView, _ replacementText: String?) -> Void)?
     internal var onDidRequestSelection: ((_ tagView: WSTagView) -> Void)?
     internal var onDidInputText: ((_ tagView: WSTagView, _ text: String) -> Void)?
@@ -181,7 +183,7 @@ open class WSTagView: UIView {
     // MARK: - Laying out
     open override func layoutSubviews() {
         super.layoutSubviews()
-        textLabel.frame = UIEdgeInsetsInsetRect(bounds, layoutMargins)
+        textLabel.frame = bounds.inset(by: layoutMargins)
         if frame.width == 0 || frame.height == 0 {
             frame.size = self.intrinsicContentSize
         }
@@ -235,8 +237,11 @@ extension WSTagView: UITextInputTraits {
     // Solves an issue where autocorrect suggestions were being
     // offered when a tag is highlighted.
     public var autocorrectionType: UITextAutocorrectionType {
-        get { return .no }
-        set { }
+        return .no
+    }
+
+    public var keyboardAppearance: UIKeyboardAppearance {
+        return keyboardAppearanceType
     }
 
 }
