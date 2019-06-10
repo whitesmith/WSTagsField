@@ -297,8 +297,8 @@ open class WSTagsField: UIScrollView {
 
     deinit {
         if #available(iOS 13, *) {
-            // Observers should becleared when NSKeyValueObservation is deallocated.
-            // Let's justkeep the code for older iOS versions unmodified to make
+            // Observers should be cleared when NSKeyValueObservation is deallocated.
+            // Let's just keep the code for older iOS versions unmodified to make
             // sure we don't break anything.
         } else {
             if let observer = layerBoundsObserver {
