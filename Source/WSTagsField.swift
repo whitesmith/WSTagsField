@@ -134,6 +134,12 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    open var placeholderFont: UIFont? {
+        didSet {
+            updatePlaceholderTextVisibility()
+        }
+    }
+
     @available(*, unavailable, message: "Use 'placeholderAlwaysVisible' instead.")
     open var placeholderAlwayVisible: Bool = false
 
@@ -749,6 +755,9 @@ extension WSTagsField {
         var attributes: [NSAttributedString.Key: Any]?
         if let placeholderColor = placeholderColor {
             attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
+        }
+        if let placeholderFont = placeholderFont {
+            attributes = [NSAttributedString.Key.font: placeholderFont]
         }
         return NSAttributedString(string: placeholder, attributes: attributes)
     }
