@@ -9,7 +9,7 @@
 import UIKit
 
 open class WSTagView: UIView {
-    fileprivate let textLabel = UILabel()
+    let textLabel = UILabel()
 
     open var displayText: String = "" {
         didSet {
@@ -78,15 +78,20 @@ open class WSTagView: UIView {
 
     open var selected: Bool = false {
         didSet {
-            if selected && !isFirstResponder {
-                _ = becomeFirstResponder()
-            } else
-            if !selected && isFirstResponder {
-                _ = resignFirstResponder()
+            if !allowsMultipleSelection {
+                if selected && !isFirstResponder {
+                    _ = becomeFirstResponder()
+                } else
+                if !selected && isFirstResponder {
+                    _ = resignFirstResponder()
+                }
             }
             updateContent(animated: true)
         }
     }
+    
+    open var allowsMultipleSelection: Bool = false
+    open var removable: Bool = true
 
     public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
@@ -106,6 +111,7 @@ open class WSTagView: UIView {
 
         self.displayText = tag.text
         updateLabelText()
+        textLabel.translatesAutoresizingMaskIntoConstraints = false
 
         let tapRecognizer = UITapGestureRecognizer(target: self, action: #selector(handleTapGestureRecognizer))
         addGestureRecognizer(tapRecognizer)
@@ -208,7 +214,7 @@ open class WSTagView: UIView {
 
     // MARK: - Gesture Recognizers
     @objc func handleTapGestureRecognizer(_ sender: UITapGestureRecognizer) {
-        if selected {
+        if selected && !allowsMultipleSelection {
             return
         }
         onDidRequestSelection?(self)
