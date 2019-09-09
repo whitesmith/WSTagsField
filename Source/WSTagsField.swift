@@ -296,10 +296,7 @@ open class WSTagsField: UIScrollView {
     }
 
     deinit {
-        if let observer = layerBoundsObserver {
-            removeObserver(observer, forKeyPath: "layer.bounds")
-            observer.invalidate()
-        }
+        layerBoundsObserver = nil
     }
 
     open override func willMove(toSuperview newSuperview: UIView?) {
