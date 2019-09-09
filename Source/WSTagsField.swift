@@ -115,7 +115,7 @@ open class WSTagsField: UIScrollView {
     @available(iOS 10.0, *)
     open var fieldTextContentType: UITextContentType! {
         set {
-            textField.textContentType = fieldTextContentType
+            textField.textContentType = newValue
         }
         get {
             return textField.textContentType
