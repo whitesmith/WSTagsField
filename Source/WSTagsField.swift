@@ -15,6 +15,7 @@ public enum WSTagAcceptOption {
 }
 
 open class WSTagsField: UIScrollView {
+
     fileprivate let textField = BackspaceDetectingTextField()
 
     /// Dedicated text field delegate.
@@ -320,8 +321,7 @@ open class WSTagsField: UIScrollView {
 
     /// Take the text inside of the field and make it a Tag.
     open func acceptCurrentTextAsTag() {
-        if let currentText = tokenizeTextFieldText(),
-           (self.textField.text?.isEmpty ?? true) == false {
+        if let currentText = tokenizeTextFieldText(), !isTextFieldEmpty {
             self.addTag(currentText)
         }
     }
@@ -482,6 +482,9 @@ open class WSTagsField: UIScrollView {
             tagViews[selectedIndex].selected = false
             tagViews[nextIndex].selected = true
         }
+        else {
+            textField.becomeFirstResponder()
+        }
     }
 
     open func selectPrevTag() {
@@ -578,6 +581,10 @@ extension WSTagsField {
         set { textField.inputAccessoryView = newValue }
     }
 
+    var isTextFieldEmpty: Bool {
+        return textField.text?.isEmpty ?? true
+    }
+
 }
 
 // MARK: Private functions
@@ -611,9 +618,11 @@ extension WSTagsField {
         }
 
         textField.onDeleteBackwards = { [weak self] in
-            if self?.readOnly ?? true { return }
+            if self?.readOnly ?? true {
+                return
+            }
 
-            if self?.textField.text?.isEmpty ?? true, let tagView = self?.tagViews.last {
+            if self?.isTextFieldEmpty ?? true, let tagView = self?.tagViews.last {
                 self?.selectTagView(tagView, animated: true)
                 self?.textField.resignFirstResponder()
             }
@@ -776,15 +785,14 @@ extension WSTagsField: UITextFieldDelegate {
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if acceptTagOption == .return && onShouldAcceptTag?(self) ?? true {
+        if let onShouldAcceptTag = onShouldAcceptTag, !onShouldAcceptTag(self) {
+            return false
+        }
+        if !isTextFieldEmpty, acceptTagOption == .return {
             tokenizeTextFieldText()
             return true
         }
-        if let textFieldShouldReturn = textDelegate?.textFieldShouldReturn, textFieldShouldReturn(textField) {
-            tokenizeTextFieldText()
-            return true
-        }
-        return false
+        return textDelegate?.textFieldShouldReturn?(textField) ?? false
     }
 
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {

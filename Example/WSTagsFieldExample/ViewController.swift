@@ -38,7 +38,7 @@ class ViewController: UIViewController {
         tagsField.placeholderColor = .red
         tagsField.placeholderAlwaysVisible = true
         tagsField.backgroundColor = .lightGray
-        tagsField.returnKeyType = .next
+        tagsField.returnKeyType = .continue
         tagsField.delimiter = ""
 
         tagsField.textDelegate = self
@@ -121,6 +121,10 @@ extension ViewController {
 
         tagsField.onDidUnselectTagView = { _, tagView in
             print("Unselect \(tagView)")
+        }
+
+        tagsField.onShouldAcceptTag = { field in
+            return field.text != "OMG"
         }
     }
 

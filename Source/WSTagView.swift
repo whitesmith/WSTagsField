@@ -81,8 +81,8 @@ open class WSTagView: UIView, UITextInputTraits {
         didSet {
             if selected && !isFirstResponder {
                 _ = becomeFirstResponder()
-            } else
-            if !selected && isFirstResponder {
+            }
+            else if !selected && isFirstResponder {
                 _ = resignFirstResponder()
             }
             updateContent(animated: true)
