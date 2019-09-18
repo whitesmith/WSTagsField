@@ -23,7 +23,6 @@ let package = Package(
         .target(
             name: "WSTagsField",
             path: ".",
-            sources: ["Source"],
-            dependencies: [])
+            sources: ["Source"])
     ]
 )
