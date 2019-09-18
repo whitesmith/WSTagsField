@@ -54,9 +54,6 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    @available(*, unavailable, message: "Use 'isDelimiterVisible' instead.")
-    open var displayDelimiter: Bool = false
-
     open var isDelimiterVisible: Bool = false {
         didSet {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
@@ -78,9 +75,6 @@ open class WSTagsField: UIScrollView {
 
     /// Whether or not the WSTagsField should become scrollable
     open var enableScrolling: Bool = true
-
-    @available(*, unavailable, message: "Use 'cornerRadius' instead.")
-    open var tagCornerRadius: CGFloat = 3.0
 
     open var cornerRadius: CGFloat = 3.0 {
         didSet {
@@ -140,9 +134,6 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    @available(*, unavailable, message: "Use 'placeholderAlwaysVisible' instead.")
-    open var placeholderAlwayVisible: Bool = false
-
     open var placeholderAlwaysVisible: Bool = false {
         didSet {
             updatePlaceholderTextVisibility()
@@ -175,9 +166,6 @@ open class WSTagsField: UIScrollView {
 
     /// By default, the return key is used to create a tag in the field. You can change it, i.e., to use comma or space key instead.
     open var acceptTagOption: WSTagAcceptOption = .return
-
-    @available(*, unavailable, message: "Use 'contentInset' instead.")
-    open var padding: UIEdgeInsets = UIEdgeInsets.zero
 
     open override var contentInset: UIEdgeInsets {
         didSet {
