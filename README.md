@@ -93,7 +93,7 @@ You will also need to make sure you're opting into using frameworks:
 use_frameworks!
 ```
 
-Then run `pod install` with CocoaPods 1.6.0 or newer.
+Then run `pod install` with CocoaPods 1.8.0 or newer.
 
 #### Manually
 
@@ -102,7 +102,7 @@ Download all the source files and drop them into your project.
 ## Requirements
 
 * iOS 9.0+
-* Xcode 10 (Swift 4)
+* Xcode 10+ (Swift 5)
 
 # Contributing
 
