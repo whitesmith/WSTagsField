@@ -138,7 +138,7 @@ open class WSTagView: UIView {
             },
             completion: { [weak self] _ in
                 if self?.selected ?? false {
-                    UIView.animate(withDuration: 0.4) { [weak self] in
+                    UIView.animate(withDuration: 0.1) { [weak self] in
                         self?.transform = CGAffineTransform.identity
                     }
                 }
