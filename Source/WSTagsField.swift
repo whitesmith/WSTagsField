@@ -159,7 +159,9 @@ open class WSTagsField: UIScrollView {
     open var keyboardAppearance: UIKeyboardAppearance = .default {
         didSet {
             textField.keyboardAppearance = self.keyboardAppearance
-            tagViews.forEach { $0.keyboardAppearanceType = self.keyboardAppearance }
+            tagViews.forEach {
+                $0.keyboardAppearance = self.keyboardAppearance
+            }
         }
     }
 
@@ -389,7 +391,7 @@ open class WSTagsField: UIScrollView {
         tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
-        tagView.keyboardAppearanceType = self.keyboardAppearance
+        tagView.keyboardAppearance = self.keyboardAppearance
         tagView.layoutMargins = self.layoutMargins
 
         tagView.onDidRequestSelection = { [weak self] tagView in

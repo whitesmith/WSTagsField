@@ -40,10 +40,8 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .lightGray
         tagsField.returnKeyType = .next
         tagsField.delimiter = ""
-        tagsField.keyboardAppearance = .dark
 
         tagsField.textDelegate = self
-        //tagsField.acceptTagOption = .space
 
         textFieldEvents()
     }
@@ -81,6 +79,8 @@ class ViewController: UIViewController {
         tagsField.placeholderColor = .green
         tagsField.placeholderAlwaysVisible = false
         tagsField.font = UIFont.systemFont(ofSize: 9)
+        tagsField.keyboardAppearance = .dark
+        tagsField.acceptTagOption = .space
     }
 
     @IBAction func touchAddRandomTags(_ sender: UIButton) {
