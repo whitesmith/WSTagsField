@@ -1,6 +1,7 @@
 # WSTagsField
 
 [![Carthage Compatible](https://img.shields.io/badge/Carthage-compatible-4BC51D.svg)](https://github.com/Carthage/Carthage)
+[![SwiftPM Compatible](https://img.shields.io/badge/SwiftPM-Compatible-brightgreen.svg)](https://swift.org/package-manager/)
 [![CocoaPods Compatible](https://img.shields.io/cocoapods/v/WSTagsField.svg)](https://cocoapods.org/pods/WSTagsField)
 [![Swift 5](https://img.shields.io/badge/Swift-5-orange.svg?style=flat)](https://developer.apple.com/swift/)
 [![Platforms iOS](https://img.shields.io/badge/Platforms-iOS-lightgray.svg?style=flat)](http://www.apple.com/ios/)
@@ -30,6 +31,7 @@ tagsField.delimiter = ","
 tagsField.isDelimiterVisible = true
 tagsField.placeholderColor = .green
 tagsField.placeholderAlwaysVisible = true
+tagsField.keyboardAppearance = .dark
 tagsField.returnKeyType = .next
 tagsField.acceptTagOption = .space
 
@@ -87,15 +89,13 @@ To install it, simply add the following line to your **Podfile**:
 pod "WSTagsField"
 ```
 
-You will also need to make sure you're opting into using frameworks:
-
-```ruby
-use_frameworks!
-```
-
 Then run `pod install` with CocoaPods 1.8.0 or newer.
 
-#### Manually
+### Swift Package Manager
+
+Using **Xcode 11**, just go to _"File" > "Swift Packages" > "Add Package Dependency..."_ and use this repository: `https://github.com/whitesmith/WSTagsField`.
+
+### Manually
 
 Download all the source files and drop them into your project.
 
