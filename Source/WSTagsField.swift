@@ -811,15 +811,10 @@ extension WSTagsField: UITextFieldDelegate {
 
 }
 
-public func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
-    return lhs == rhs.textField
+extension WSTagsField {
+
+    public static func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
+        return lhs == rhs.textField
+    }
+
 }
-
-#if swift(>=4.2)
-
-// Workaround for bugs.swift.org/browse/SR-7879
-extension UIEdgeInsets {
-    static let zero = UIEdgeInsets()
-}
-
-#endif
