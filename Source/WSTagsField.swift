@@ -301,8 +301,8 @@ open class WSTagsField: UIScrollView {
         }
         else {
             if let observer = layerBoundsObserver {
-                observer.invalidate()
                 removeObserver(observer, forKeyPath: "layer.bounds")
+                observer.invalidate()
                 self.layerBoundsObserver = nil
             }
         }
