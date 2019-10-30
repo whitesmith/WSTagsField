@@ -8,7 +8,8 @@
 
 import UIKit
 
-open class WSTagView: UIView {
+open class WSTagView: UIView, UITextInputTraits {
+
     fileprivate let textLabel = UILabel()
 
     open var displayText: String = "" {
@@ -38,12 +39,14 @@ open class WSTagView: UIView {
             setNeedsDisplay()
         }
     }
+
     open var borderWidth: CGFloat = 0.0 {
         didSet {
             self.layer.borderWidth = borderWidth
             setNeedsDisplay()
         }
     }
+
     open var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor {
@@ -70,8 +73,6 @@ open class WSTagView: UIView {
         didSet { updateContent(animated: false) }
     }
 
-    open var keyboardAppearanceType: UIKeyboardAppearance = .default
-
     internal var onDidRequestDelete: ((_ tagView: WSTagView, _ replacementText: String?) -> Void)?
     internal var onDidRequestSelection: ((_ tagView: WSTagView) -> Void)?
     internal var onDidInputText: ((_ tagView: WSTagView, _ text: String) -> Void)?
@@ -80,13 +81,26 @@ open class WSTagView: UIView {
         didSet {
             if selected && !isFirstResponder {
                 _ = becomeFirstResponder()
-            } else
-            if !selected && isFirstResponder {
+            }
+            else if !selected && isFirstResponder {
                 _ = resignFirstResponder()
             }
             updateContent(animated: true)
         }
     }
+
+    // MARK: - UITextInputTraits
+
+    public var autocapitalizationType: UITextAutocapitalizationType = .none
+    public var autocorrectionType: UITextAutocorrectionType  = .no
+    public var spellCheckingType: UITextSpellCheckingType  = .no
+    public var keyboardType: UIKeyboardType = .default
+    public var keyboardAppearance: UIKeyboardAppearance = .default
+    public var returnKeyType: UIReturnKeyType = .next
+    public var enablesReturnKeyAutomatically: Bool = false
+    public var isSecureTextEntry: Bool = false
+
+    // MARK: - Initializers
 
     public init(tag: WSTag) {
         super.init(frame: CGRect.zero)
@@ -117,6 +131,8 @@ open class WSTagView: UIView {
         assert(false, "Not implemented")
     }
 
+    // MARK: - Styling
+
     fileprivate func updateColors() {
         self.backgroundColor = selected ? selectedColor : tintColor
         textLabel.textColor = selected ? selectedTextColor : textColor
@@ -138,7 +154,7 @@ open class WSTagView: UIView {
             },
             completion: { [weak self] _ in
                 if self?.selected ?? false {
-                    UIView.animate(withDuration: 0.4) { [weak self] in
+                    UIView.animate(withDuration: 0.1) { [weak self] in
                         self?.transform = CGAffineTransform.identity
                     }
                 }
@@ -147,6 +163,7 @@ open class WSTagView: UIView {
     }
 
     // MARK: - Size Measurements
+
     open override var intrinsicContentSize: CGSize {
         let labelIntrinsicSize = textLabel.intrinsicContentSize
         return CGSize(width: labelIntrinsicSize.width + layoutMargins.left + layoutMargins.right,
@@ -228,20 +245,6 @@ extension WSTagView: UIKeyInput {
 
     public func deleteBackward() {
         onDidRequestDelete?(self, nil)
-    }
-
-}
-
-extension WSTagView: UITextInputTraits {
-
-    // Solves an issue where autocorrect suggestions were being
-    // offered when a tag is highlighted.
-    public var autocorrectionType: UITextAutocorrectionType {
-        return .no
-    }
-
-    public var keyboardAppearance: UIKeyboardAppearance {
-        return keyboardAppearanceType
     }
 
 }

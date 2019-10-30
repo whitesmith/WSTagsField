@@ -38,12 +38,10 @@ class ViewController: UIViewController {
         tagsField.placeholderColor = .red
         tagsField.placeholderAlwaysVisible = true
         tagsField.backgroundColor = .lightGray
-        tagsField.returnKeyType = .next
+        tagsField.returnKeyType = .continue
         tagsField.delimiter = ""
-        tagsField.keyboardAppearance = .dark
 
         tagsField.textDelegate = self
-        //tagsField.acceptTagOption = .space
 
         textFieldEvents()
     }
@@ -81,6 +79,8 @@ class ViewController: UIViewController {
         tagsField.placeholderColor = .green
         tagsField.placeholderAlwaysVisible = false
         tagsField.font = UIFont.systemFont(ofSize: 9)
+        tagsField.keyboardAppearance = .dark
+        tagsField.acceptTagOption = .space
     }
 
     @IBAction func touchAddRandomTags(_ sender: UIButton) {
@@ -121,6 +121,10 @@ extension ViewController {
 
         tagsField.onDidUnselectTagView = { _, tagView in
             print("Unselect \(tagView)")
+        }
+
+        tagsField.onShouldAcceptTag = { field in
+            return field.text != "OMG"
         }
     }
 

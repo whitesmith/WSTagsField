@@ -15,6 +15,7 @@ public enum WSTagAcceptOption {
 }
 
 open class WSTagsField: UIScrollView {
+
     fileprivate let textField = BackspaceDetectingTextField()
 
     /// Dedicated text field delegate.
@@ -54,9 +55,6 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    @available(*, unavailable, message: "Use 'isDelimiterVisible' instead.")
-    open var displayDelimiter: Bool = false
-
     open var isDelimiterVisible: Bool = false {
         didSet {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
@@ -78,9 +76,6 @@ open class WSTagsField: UIScrollView {
 
     /// Whether or not the WSTagsField should become scrollable
     open var enableScrolling: Bool = true
-
-    @available(*, unavailable, message: "Use 'cornerRadius' instead.")
-    open var tagCornerRadius: CGFloat = 3.0
 
     open var cornerRadius: CGFloat = 3.0 {
         didSet {
@@ -115,7 +110,7 @@ open class WSTagsField: UIScrollView {
     @available(iOS 10.0, *)
     open var fieldTextContentType: UITextContentType! {
         set {
-            textField.textContentType = fieldTextContentType
+            textField.textContentType = newValue
         }
         get {
             return textField.textContentType
@@ -134,8 +129,11 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    @available(*, unavailable, message: "Use 'placeholderAlwaysVisible' instead.")
-    open var placeholderAlwayVisible: Bool = false
+    open var placeholderFont: UIFont? {
+        didSet {
+            updatePlaceholderTextVisibility()
+        }
+    }
 
     open var placeholderAlwaysVisible: Bool = false {
         didSet {
@@ -153,7 +151,9 @@ open class WSTagsField: UIScrollView {
     open var keyboardAppearance: UIKeyboardAppearance = .default {
         didSet {
             textField.keyboardAppearance = self.keyboardAppearance
-            tagViews.forEach { $0.keyboardAppearanceType = self.keyboardAppearance }
+            tagViews.forEach {
+                $0.keyboardAppearance = self.keyboardAppearance
+            }
         }
     }
 
@@ -167,9 +167,6 @@ open class WSTagsField: UIScrollView {
 
     /// By default, the return key is used to create a tag in the field. You can change it, i.e., to use comma or space key instead.
     open var acceptTagOption: WSTagAcceptOption = .return
-
-    @available(*, unavailable, message: "Use 'contentInset' instead.")
-    open var padding: UIEdgeInsets = UIEdgeInsets.zero
 
     open override var contentInset: UIEdgeInsets {
         didSet {
@@ -296,9 +293,18 @@ open class WSTagsField: UIScrollView {
     }
 
     deinit {
-        if let observer = layerBoundsObserver {
-            removeObserver(observer, forKeyPath: "layer.bounds")
-            observer.invalidate()
+        if #available(iOS 13, *) {
+            // Observers should be cleared when NSKeyValueObservation is deallocated.
+            // Let's just keep the code for older iOS versions unmodified to make
+            // sure we don't break anything.
+            layerBoundsObserver = nil
+        }
+        else {
+            if let observer = layerBoundsObserver {
+                removeObserver(observer, forKeyPath: "layer.bounds")
+                observer.invalidate()
+                self.layerBoundsObserver = nil
+            }
         }
     }
 
@@ -315,8 +321,7 @@ open class WSTagsField: UIScrollView {
 
     /// Take the text inside of the field and make it a Tag.
     open func acceptCurrentTextAsTag() {
-        if let currentText = tokenizeTextFieldText(),
-           (self.textField.text?.isEmpty ?? true) == false {
+        if let currentText = tokenizeTextFieldText(), !isTextFieldEmpty {
             self.addTag(currentText)
         }
     }
@@ -374,7 +379,7 @@ open class WSTagsField: UIScrollView {
         tagView.cornerRadius = self.cornerRadius
         tagView.borderWidth = self.borderWidth
         tagView.borderColor = self.borderColor
-        tagView.keyboardAppearanceType = self.keyboardAppearance
+        tagView.keyboardAppearance = self.keyboardAppearance
         tagView.layoutMargins = self.layoutMargins
 
         tagView.onDidRequestSelection = { [weak self] tagView in
@@ -532,6 +537,9 @@ open class WSTagsField: UIScrollView {
             tagViews[selectedIndex].selected = false
             tagViews[nextIndex].selected = true
         }
+        else {
+            textField.becomeFirstResponder()
+        }
     }
 
     open func selectPrevTag() {
@@ -628,6 +636,10 @@ extension WSTagsField {
         set { textField.inputAccessoryView = newValue }
     }
 
+    var isTextFieldEmpty: Bool {
+        return textField.text?.isEmpty ?? true
+    }
+
 }
 
 // MARK: Private functions
@@ -661,9 +673,11 @@ extension WSTagsField {
         }
 
         textField.onDeleteBackwards = { [weak self] in
-            if self?.readOnly ?? true { return }
+            if self?.readOnly ?? true {
+                return
+            }
 
-            if self?.textField.text?.isEmpty ?? true, let tagView = self?.tagViews.last {
+            if self?.isTextFieldEmpty ?? true, let tagView = self?.tagViews.last {
                 self?.selectTagView(tagView, animated: true)
                 self?.textField.resignFirstResponder()
             }
@@ -799,6 +813,9 @@ extension WSTagsField {
         if let placeholderColor = placeholderColor {
             attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
         }
+        if let placeholderFont = placeholderFont {
+            attributes = [NSAttributedString.Key.font: placeholderFont]
+        }
         return NSAttributedString(string: placeholder, attributes: attributes)
     }
 
@@ -823,15 +840,14 @@ extension WSTagsField: UITextFieldDelegate {
     }
 
     public func textFieldShouldReturn(_ textField: UITextField) -> Bool {
-        if acceptTagOption == .return && onShouldAcceptTag?(self) ?? true {
+        if let onShouldAcceptTag = onShouldAcceptTag, !onShouldAcceptTag(self) {
+            return false
+        }
+        if !isTextFieldEmpty, acceptTagOption == .return {
             tokenizeTextFieldText()
             return true
         }
-        if let textFieldShouldReturn = textDelegate?.textFieldShouldReturn, textFieldShouldReturn(textField) {
-            tokenizeTextFieldText()
-            return true
-        }
-        return false
+        return textDelegate?.textFieldShouldReturn?(textField) ?? false
     }
 
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
@@ -848,15 +864,10 @@ extension WSTagsField: UITextFieldDelegate {
 
 }
 
-public func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
-    return lhs == rhs.textField
+extension WSTagsField {
+
+    public static func == (lhs: UITextField, rhs: WSTagsField) -> Bool {
+        return lhs == rhs.textField
+    }
+
 }
-
-#if swift(>=4.2)
-
-// Workaround for bugs.swift.org/browse/SR-7879
-extension UIEdgeInsets {
-    static let zero = UIEdgeInsets()
-}
-
-#endif
