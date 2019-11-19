@@ -794,7 +794,7 @@ extension WSTagsField: UITextFieldDelegate {
         if let onShouldAcceptTag = onShouldAcceptTag, !onShouldAcceptTag(self) {
             return false
         }
-        if !isTextFieldEmpty, acceptTagOption == .return {
+        if !isTextFieldEmpty, acceptTagOption.contains(.return) {
             tokenizeTextFieldText()
             return true
         }
@@ -802,11 +802,11 @@ extension WSTagsField: UITextFieldDelegate {
     }
 
     public func textField(_ textField: UITextField, shouldChangeCharactersIn range: NSRange, replacementString string: String) -> Bool {
-        if acceptTagOption == .comma && string == "," && onShouldAcceptTag?(self) ?? true {
+        if acceptTagOption.contains(.comma) && string == "," && onShouldAcceptTag?(self) ?? true {
             tokenizeTextFieldText()
             return false
         }
-        if acceptTagOption == .space && string == " " && onShouldAcceptTag?(self) ?? true {
+        if acceptTagOption.contains(.space) && string == " " && onShouldAcceptTag?(self) ?? true {
             tokenizeTextFieldText()
             return false
         }
