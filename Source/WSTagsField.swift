@@ -15,9 +15,9 @@ public struct WSTagAcceptOption: OptionSet {
         self.rawValue = rawValue
     }
 
-    static let `return` = WSTagAcceptOption(rawValue: 1 << 0)
-    static let  comma   = WSTagAcceptOption(rawValue: 1 << 1)
-    static let  space   = WSTagAcceptOption(rawValue: 1 << 2)
+    public static let `return` = WSTagAcceptOption(rawValue: 1 << 0)
+    public static let  comma   = WSTagAcceptOption(rawValue: 1 << 1)
+    public static let  space   = WSTagAcceptOption(rawValue: 1 << 2)
 }
 
 open class WSTagsField: UIScrollView {
