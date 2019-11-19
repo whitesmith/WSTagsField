@@ -8,10 +8,16 @@
 
 import UIKit
 
-public enum WSTagAcceptOption {
-    case `return`
-    case comma
-    case space
+public struct WSTagAcceptOption: OptionSet {
+    public let rawValue: Int
+
+    public init(rawValue: Int) {
+        self.rawValue = rawValue
+    }
+
+    static let `return` = WSTagAcceptOption(rawValue: 1 << 0)
+    static let  comma   = WSTagAcceptOption(rawValue: 1 << 1)
+    static let  space   = WSTagAcceptOption(rawValue: 1 << 2)
 }
 
 open class WSTagsField: UIScrollView {
