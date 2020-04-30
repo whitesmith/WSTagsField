@@ -348,6 +348,10 @@ open class WSTagsField: UIScrollView {
         self.textField.resignFirstResponder()
     }
 
+    public var targetInputField: UITextField {
+        textField
+    }
+
     open override func reloadInputViews() {
         self.textField.reloadInputViews()
     }
