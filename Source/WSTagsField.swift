@@ -22,7 +22,7 @@ public struct WSTagAcceptOption: OptionSet {
 
 open class WSTagsField: UIScrollView {
 
-    fileprivate let textField = BackspaceDetectingTextField()
+    public let textField = BackspaceDetectingTextField()
 
     /// Dedicated text field delegate.
     open weak var textDelegate: UITextFieldDelegate?
@@ -107,6 +107,7 @@ open class WSTagsField: UIScrollView {
         }
     }
 
+    @available(*, deprecated, message: "use 'textField.textColor' directly.")
     open var fieldTextColor: UIColor? {
         didSet {
             textField.textColor = fieldTextColor
@@ -114,6 +115,7 @@ open class WSTagsField: UIScrollView {
     }
 
     @available(iOS 10.0, *)
+    @available(*, deprecated, message: "use 'textField.fieldTextContentType' directly.")
     open var fieldTextContentType: UITextContentType! {
         set {
             textField.textContentType = newValue
@@ -348,10 +350,6 @@ open class WSTagsField: UIScrollView {
         self.textField.resignFirstResponder()
     }
 
-    public var targetInputField: UITextField {
-        textField
-    }
-
     open override func reloadInputViews() {
         self.textField.reloadInputViews()
     }
@@ -546,31 +544,37 @@ open class WSTagsField: UIScrollView {
 
 extension WSTagsField {
 
+    @available(*, deprecated, message: "use 'textField.keyboardType' directly.")
     public var keyboardType: UIKeyboardType {
         get { return textField.keyboardType }
         set { textField.keyboardType = newValue }
     }
 
+    @available(*, deprecated, message: "use 'textField.returnKeyType' directly.")
     public var returnKeyType: UIReturnKeyType {
         get { return textField.returnKeyType }
         set { textField.returnKeyType = newValue }
     }
 
+    @available(*, deprecated, message: "use 'textField.spellCheckingType' directly.")
     public var spellCheckingType: UITextSpellCheckingType {
         get { return textField.spellCheckingType }
         set { textField.spellCheckingType = newValue }
     }
 
+    @available(*, deprecated, message: "use 'textField.autocapitalizationType' directly.")
     public var autocapitalizationType: UITextAutocapitalizationType {
         get { return textField.autocapitalizationType }
         set { textField.autocapitalizationType = newValue }
     }
 
+    @available(*, deprecated, message: "use 'textField.autocorrectionType' directly.")
     public var autocorrectionType: UITextAutocorrectionType {
         get { return textField.autocorrectionType }
         set { textField.autocorrectionType = newValue }
     }
 
+    @available(*, deprecated, message: "use 'textField.enablesReturnKeyAutomatically' directly.")
     public var enablesReturnKeyAutomatically: Bool {
         get { return textField.enablesReturnKeyAutomatically }
         set { textField.enablesReturnKeyAutomatically = newValue }
@@ -617,7 +621,6 @@ extension WSTagsField {
         textField.spellCheckingType = .no
         textField.delegate = self
         textField.font = font
-        textField.textColor = fieldTextColor
         addSubview(textField)
 
         layerBoundsObserver = self.observe(\.layer.bounds, options: [.old, .new]) { [weak self] sender, change in
