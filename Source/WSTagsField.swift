@@ -794,6 +794,9 @@ extension WSTagsField: UITextFieldDelegate {
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
+        if !isTextFieldEmpty{
+            tokenizeTextFieldText()
+        }
         textDelegate?.textFieldDidEndEditing?(textField)
     }
 
