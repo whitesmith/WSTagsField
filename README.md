@@ -8,7 +8,7 @@
 [![Build Status](https://app.bitrise.io/app/059bc89743c769dc/status.svg?token=Wu0zdJtTsCQlVFSG1XuGIw&branch=master)]()
 [![License MIT](https://img.shields.io/badge/License-MIT-lightgrey.svg?style=flat)](https://opensource.org/licenses/MIT)
 
-An iOS text field that represents different Tags.
+An iOS text field that represents tags, hashtags, tokens in general.
 
 ![WSTagsField](http://i.giphy.com/3o72F8JCGkjrF4Lwvm.gif)
 
@@ -34,6 +34,7 @@ tagsField.placeholderAlwaysVisible = true
 tagsField.keyboardAppearance = .dark
 tagsField.returnKeyType = .next
 tagsField.acceptTagOption = .space
+tagsField.shouldTokenizeAfterResigningFirstResponder = true
 
 // Events
 tagsField.onDidAddTag = { field, tag in
