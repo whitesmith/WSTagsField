@@ -66,6 +66,9 @@ open class WSTagsField: UIScrollView {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
+    
+    /// Whether the text field should tokenize strings automatically when the keyboard is dismissed. 
+    open var shouldTokenizeAfterResigningFirstResponder: Bool = false
 
     open var maxHeight: CGFloat = CGFloat.infinity {
         didSet {
@@ -794,6 +797,9 @@ extension WSTagsField: UITextFieldDelegate {
     }
 
     public func textFieldDidEndEditing(_ textField: UITextField) {
+        if !isTextFieldEmpty, shouldTokenizeAfterResigningFirstResponder {
+            tokenizeTextFieldText()
+        }
         textDelegate?.textFieldDidEndEditing?(textField)
     }
 
