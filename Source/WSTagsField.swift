@@ -334,7 +334,6 @@ open class WSTagsField: UIScrollView {
 
     open override func layoutSubviews() {
         super.layoutSubviews()
-        repositionViews()
     }
 
     /// Take the text inside of the field and make it a Tag.
@@ -770,7 +769,7 @@ extension WSTagsField {
 
         if self.isScrollEnabled {
             // FIXME: this isn't working. Need to think in a workaround.
-            //self.scrollRectToVisible(textField.frame, animated: false)
+            self.scrollRectToVisible(textField.frame, animated: false)
         }
     }
 
