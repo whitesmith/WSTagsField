@@ -208,6 +208,13 @@ open class WSTagsField: UIScrollView {
 
         return false
     }
+    
+    /// Each tag will occupy only 1 line. Input text field will be also moved to new line if set to true.
+    open var isTagPerLine: Bool = false {
+        didSet {
+            repositionViews()
+        }
+    }
 
     open fileprivate(set) var tags = [WSTag]()
     open var tagViews = [WSTagView]()
@@ -674,10 +681,11 @@ extension WSTagsField {
 
         // Tag views Rects
         var tagRect = CGRect.null
-        for tagView in tagViews {
+        for (index, tagView) in tagViews.enumerated() {
             tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(.init(width: maxWidth, height: 0)))
 
-            if curX + tagRect.width > maxWidth {
+            let isNewLine = isTagPerLine ? (index > 0) : (curX + tagRect.width > maxWidth)
+            if isNewLine {
                 // Need a new line
                 curX = 0
                 curY += Constants.STANDARD_ROW_HEIGHT + spaceBetweenLines
@@ -701,7 +709,8 @@ extension WSTagsField {
             var textFieldRect = CGRect.zero
             textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
 
-            if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
+            let isNewLine = isTagPerLine ? (!tagViews.isEmpty) : (availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH)
+            if isNewLine {
                 // If in the future we add more UI elements below the tags,
                 // isOnFirstLine will be useful, and this calculation is important.
                 // So leaving it set here, and marking the warning to ignore it
