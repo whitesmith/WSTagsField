@@ -66,8 +66,8 @@ open class WSTagsField: UIScrollView {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
-    
-    /// Whether the text field should tokenize strings automatically when the keyboard is dismissed. 
+
+    /// Whether the text field should tokenize strings automatically when the keyboard is dismissed.
     open var shouldTokenizeAfterResigningFirstResponder: Bool = false
 
     open var maxHeight: CGFloat = CGFloat.infinity {
@@ -347,8 +347,8 @@ open class WSTagsField: UIScrollView {
     }
 
     open func endEditing() {
-        // NOTE: We used to check if .isFirstResponder and then resign first responder, but sometimes we noticed 
-        // that it would be the first responder, but still return isFirstResponder=NO. 
+        // NOTE: We used to check if .isFirstResponder and then resign first responder, but sometimes we noticed
+        // that it would be the first responder, but still return isFirstResponder=NO.
         // So always attempt to resign without checking.
         self.textField.resignFirstResponder()
     }
@@ -624,6 +624,9 @@ extension WSTagsField {
         textField.spellCheckingType = .no
         textField.delegate = self
         textField.font = font
+        textField.itemSelectionHandler = { chosenTagName in
+            self.acceptCurrentTextAsTag()
+        }
         addSubview(textField)
 
         layerBoundsObserver = self.observe(\.layer.bounds, options: [.old, .new]) { [weak self] sender, change in

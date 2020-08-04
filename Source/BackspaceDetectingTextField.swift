@@ -7,13 +7,14 @@
 //
 
 import UIKit
+import SearchTextField
 
 protocol BackspaceDetectingTextFieldDelegate: UITextFieldDelegate {
     /// Notify whenever the backspace key is pressed
     func textFieldDidDeleteBackwards(_ textField: UITextField)
 }
 
-open class BackspaceDetectingTextField: UITextField {
+open class BackspaceDetectingTextField: SearchTextField {
 
     open var onDeleteBackwards: (() -> Void)?
 
