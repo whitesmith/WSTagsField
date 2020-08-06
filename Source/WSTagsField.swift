@@ -20,6 +20,7 @@ public struct WSTagAcceptOption: OptionSet {
     public static let  space   = WSTagAcceptOption(rawValue: 1 << 2)
 }
 
+@IBDesignable
 open class WSTagsField: UIScrollView {
 
     public let textField = BackspaceDetectingTextField()
@@ -28,77 +29,77 @@ open class WSTagsField: UIScrollView {
     open weak var textDelegate: UITextFieldDelegate?
 
     /// Background color for tag view in normal (non-selected) state.
-    open override var tintColor: UIColor! {
+    @IBInspectable open override var tintColor: UIColor! {
         didSet {
             tagViews.forEach { $0.tintColor = self.tintColor }
         }
     }
 
     /// Text color for tag view in normal (non-selected) state.
-    open var textColor: UIColor? {
+    @IBInspectable open var textColor: UIColor? {
         didSet {
             tagViews.forEach { $0.textColor = self.textColor }
         }
     }
 
     /// Background color for tag view in normal (selected) state.
-    open var selectedColor: UIColor? {
+    @IBInspectable open var selectedColor: UIColor? {
         didSet {
             tagViews.forEach { $0.selectedColor = self.selectedColor }
         }
     }
 
     /// Text color for tag view in normal (selected) state.
-    open var selectedTextColor: UIColor? {
+    @IBInspectable open var selectedTextColor: UIColor? {
         didSet {
             tagViews.forEach { $0.selectedTextColor = self.selectedTextColor }
         }
     }
 
-    open var delimiter: String = "" {
+    @IBInspectable open var delimiter: String = "" {
         didSet {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
 
-    open var isDelimiterVisible: Bool = false {
+    @IBInspectable open var isDelimiterVisible: Bool = false {
         didSet {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
     
     /// Whether the text field should tokenize strings automatically when the keyboard is dismissed. 
-    open var shouldTokenizeAfterResigningFirstResponder: Bool = false
+    @IBInspectable open var shouldTokenizeAfterResigningFirstResponder: Bool = false
 
-    open var maxHeight: CGFloat = CGFloat.infinity {
+    @IBInspectable open var maxHeight: CGFloat = CGFloat.infinity {
         didSet {
             tagViews.forEach { $0.displayDelimiter = self.isDelimiterVisible ? self.delimiter : "" }
         }
     }
 
     /// Max number of lines of tags can display in WSTagsField before its contents become scrollable. Default value is 0, which means WSTagsField always resize to fit all tags.
-    open var numberOfLines: Int = 0 {
+    @IBInspectable open var numberOfLines: Int = 0 {
         didSet {
             repositionViews()
         }
     }
 
     /// Whether or not the WSTagsField should become scrollable
-    open var enableScrolling: Bool = true
+    @IBInspectable open var enableScrolling: Bool = true
 
-    open var cornerRadius: CGFloat = 3.0 {
+    @IBInspectable open var cornerRadius: CGFloat = 3.0 {
         didSet {
             tagViews.forEach { $0.cornerRadius = self.cornerRadius }
         }
     }
 
-    open var borderWidth: CGFloat = 0.0 {
+    @IBInspectable open var borderWidth: CGFloat = 0.0 {
         didSet {
             tagViews.forEach { $0.borderWidth = self.borderWidth }
         }
     }
 
-    open var borderColor: UIColor? {
+    @IBInspectable open var borderColor: UIColor? {
         didSet {
             if let borderColor = borderColor { tagViews.forEach { $0.borderColor = borderColor } }
         }
@@ -128,25 +129,25 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    open var placeholder: String = "Tags" {
+    @IBInspectable open var placeholder: String = "Tags" {
         didSet {
             updatePlaceholderTextVisibility()
         }
     }
 
-    open var placeholderColor: UIColor? {
+    @IBInspectable open var placeholderColor: UIColor? {
         didSet {
             updatePlaceholderTextVisibility()
         }
     }
 
-    open var placeholderFont: UIFont? {
+    @IBInspectable open var placeholderFont: UIFont? {
         didSet {
             updatePlaceholderTextVisibility()
         }
     }
 
-    open var placeholderAlwaysVisible: Bool = false {
+    @IBInspectable open var placeholderAlwaysVisible: Bool = false {
         didSet {
             updatePlaceholderTextVisibility()
         }
@@ -168,7 +169,7 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    open var readOnly: Bool = false {
+    @IBInspectable open var readOnly: Bool = false {
         didSet {
             unselectAllTagViewsAnimated()
             textField.isEnabled = !readOnly
@@ -185,13 +186,13 @@ open class WSTagsField: UIScrollView {
         }
     }
 
-    open var spaceBetweenTags: CGFloat = 2.0 {
+    @IBInspectable open var spaceBetweenTags: CGFloat = 2.0 {
         didSet {
             repositionViews()
         }
     }
 
-    open var spaceBetweenLines: CGFloat = 2.0 {
+    @IBInspectable open var spaceBetweenLines: CGFloat = 2.0 {
         didSet {
             repositionViews()
         }
