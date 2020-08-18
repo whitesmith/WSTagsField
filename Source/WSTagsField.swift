@@ -330,7 +330,12 @@ open class WSTagsField: UIScrollView {
         super.layoutSubviews()
         repositionViews()
     }
-
+    
+    /// Set corner radius of tag views
+    open func setCornerRadius(to cornerRadius: CGFloat) {
+        tagViews.forEach { $0.cornerRadius = cornerRadius }
+    }
+    
     /// Take the text inside of the field and make it a Tag.
     open func acceptCurrentTextAsTag() {
         if let currentText = tokenizeTextFieldText(), !isTextFieldEmpty {
