@@ -705,7 +705,6 @@ extension WSTagsField {
 
         if textField.isEnabled {
             var textFieldRect = CGRect.zero
-            textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
 
             if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
                 // If in the future we add more UI elements below the tags,
@@ -721,6 +720,10 @@ extension WSTagsField {
             textFieldRect.origin.x = curX
             textFieldRect.size.width = availableWidthForTextField
 
+            // using the available width to find the height required for placeholder.
+            let tempSize = CGSize(width: availableWidthForTextField, height: UIScreen.main.bounds.height)
+            let placeholderHeight: CGFloat = showsPlaceholder ? getPlaceholderHeight(in: tempSize) : .zero
+            textFieldRect.size.height = max(Constants.STANDARD_ROW_HEIGHT, placeholderHeight)
             closure(nil, nil, textFieldRect)
         }
     }
@@ -772,16 +775,30 @@ extension WSTagsField {
     }
 
     fileprivate func updatePlaceholderTextVisibility() {
-        textField.attributedPlaceholder = (placeholderAlwaysVisible || tags.count == 0) ? attributedPlaceholder() : nil
+        textField.attributedPlaceholder = showsPlaceholder ? attributedPlaceholder() : nil
+    }
+
+    private func getPlaceholderHeight(in size: CGSize) -> CGFloat {
+      attributedPlaceholder().boundingRect(with: size, options: .usesLineFragmentOrigin, context: nil).height
+        + contentInset.top
+        + contentInset.bottom
+    }
+
+    private var showsPlaceholder: Bool {
+      placeholderAlwaysVisible || tags.count == 0
     }
 
     private func attributedPlaceholder() -> NSAttributedString {
-        var attributes: [NSAttributedString.Key: Any]?
+        var attributes: [NSAttributedString.Key: Any] = [:]
+        let paragraphStyle = NSMutableParagraphStyle()
+        paragraphStyle.lineBreakMode = .byWordWrapping
+        attributes[.paragraphStyle] = paragraphStyle
+
         if let placeholderColor = placeholderColor {
-            attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
+          attributes[.foregroundColor] = placeholderColor
         }
         if let placeholderFont = placeholderFont {
-            attributes = [NSAttributedString.Key.font: placeholderFont]
+          attributes[.font] = placeholderFont
         }
         return NSAttributedString(string: placeholder, attributes: attributes)
     }
