@@ -776,14 +776,17 @@ extension WSTagsField {
     }
 
     private func attributedPlaceholder() -> NSAttributedString {
-        var attributes: [NSAttributedString.Key: Any]?
+        let attributedString = NSMutableAttributedString(string: placeholder)
+        
         if let placeholderColor = placeholderColor {
-            attributes = [NSAttributedString.Key.foregroundColor: placeholderColor]
+            attributedString.addAttribute(NSAttributedString.Key.foregroundColor, value: placeholderColor, range: NSMakeRange(0, placeholder.count))
         }
+        
         if let placeholderFont = placeholderFont {
-            attributes = [NSAttributedString.Key.font: placeholderFont]
+            attributedString.addAttribute(NSAttributedString.Key.font, value: placeholderFont, range: NSMakeRange(0, placeholder.count))
         }
-        return NSAttributedString(string: placeholder, attributes: attributes)
+        
+        return attributedString
     }
 
     private var maxHeightBasedOnNumberOfLines: CGFloat {
