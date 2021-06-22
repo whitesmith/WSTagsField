@@ -325,6 +325,8 @@ open class WSTagsField: UIScrollView {
 
     open override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
+        
+        guard let _ = newSuperview else { return }
         tagViews.forEach { $0.setNeedsLayout() }
         repositionViews()
     }
