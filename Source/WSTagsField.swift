@@ -292,6 +292,9 @@ open class WSTagsField: UIScrollView {
     open override func sizeThatFits(_ size: CGSize) -> CGSize {
         return .init(width: size.width, height: calculateContentHeight(layoutWidth: size.width) + contentInset.top + contentInset.bottom)
     }
+    
+    open var suggestions = [String]()
+    open var caseSensitiveSuggestions = false
 
     // MARK: -
     public override init(frame: CGRect) {
@@ -322,6 +325,8 @@ open class WSTagsField: UIScrollView {
 
     open override func willMove(toSuperview newSuperview: UIView?) {
         super.willMove(toSuperview: newSuperview)
+        
+        guard let _ = newSuperview else { return }
         tagViews.forEach { $0.setNeedsLayout() }
         repositionViews()
     }
@@ -832,7 +837,28 @@ extension WSTagsField: UITextFieldDelegate {
             tokenizeTextFieldText()
             return false
         }
-        return true
+        return !autoCompleteText(for: textField, using: string)
+    }
+    
+    private func autoCompleteText(for textField: UITextField, using string: String) -> Bool {
+        guard !string.isEmpty,
+              let selectedTextRange = textField.selectedTextRange,
+              selectedTextRange.end == textField.endOfDocument,
+              let prefixRange = textField.textRange(from: textField.beginningOfDocument, to: selectedTextRange.start),
+              let text = textField.text(in: prefixRange) else { return false }
+        
+        let pfx = text + string
+        let matches = suggestions.filter { caseSensitiveSuggestions ? $0.hasPrefix(pfx) : $0.range(of: pfx, options: [.anchored, .caseInsensitive]) != nil }
+        
+        if matches.count > 0 {
+            textField.text = matches[0]
+            
+            if let start = textField.position(from: textField.beginningOfDocument, offset: pfx.count) {
+                textField.selectedTextRange = textField.textRange(from: start, to: textField.endOfDocument)
+                return true
+            }
+        }
+        return false
     }
 
 }
