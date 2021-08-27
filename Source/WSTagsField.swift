@@ -209,6 +209,13 @@ open class WSTagsField: UIScrollView {
 
         return false
     }
+    
+    /// Each tag will occupy only 1 line. Input text field will be also moved to new line if set to true.
+    open var isTagPerLine: Bool = false {
+        didSet {
+            repositionViews()
+        }
+    }
 
     open fileprivate(set) var tags = [WSTag]()
     open var tagViews = [WSTagView]()
@@ -333,7 +340,6 @@ open class WSTagsField: UIScrollView {
 
     open override func layoutSubviews() {
         super.layoutSubviews()
-        repositionViews()
     }
     
     /// Set corner radius of tag views
@@ -685,10 +691,11 @@ extension WSTagsField {
 
         // Tag views Rects
         var tagRect = CGRect.null
-        for tagView in tagViews {
+        for (index, tagView) in tagViews.enumerated() {
             tagRect = CGRect(origin: CGPoint.zero, size: tagView.sizeToFit(.init(width: maxWidth, height: 0)))
 
-            if curX + tagRect.width > maxWidth {
+            let isNewLine = isTagPerLine ? (index > 0) : (curX + tagRect.width > maxWidth)
+            if isNewLine {
                 // Need a new line
                 curX = 0
                 curY += Constants.STANDARD_ROW_HEIGHT + spaceBetweenLines
@@ -712,7 +719,8 @@ extension WSTagsField {
             var textFieldRect = CGRect.zero
             textFieldRect.size.height = Constants.STANDARD_ROW_HEIGHT
 
-            if availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH {
+            let isNewLine = isTagPerLine ? (!tagViews.isEmpty) : (availableWidthForTextField < Constants.MINIMUM_TEXTFIELD_WIDTH)
+            if isNewLine {
                 // If in the future we add more UI elements below the tags,
                 // isOnFirstLine will be useful, and this calculation is important.
                 // So leaving it set here, and marking the warning to ignore it
@@ -772,7 +780,7 @@ extension WSTagsField {
 
         if self.isScrollEnabled {
             // FIXME: this isn't working. Need to think in a workaround.
-            //self.scrollRectToVisible(textField.frame, animated: false)
+            self.scrollRectToVisible(textField.frame, animated: false)
         }
     }
 
