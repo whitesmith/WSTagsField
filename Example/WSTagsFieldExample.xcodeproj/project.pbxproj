@@ -7,48 +7,24 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		2B0A89A12701F072000078D7 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0A899F2701F05B000078D7 /* WSTagsField.framework */; };
+		2B0A89A22701F072000078D7 /* WSTagsField.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = 2B0A899F2701F05B000078D7 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 		D73307521EB3B8DE00FD29B4 /* TableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D73307511EB3B8DE00FD29B4 /* TableViewController.swift */; };
 		D7F33FF61D2A7378003F0082 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F33FF51D2A7378003F0082 /* AppDelegate.swift */; };
 		D7F33FF81D2A7378003F0082 /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = D7F33FF71D2A7378003F0082 /* ViewController.swift */; };
 		D7F33FFB1D2A7378003F0082 /* Main.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7F33FF91D2A7378003F0082 /* Main.storyboard */; };
 		D7F33FFD1D2A7378003F0082 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = D7F33FFC1D2A7378003F0082 /* Assets.xcassets */; };
 		D7F340001D2A7378003F0082 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = D7F33FFE1D2A7378003F0082 /* LaunchScreen.storyboard */; };
-		D7F340101D2A7416003F0082 /* WSTagsField.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = D7F3400D1D2A7407003F0082 /* WSTagsField.framework */; };
-		D7F340111D2A7416003F0082 /* WSTagsField.framework in Embed Frameworks */ = {isa = PBXBuildFile; fileRef = D7F3400D1D2A7407003F0082 /* WSTagsField.framework */; settings = {ATTRIBUTES = (CodeSignOnCopy, RemoveHeadersOnCopy, ); }; };
 /* End PBXBuildFile section */
 
-/* Begin PBXContainerItemProxy section */
-		D7F3400C1D2A7407003F0082 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D7F340071D2A7407003F0082 /* WSTagsField.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D78C9FEF1D2A6AFD004F4BFF;
-			remoteInfo = WSTagsField;
-		};
-		D7F3400E1D2A7407003F0082 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D7F340071D2A7407003F0082 /* WSTagsField.xcodeproj */;
-			proxyType = 2;
-			remoteGlobalIDString = D78C9FF91D2A6AFD004F4BFF;
-			remoteInfo = WSTagsFieldTests;
-		};
-		D7F340121D2A7416003F0082 /* PBXContainerItemProxy */ = {
-			isa = PBXContainerItemProxy;
-			containerPortal = D7F340071D2A7407003F0082 /* WSTagsField.xcodeproj */;
-			proxyType = 1;
-			remoteGlobalIDString = D78C9FEE1D2A6AFD004F4BFF;
-			remoteInfo = WSTagsField;
-		};
-/* End PBXContainerItemProxy section */
-
 /* Begin PBXCopyFilesBuildPhase section */
-		D7F340141D2A7416003F0082 /* Embed Frameworks */ = {
+		2B0A899A2701EF78000078D7 /* Embed Frameworks */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
 			dstPath = "";
 			dstSubfolderSpec = 10;
 			files = (
-				D7F340111D2A7416003F0082 /* WSTagsField.framework in Embed Frameworks */,
+				2B0A89A22701F072000078D7 /* WSTagsField.framework in Embed Frameworks */,
 			);
 			name = "Embed Frameworks";
 			runOnlyForDeploymentPostprocessing = 0;
@@ -56,6 +32,8 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		2B0A897D2701E501000078D7 /* WSTagsField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WSTagsField.framework; path = "../../../../../Users/umairshams/Library/Developer/Xcode/DerivedData/WSTagsField-ctwkgzlmnhepjvcpecfhvybooews/Build/Products/Debug-iphonesimulator/WSTagsField.framework"; sourceTree = "<group>"; };
+		2B0A899F2701F05B000078D7 /* WSTagsField.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = WSTagsField.framework; path = "../../../../../Users/umairshams/Library/Developer/Xcode/DerivedData/WSTagsField-ctwkgzlmnhepjvcpecfhvybooews/Build/Products/Debug-iphonesimulator/WSTagsField.framework"; sourceTree = "<group>"; };
 		D73307511EB3B8DE00FD29B4 /* TableViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = TableViewController.swift; sourceTree = "<group>"; };
 		D7F33FF21D2A7378003F0082 /* WSTagsFieldExample.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = WSTagsFieldExample.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		D7F33FF51D2A7378003F0082 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
@@ -64,7 +42,6 @@
 		D7F33FFC1D2A7378003F0082 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		D7F33FFF1D2A7378003F0082 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		D7F340011D2A7378003F0082 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		D7F340071D2A7407003F0082 /* WSTagsField.xcodeproj */ = {isa = PBXFileReference; lastKnownFileType = "wrapper.pb-project"; name = WSTagsField.xcodeproj; path = ../WSTagsField.xcodeproj; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -72,19 +49,28 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				D7F340101D2A7416003F0082 /* WSTagsField.framework in Frameworks */,
+				2B0A89A12701F072000078D7 /* WSTagsField.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		2B0A897C2701E501000078D7 /* Frameworks */ = {
+			isa = PBXGroup;
+			children = (
+				2B0A897D2701E501000078D7 /* WSTagsField.framework */,
+			);
+			name = Frameworks;
+			sourceTree = "<group>";
+		};
 		D7F33FE91D2A7378003F0082 = {
 			isa = PBXGroup;
 			children = (
+				2B0A899F2701F05B000078D7 /* WSTagsField.framework */,
 				D7F33FF41D2A7378003F0082 /* WSTagsFieldExample */,
 				D7F33FF31D2A7378003F0082 /* Products */,
-				D7F340071D2A7407003F0082 /* WSTagsField.xcodeproj */,
+				2B0A897C2701E501000078D7 /* Frameworks */,
 			);
 			sourceTree = "<group>";
 		};
@@ -110,15 +96,6 @@
 			path = WSTagsFieldExample;
 			sourceTree = "<group>";
 		};
-		D7F340081D2A7407003F0082 /* Products */ = {
-			isa = PBXGroup;
-			children = (
-				D7F3400D1D2A7407003F0082 /* WSTagsField.framework */,
-				D7F3400F1D2A7407003F0082 /* WSTagsFieldTests.xctest */,
-			);
-			name = Products;
-			sourceTree = "<group>";
-		};
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
@@ -129,13 +106,12 @@
 				D7F33FEE1D2A7378003F0082 /* Sources */,
 				D7F33FEF1D2A7378003F0082 /* Frameworks */,
 				D7F33FF01D2A7378003F0082 /* Resources */,
-				D7F340141D2A7416003F0082 /* Embed Frameworks */,
 				125AC6E91F14CFF600137101 /* Swift Lint */,
+				2B0A899A2701EF78000078D7 /* Embed Frameworks */,
 			);
 			buildRules = (
 			);
 			dependencies = (
-				D7F340131D2A7416003F0082 /* PBXTargetDependency */,
 			);
 			name = WSTagsFieldExample;
 			productName = WSTagsFieldExample;
@@ -169,35 +145,12 @@
 			mainGroup = D7F33FE91D2A7378003F0082;
 			productRefGroup = D7F33FF31D2A7378003F0082 /* Products */;
 			projectDirPath = "";
-			projectReferences = (
-				{
-					ProductGroup = D7F340081D2A7407003F0082 /* Products */;
-					ProjectRef = D7F340071D2A7407003F0082 /* WSTagsField.xcodeproj */;
-				},
-			);
 			projectRoot = "";
 			targets = (
 				D7F33FF11D2A7378003F0082 /* WSTagsFieldExample */,
 			);
 		};
 /* End PBXProject section */
-
-/* Begin PBXReferenceProxy section */
-		D7F3400D1D2A7407003F0082 /* WSTagsField.framework */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.framework;
-			path = WSTagsField.framework;
-			remoteRef = D7F3400C1D2A7407003F0082 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-		D7F3400F1D2A7407003F0082 /* WSTagsFieldTests.xctest */ = {
-			isa = PBXReferenceProxy;
-			fileType = wrapper.cfbundle;
-			path = WSTagsFieldTests.xctest;
-			remoteRef = D7F3400E1D2A7407003F0082 /* PBXContainerItemProxy */;
-			sourceTree = BUILT_PRODUCTS_DIR;
-		};
-/* End PBXReferenceProxy section */
 
 /* Begin PBXResourcesBuildPhase section */
 		D7F33FF01D2A7378003F0082 /* Resources */ = {
@@ -241,14 +194,6 @@
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
-
-/* Begin PBXTargetDependency section */
-		D7F340131D2A7416003F0082 /* PBXTargetDependency */ = {
-			isa = PBXTargetDependency;
-			name = WSTagsField;
-			targetProxy = D7F340121D2A7416003F0082 /* PBXContainerItemProxy */;
-		};
-/* End PBXTargetDependency section */
 
 /* Begin PBXVariantGroup section */
 		D7F33FF91D2A7378003F0082 /* Main.storyboard */ = {
@@ -381,8 +326,11 @@
 		D7F340051D2A7378003F0082 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = WSTagsFieldExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsFieldExample;
@@ -394,8 +342,11 @@
 		D7F340061D2A7378003F0082 /* Release */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
-				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
+					"$(PROJECT_DIR)",
+				);
 				INFOPLIST_FILE = WSTagsFieldExample/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				PRODUCT_BUNDLE_IDENTIFIER = co.whitesmith.WSTagsFieldExample;
