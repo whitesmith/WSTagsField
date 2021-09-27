@@ -117,6 +117,12 @@ open class WSTagsField: UIScrollView {
             textField.textColor = fieldTextColor
         }
     }
+    
+    open var textFieldTintColor: UIColor? {
+        didSet {
+            textField.tintColor = textFieldTintColor
+        }
+    }
 
     @available(iOS 10.0, *)
     @available(*, deprecated, message: "use 'textField.fieldTextContentType' directly.")
