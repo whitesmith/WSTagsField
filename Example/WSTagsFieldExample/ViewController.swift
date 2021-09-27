@@ -25,6 +25,7 @@ class ViewController: UIViewController {
         //tagsField.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
         tagsField.suggestions = ["Support", "Work", "Help"]
+        tagsField.textFieldTintColor = .green
         
         tagsField.cornerRadius = 3.0
         tagsField.spaceBetweenLines = 10
@@ -42,9 +43,10 @@ class ViewController: UIViewController {
         tagsField.backgroundColor = .lightGray
         tagsField.textField.returnKeyType = .continue
         tagsField.delimiter = ""
-
+        
+        tagsField.textFieldTintColor = .magenta
+        tagsField.tintColor = .black
         tagsField.textDelegate = self
-
         textFieldEvents()
     }
 
