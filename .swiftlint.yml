@@ -9,6 +9,7 @@ disabled_rules:
   - file_length
   - function_body_length
   - type_body_length
+  - unused_setter_value
 
 excluded: # paths to ignore during linting. Takes precedence over `included`.
   - Carthage
