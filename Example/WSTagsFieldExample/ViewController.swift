@@ -24,6 +24,8 @@ class ViewController: UIViewController {
         //tagsField.translatesAutoresizingMaskIntoConstraints = false
         //tagsField.heightAnchor.constraint(equalToConstant: 150).isActive = true
 
+        tagsField.suggestions = ["Support", "Work", "Help"]
+        
         tagsField.cornerRadius = 3.0
         tagsField.spaceBetweenLines = 10
         tagsField.spaceBetweenTags = 10
@@ -38,12 +40,10 @@ class ViewController: UIViewController {
         tagsField.placeholderColor = .red
         tagsField.placeholderAlwaysVisible = true
         tagsField.backgroundColor = .lightGray
-        tagsField.returnKeyType = .next
+        tagsField.textField.returnKeyType = .continue
         tagsField.delimiter = ""
-        tagsField.keyboardAppearance = .dark
 
         tagsField.textDelegate = self
-        //tagsField.acceptTagOption = .space
 
         textFieldEvents()
     }
@@ -77,10 +77,12 @@ class ViewController: UIViewController {
         tagsField.isDelimiterVisible = true
         tagsField.borderWidth = 2
         tagsField.borderColor = .blue
-        tagsField.fieldTextColor = .green
+        tagsField.textField.textColor = .green
         tagsField.placeholderColor = .green
         tagsField.placeholderAlwaysVisible = false
         tagsField.font = UIFont.systemFont(ofSize: 9)
+        tagsField.keyboardAppearance = .dark
+        tagsField.acceptTagOption = .space
     }
 
     @IBAction func touchAddRandomTags(_ sender: UIButton) {
@@ -99,12 +101,12 @@ class ViewController: UIViewController {
 extension ViewController {
 
     fileprivate func textFieldEvents() {
-        tagsField.onDidAddTag = { _, _ in
-            print("onDidAddTag")
+        tagsField.onDidAddTag = { field, tag in
+            print("onDidAddTag", tag.text)
         }
 
-        tagsField.onDidRemoveTag = { _, _ in
-            print("onDidRemoveTag")
+        tagsField.onDidRemoveTag = { field, tag in
+            print("onDidRemoveTag", tag.text)
         }
 
         tagsField.onDidChangeText = { _, text in
@@ -121,6 +123,10 @@ extension ViewController {
 
         tagsField.onDidUnselectTagView = { _, tagView in
             print("Unselect \(tagView)")
+        }
+
+        tagsField.onShouldAcceptTag = { field in
+            return field.text != "OMG"
         }
     }
 

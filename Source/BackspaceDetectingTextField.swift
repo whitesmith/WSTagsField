@@ -13,19 +13,19 @@ protocol BackspaceDetectingTextFieldDelegate: UITextFieldDelegate {
     func textFieldDidDeleteBackwards(_ textField: UITextField)
 }
 
-class BackspaceDetectingTextField: UITextField {
+open class BackspaceDetectingTextField: UITextField {
 
-    var onDeleteBackwards: (() -> Void)?
+    open var onDeleteBackwards: (() -> Void)?
 
     init() {
         super.init(frame: CGRect.zero)
     }
 
-    required init?(coder aDecoder: NSCoder) {
-        fatalError("init(coder:) has not been implemented")
+    required public init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
     }
 
-    override func deleteBackward() {
+    open override func deleteBackward() {
         onDeleteBackwards?()
         // Call super afterwards. The `text` property will return text prior to the delete.
         super.deleteBackward()
