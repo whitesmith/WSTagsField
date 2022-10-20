@@ -128,6 +128,13 @@ extension ViewController {
         tagsField.onShouldAcceptTag = { field in
             return field.text != "OMG"
         }
+
+        tagsField.onPaste = { [weak self] text, newText in
+            print("Paste \(text)")
+            let tags = newText.components(separatedBy: " ")
+            self?.tagsField.addTags(tags)
+            return true
+        }
     }
 
 }

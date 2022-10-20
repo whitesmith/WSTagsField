@@ -250,6 +250,12 @@ open class WSTagsField: UIScrollView {
      */
     open var onDidChangeHeightTo: ((WSTagsField, _ height: CGFloat) -> Void)?
 
+    /**
+     * Called when the user pastes something.
+     * @return True if the pasted content has been processed. Otherwise, return false.
+     */
+    open var onPaste: ((_ text: String, _ newText: String) -> Bool)?
+
     // MARK: - Properties
 
     fileprivate var oldIntrinsicContentHeight: CGFloat = 0
@@ -844,7 +850,10 @@ extension WSTagsField: UITextFieldDelegate {
             tokenizeTextFieldText()
             return false
         }
-        return !autoCompleteText(for: textField, using: string)
+        var processed = autoCompleteText(for: textField, using: string)
+        processed = processed ? processed : handlePasting(for: textField, in: range, with: string)
+        //processed = processed ? processed : doSomethingElse()
+        return !processed
     }
     
     private func autoCompleteText(for textField: UITextField, using string: String) -> Bool {
@@ -866,6 +875,20 @@ extension WSTagsField: UITextFieldDelegate {
             }
         }
         return false
+    }
+
+    private func handlePasting(for textField: UITextField, in range: NSRange, with string: String) -> Bool {
+        guard onPaste != nil,
+              string.count > 1,
+              let pasteboardContent = UIPasteboard.general.string,
+              string.contains(pasteboardContent) else { return false }
+
+        var existingText = textField.text ?? ""
+        let start = existingText.index(existingText.startIndex, offsetBy: range.lowerBound)
+        let end = existingText.index(existingText.startIndex, offsetBy: range.upperBound)
+        existingText.replaceSubrange(start..<end, with: string)
+
+        return onPaste?(string, existingText) == true
     }
 
 }
